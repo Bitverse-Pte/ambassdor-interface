@@ -1,0 +1,313 @@
+{
+    "code": 0,
+    "data": {
+        "currency": [
+            {
+                "id": "USDC",
+                "starkExAssetId": "0xa21edc9d9997b1b1956f542fe95922518a9e28ace11b7b2972a1974bf5971f",
+                "starkExResolution": "1000000",
+                "stepSize": "0.000001",
+                "showStep": "0.0001",
+                "iconUrl": "https://l2dex-image-static.dev.apexplus.exchange/icon/USDC.svg"
+            },
+            {
+                "id": "BTC",
+                "starkExAssetId": "",
+                "starkExResolution": "",
+                "stepSize": "0.0001",
+                "showStep": "",
+                "iconUrl": "https://l2dex-image-static.dev.apexplus.exchange/icon/BTC.svg"
+            },
+            {
+                "id": "ETH",
+                "starkExAssetId": "",
+                "starkExResolution": "",
+                "stepSize": "0.001",
+                "showStep": "",
+                "iconUrl": "https://l2dex-image-static.dev.apexplus.exchange/icon/ETH.svg"
+            },
+            {
+                "id": "LINK",
+                "starkExAssetId": "",
+                "starkExResolution": "",
+                "stepSize": "0.1",
+                "showStep": "",
+                "iconUrl": "https://l2dex-image-static.dev.apexplus.exchange/icon/LINK-2.svg"
+            },
+            {
+                "id": "DOGE",
+                "starkExAssetId": "",
+                "starkExResolution": "",
+                "stepSize": "0.0001",
+                "showStep": "",
+                "iconUrl": "https://l2dex-image-static.dev.apexplus.exchange/icon/DOGE.svg"
+            }
+        ],
+        "global": {
+            "feeAccountId": "123456",
+            "feeAccountL2Key": "0x1e240",
+            "starkExCollateralCurrencyId": "USDC",
+            "starkExFundingValidityPeriod": 604800,
+            "starkExMaxFundingRate": "1120",
+            "starkExOrdersTreeHeight": 64,
+            "starkExPositionsTreeHeight": 0,
+            "starkExPriceValidityPeriod": 31536000,
+            "registerEnvId": 5,
+            "crossChainAccountId": "330574978934112832",
+            "crossChainL2Key": "0492fb45450e59c7679df18e954a13ecb62121c4eefd4e18264563e415046740",
+            "fastWithdrawAccountId": "330574978934112832",
+            "fastWithdrawFactRegisterAddress": "0x5070F5d37419AEAd10Df2252421e457336561269",
+            "fastWithdrawL2Key": "0492fb45450e59c7679df18e954a13ecb62121c4eefd4e18264563e415046740",
+            "fastWithdrawMaxAmount": "100000"
+        },
+        "perpetualContract": [
+            {
+                "baselinePositionValue": "2000000.0000",
+                "crossId": 30000,
+                "crossSymbolId": 10,
+                "crossSymbolName": "BTCUSDC",
+                "digitMerge": "1,2,5,10",
+                "displayMaxLeverage": "20",
+                "displayMinLeverage": "1",
+                "enableDisplay": true,
+                "enableOpenPosition": true,
+                "enableTrade": true,
+                "fundingImpactMarginNotional": "10",
+                "fundingInterestRate": "0.0003",
+                "incrementalInitialMarginRate": "0.0075",
+                "incrementalMaintenanceMarginRate": "0.0000",
+                "incrementalPositionValue": "2000000.0000",
+                "initialMarginRate": "0.0500",
+                "maintenanceMarginRate": "0.0300",
+                "maxOrderSize": "100.0000",
+                "maxPositionSize": "170.0000",
+                "minOrderSize": "0.0010",
+                "settleCurrencyId": "USDC",
+                "starkExOraclePriceQuorum": "1",
+                "starkExResolution": "10000000000",
+                "starkExRiskFactor": "128849019",
+                "starkExSyntheticAssetId": "0x4254432d3130000000000000000000",
+                "stepSize": "0.0001",
+                "symbol": "BTC-USDC",
+                "symbolDisplayName": "BTCUSDC",
+                "tickSize": "1",
+                "underlyingCurrencyId": "BTC"
+            },
+            {
+                "baselinePositionValue": "1000000.0000",
+                "crossId": 30000,
+                "crossSymbolId": 11,
+                "crossSymbolName": "ETHUSDC",
+                "digitMerge": "0.1,0.2,0.5,1",
+                "displayMaxLeverage": "20",
+                "displayMinLeverage": "1",
+                "enableDisplay": true,
+                "enableOpenPosition": true,
+                "enableTrade": true,
+                "fundingImpactMarginNotional": "100",
+                "fundingInterestRate": "0.0003",
+                "incrementalInitialMarginRate": "0.0075",
+                "incrementalMaintenanceMarginRate": "0.0000",
+                "incrementalPositionValue": "1000000.0000",
+                "initialMarginRate": "0.0500",
+                "maintenanceMarginRate": "0.0300",
+                "maxOrderSize": "1000.000",
+                "maxPositionSize": "2820.000",
+                "minOrderSize": "0.010",
+                "settleCurrencyId": "USDC",
+                "starkExOraclePriceQuorum": "1",
+                "starkExResolution": "100000000",
+                "starkExRiskFactor": "128849019",
+                "starkExSyntheticAssetId": "0x4554482d3900000000000000000000",
+                "stepSize": "0.001",
+                "symbol": "ETH-USDC",
+                "symbolDisplayName": "ETHUSDC",
+                "tickSize": "0.1",
+                "underlyingCurrencyId": "ETH"
+            },
+            {
+                "baselinePositionValue": "1000000.0000",
+                "crossId": 30000,
+                "crossSymbolId": 12,
+                "crossSymbolName": "LINKUSDC",
+                "digitMerge": "0.001,0.002,0.004,0.01",
+                "displayMaxLeverage": "10",
+                "displayMinLeverage": "1",
+                "enableDisplay": true,
+                "enableOpenPosition": true,
+                "enableTrade": true,
+                "fundingImpactMarginNotional": "10",
+                "fundingInterestRate": "0.0003",
+                "incrementalInitialMarginRate": "0.0075",
+                "incrementalMaintenanceMarginRate": "0.0000",
+                "incrementalPositionValue": "1000000.0000",
+                "initialMarginRate": "0.1000",
+                "maintenanceMarginRate": "0.0500",
+                "maxOrderSize": "200000.0",
+                "maxPositionSize": "200000.0",
+                "minOrderSize": "1.0",
+                "settleCurrencyId": "USDC",
+                "starkExOraclePriceQuorum": "1",
+                "starkExResolution": "10000000",
+                "starkExRiskFactor": "214748365",
+                "starkExSyntheticAssetId": "0x4c494e4b2d37000000000000000000",
+                "stepSize": "0.1",
+                "symbol": "LINK-USDC",
+                "symbolDisplayName": "LINKUSDC",
+                "tickSize": "0.001",
+                "underlyingCurrencyId": "LINK"
+            },
+            {
+                "baselinePositionValue": "1000000.0000",
+                "crossId": 30000,
+                "crossSymbolId": 13,
+                "crossSymbolName": "DOGEUSDC",
+                "digitMerge": "0.0001,0.0002,0.0004,0.001",
+                "displayMaxLeverage": "10",
+                "displayMinLeverage": "1",
+                "enableDisplay": true,
+                "enableOpenPosition": true,
+                "enableTrade": true,
+                "fundingImpactMarginNotional": "10",
+                "fundingInterestRate": "0.0003",
+                "incrementalInitialMarginRate": "0.0075",
+                "incrementalMaintenanceMarginRate": "0.0000",
+                "incrementalPositionValue": "1000000.0000",
+                "initialMarginRate": "0.1000",
+                "maintenanceMarginRate": "0.0500",
+                "maxOrderSize": "22000000",
+                "maxPositionSize": "22000000",
+                "minOrderSize": "100",
+                "settleCurrencyId": "USDC",
+                "starkExOraclePriceQuorum": "1",
+                "starkExResolution": "100000",
+                "starkExRiskFactor": "214748365",
+                "starkExSyntheticAssetId": "0x444f47452d35000000000000000000",
+                "stepSize": "10",
+                "symbol": "DOGE-USDC",
+                "symbolDisplayName": "DOGEUSDC",
+                "tickSize": "0.0001",
+                "underlyingCurrencyId": "DOGE"
+            }
+        ],
+        "multiChain": {
+            "chains": [
+                {
+                    "chain": "Goerli - Testnet",
+                    "chainId": 5,
+                    "chainIconUrl": "https://l2dex-image-static.dev.apexplus.exchange/chains/chain_logos/Goerli.svg",
+                    "contractAddress": "0x7478037C3a1F44f0Add4Ae06158fefD10d44Bb63",
+                    "depositGasFeeLess": false,
+                    "feeLess": false,
+                    "feeRate": "0.001",
+                    "gasLess": false,
+                    "gasToken": "ETH",
+                    "minFee": "10",
+                    "rpcUrl": "https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
+                    "webTxUrl": "https://goerli.etherscan.io/tx/",
+                    "txConfirm": 30,
+                    "tokens": [
+                        {
+                            "decimals": 6,
+                            "iconUrl": "https://l2dex-image-static.dev.apexplus.exchange/icon/USDC.svg",
+                            "token": "USDC",
+                            "tokenAddress": "0xd44BB808bfE43095dBb94c83077766382D63952a",
+                            "pullOff": false
+                        },
+                        {
+                            "decimals": 18,
+                            "iconUrl": "https://l2dex-image-static.dev.apexplus.exchange/icon/ETH.svg",
+                            "token": "ETH",
+                            "tokenAddress": "",
+                            "pullOff": true
+                        }
+                    ],
+                    "withdrawGasFeeLess": false
+                },
+                {
+                    "chain": "BNB Chain - Testnet",
+                    "chainId": 97,
+                    "chainIconUrl": "https://l2dex-image-static.dev.apexplus.exchange/chains/chain_tokens/BSC/BNB_BNB.svg",
+                    "contractAddress": "0x18871530ce2A53591512D8C365734e5719f0138A",
+                    "depositGasFeeLess": false,
+                    "feeLess": false,
+                    "feeRate": "0.001",
+                    "gasLess": true,
+                    "gasToken": "BNB",
+                    "minFee": "10",
+                    "rpcUrl": "https://data-seed-prebsc-2-s1.binance.org:8545",
+                    "webTxUrl": "https://testnet.bscscan.com/tx/",
+                    "txConfirm": 15,
+                    "tokens": [
+                        {
+                            "decimals": 6,
+                            "iconUrl": "https://l2dex-image-static.dev.apexplus.exchange/chains/chain_tokens/BSC/BNB_USDC.svg",
+                            "token": "USDC",
+                            "tokenAddress": "0xFfa501dFf91737Ff5fAFdaa788B8D00002034b6c",
+                            "pullOff": false
+                        },
+                        {
+                            "decimals": 18,
+                            "iconUrl": "https://l2dex-image-static.dev.apexplus.exchange/chains/chain_tokens/BSC/BNB_BNB.svg",
+                            "token": "BNB",
+                            "tokenAddress": "",
+                            "pullOff": true
+                        }
+                    ],
+                    "withdrawGasFeeLess": false
+                },
+                {
+                    "chain": "Polygon",
+                    "chainId": 137,
+                    "chainIconUrl": "https://l2dex-image-static.dev.apexplus.exchange/chains/chain_logos/Ploygon.svg",
+                    "contractAddress": "0xcc9c7694D5bbC72707D9D100Bb53E52b459E30Cd",
+                    "depositGasFeeLess": false,
+                    "feeLess": false,
+                    "feeRate": "0.001",
+                    "gasLess": true,
+                    "gasToken": "MATIC",
+                    "minFee": "0.01",
+                    "rpcUrl": "https://rpc-mainnet.maticvigil.com",
+                    "webTxUrl": "https://polygonscan.com/tx/",
+                    "txConfirm": 15,
+                    "tokens": [
+                        {
+                            "decimals": 6,
+                            "iconUrl": "https://l2dex-image-static.dev.apexplus.exchange/chains/chain_tokens/Polygon/Polygon_USDC.svg",
+                            "token": "USDC",
+                            "tokenAddress": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+                            "pullOff": false
+                        },
+                        {
+                            "decimals": 18,
+                            "iconUrl": "https://l2dex-image-static.dev.apexplus.exchange/chains/chain_tokens/Polygon/Polygon_MATIC.svg",
+                            "token": "MATIC",
+                            "tokenAddress": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+                            "pullOff": false
+                        },
+                        {
+                            "decimals": 18,
+                            "iconUrl": "https://l2dex-image-static.dev.apexplus.exchange/chains/chain_tokens/Polygon/Polygon_WETH.svg",
+                            "token": "WETH",
+                            "tokenAddress": "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
+                            "pullOff": false
+                        },
+                        {
+                            "decimals": 6,
+                            "iconUrl": "https://l2dex-image-static.dev.apexplus.exchange/chains/chain_tokens/Polygon/Polygon_USDT.svg",
+                            "token": "USDT",
+                            "tokenAddress": "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
+                            "pullOff": false
+                        }
+                    ],
+                    "withdrawGasFeeLess": false
+                }
+            ],
+            "currency": "USDC",
+            "maxWithdraw": "100000",
+            "minDeposit": "10",
+            "minWithdraw": "10"
+        }
+    },
+    "timeCost": 202606
+}
