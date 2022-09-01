@@ -1,13 +1,14 @@
-import { collectPoint } from "@/server"
-import { useBoolean, useRequest } from "ahooks"
-import { useEffect, useMemo, useState } from "react"
-import styled, { keyframes } from "styled-components"
-import Button from "../Button"
-import Loading from "../Loading"
-import Modal from "../Modal"
+import { collectPoint } from "@/server";
+import { useBoolean, useRequest } from "ahooks";
+import { useEffect, useMemo, useState } from "react";
+import styled, { keyframes } from "styled-components";
+import Button from "../Button";
+import Loading from "../Loading";
+import Modal from "../Modal";
 
-import success from '@/assets/dialog/success.svg'
-import failed from '@/assets/dialog/error.svg'
+import success from "@/assets/dialog/success.svg";
+import failed from "@/assets/dialog/error.svg";
+import { useModel } from "umi";
 
 const springish = keyframes`
   /* 0.00% {transform: translate3d(50.00px, 0, 0) scale(0);}
@@ -37,140 +38,161 @@ const springish = keyframes`
 
 `;
 
-
 const StyledModal = styled(Modal)`
-.inner{
+  .inner {
     min-width: 624px;
-}
+  }
 
-.container{
+  .container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     .loading i {
-        display: block;
+      display: block;
     }
-    .collect-img{
-        width: 484px;
+    .collect-img {
+      width: 484px;
     }
-    .collect-success-img, .collect-failed-img{
-        width: 120px;
-        margin: 36px 0 20px;
-        animation: ${springish}; 
-        animation-duration: .24s;
-        animation-iteration-count: 2;
-        animation-timing-function: cubic-bezier(0.445,  0.050, 0.550, 0.950);
+    .collect-success-img,
+    .collect-failed-img {
+      width: 120px;
+      margin: 36px 0 20px;
+      animation: ${springish};
+      animation-duration: 0.24s;
+      animation-iteration-count: 2;
+      animation-timing-function: cubic-bezier(0.445, 0.05, 0.55, 0.95);
     }
-    .collect-failed-img{
-        margin: 36px 0;
+    .collect-failed-img {
+      margin: 36px 0;
     }
-    .desc{
-        margin-bottom: 36px;
-        color: #fff;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+    .desc {
+      margin-bottom: 36px;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
-    .active{
-        font-family: 'Dela Gothic One';
-        color: #00EBC8;
-        font-weight: 600;
-        font-size: 40px;
-        line-height: 68px;
+    .active {
+      font-family: "Dela Gothic One";
+      color: #00ebc8;
+      font-weight: 600;
+      font-size: 40px;
+      line-height: 68px;
     }
-    .points{
-        font-family: 'Dela Gothic One';
-        font-weight: 600;
-        font-size: 22px;
-        line-height: 30px;
+    .points {
+      font-family: "Dela Gothic One";
+      font-weight: 600;
+      font-size: 22px;
+      line-height: 30px;
     }
-    .tip{
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 22px;
+    .tip {
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 22px;
     }
-}
-`
+  }
+`;
 
-const pendingMsg = 'WELL DONE! YOU GOT 100 POINTS TO COLLECT!'
-const successMsg = 'has been Successflly added to your account！'
-const error = ''
 
-const CollectPointsDialog = (props: any)=>{
+const CollectPointsDialog = (props: any) => {
+  // @ts-ignore
+  const {
+    user: { user, fetchUser },
+  } = useModel("userInfo");
 
-    const {loading, data, run, error} = useRequest(collectPoint, {
-        manual: true
-    })
+  const { loading, data, run, error } = useRequest(collectPoint, {
+    manual: true,
+  });
 
-    const [currentTitle, setCurrentTtile] = useState('Congratulations!')
-    const claimSuccess = useMemo(()=>{
-        if(!data) return false
-        return data?.data?.code === 200
-    }, [data])
+  const [currentTitle, setCurrentTtile] = useState("Congratulations!");
+  const claimSuccess = useMemo(() => {
+    if (!data) return false;
+    return data?.data?.code === 200;
+  }, [data]);
 
-    const claimFailed = useMemo(()=>{
-        if(!data) return false
-        if(error) return true
-        return data?.data?.code !== 200
-    }, [data, error])
-    
-    useEffect(()=>{
-        if(claimSuccess){
-            setCurrentTtile('Succeed')
-        }
-    }, [claimSuccess])
-    useEffect(()=>{
-        if(claimFailed){
-            setCurrentTtile('Failed')
-        }
-    }, [claimFailed])
+  const claimFailed = useMemo(() => {
+    if (!data) return false;
+    if (error) return true;
+    return data?.data?.code !== 200;
+  }, [data, error]);
 
-    const handleCollect = ()=>{
-        if(claimSuccess){
-            props.onClose()
-            return
-        }
-        if(claimFailed){
-            run()
-            return
-        }
-        if(!loading){
-            run()
-            return
-        }
+  useEffect(() => {
+    if (claimSuccess) {
+      setCurrentTtile("Succeed");
+      fetchUser()
     }
+  }, [claimSuccess]);
+  useEffect(() => {
+    if (claimFailed) {
+      setCurrentTtile("Failed");
+      fetchUser()
+    }
+  }, [claimFailed]);
 
-    return <StyledModal {...props} title={currentTitle}>
-        <div className="container">
-            {
-                claimSuccess ? (<img className="collect-success-img" src={success} alt="" />) : claimFailed ? (<img className="collect-failed-img" src={failed} alt="" />) : (<img className="collect-img" src={require('@/assets/dialog/collect-points.png')} alt="" />)
-            }
-            {
-                claimFailed ? null : (
-                    <div className="desc">
-                        <div className="points">
-                            <span className="active">100</span>
-                            Points
-                        </div>
-                        <span className="tip">
-                            {
-                                claimSuccess ? successMsg : pendingMsg
-                            }                    
-                        </span>
-                    </div>
-                )
-            }
-          
-            <Button loading={loading} radius="16px" onClick={handleCollect}>
-                {
-                    loading ? <Loading/> :  claimSuccess ? 'Confirm' : claimFailed ? 'Try Again' : 'Collect'
-                }
-            </Button>
-        </div>
+  const handleCollect = () => {
+    if (claimSuccess) {
+      props.onClose();
+      return;
+    }
+    if (claimFailed) {
+      run();
+      return;
+    }
+    if (!loading) {
+      run();
+      return;
+    }
+  };
 
+
+  const pendingMsg = useMemo(()=>{
+    return `WELL DONE! YOU GOT ${user?.pointCache || 0} POINTS TO COLLECT!`
+  }, [user?.pointCache]);
+
+  const successMsg = "has been Successflly added to your account!";
+
+  return (
+    <StyledModal {...props} title={currentTitle}>
+      <div className="container">
+        {claimSuccess ? (
+          <img className="collect-success-img" src={success} alt="" />
+        ) : claimFailed ? (
+          <img className="collect-failed-img" src={failed} alt="" />
+        ) : (
+          <img
+            className="collect-img"
+            src={require("@/assets/dialog/collect-points.png")}
+            alt=""
+          />
+        )}
+        {claimFailed ? null : (
+          <div className="desc" style={{marginTop: '-26px'}}>
+            <div className="points">
+              <span className="active">{user?.pointCache || 0}</span>&nbsp;
+              Points
+            </div>
+            <span className="tip">
+              {claimSuccess ? successMsg : pendingMsg}
+            </span>
+          </div>
+        )}
+
+        <Button loading={loading} radius="16px" onClick={handleCollect}>
+          {loading ? (
+            <Loading />
+          ) : claimSuccess ? (
+            "Confirm"
+          ) : claimFailed ? (
+            "Try Again"
+          ) : (
+            "Collect"
+          )}
+        </Button>
+      </div>
     </StyledModal>
-}
+  );
+};
 
-export default CollectPointsDialog
+export default CollectPointsDialog;

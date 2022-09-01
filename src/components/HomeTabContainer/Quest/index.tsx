@@ -13,6 +13,7 @@ import IconCalendar from '@/components/Icons/IconCalendar';
 import Button from '@/components/Button';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import { useModel } from 'umi';
 
 const DayPickerContainer = styled.div`
   position: relative;
@@ -256,7 +257,7 @@ const ExpandContainer = ({ row, children }: any) => {
   const { run, loading, data, error } = useRequest((id) => getActionList({ questKey: id }), {
     manual: true,
   });
-
+  
   useEffect(() => {
     if (status) {
       run(row?.id);
@@ -409,6 +410,15 @@ export default ({ show }: any) => {
   // const actions = useMemo(() => actionListData?.data?.result, [actionListData])
   const questList = useMemo(() => qustListData?.data?.result, [qustListData]);
 
+  const {
+    questModal: { questModalSetTrue, run: questModalRun },
+  } = useModel("questModal");
+
+  const handleClick = (questKey: string)=>{
+    questModalRun({questKey, page: 0})
+    questModalSetTrue()
+  }
+
   const columns = useMemo(
     () => [
       {
@@ -426,9 +436,8 @@ export default ({ show }: any) => {
         grid: 'span 2',
         formatter({ row }: any) {
           return (
-            <a style={{ color: '#fff', textDecoration: 'none' }} href={row?.url} target="_blank">
               <Tippy content={row?.title}>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center' }} onClick={()=>handleClick(row?.questKey)}>
                   <span
                     style={{
                       maxWidth: '262px',
@@ -445,7 +454,6 @@ export default ({ show }: any) => {
                   <IconTopRightArrow />
                 </div>
               </Tippy>
-            </a>
           );
         },
       },

@@ -57,10 +57,13 @@ const PortalWrapper = styled(motion.div)`
   left: 0;
   z-index: 666;
   background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  transition: all linear .2s;
   /* background: rgba(58, 58, 58, 0.3); */
   /* 产品的意思是：用户要能看清蒙层下的字，不能太模糊 */
   /* backdrop-filter: blur(6px); */
   > .inner {
+    border: 1px solid rgba(255,255,255,0.32);
     box-sizing: border-box;
     /* padding: 0 0 24px 0; */
     /* padding-bottom: 24px; */

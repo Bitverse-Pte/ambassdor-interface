@@ -23,6 +23,7 @@
     "@web3-react/url": "^8.0.25-beta.0",
     "@web3-react/walletconnect": "^8.0.35-beta.0",
     "ahooks": "^3.5.2",
+    "apex-icon": "^0.5.8",
     "axios": "^0.27.2",
     "date-fns": "^2.29.2",
     "dayjs": "^1.11.4",

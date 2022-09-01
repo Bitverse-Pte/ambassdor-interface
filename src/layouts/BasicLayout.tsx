@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import Web3Provider from "@/components/WalletProvider";
 import Login from "@/components/Update/Login";
+import QuestTitleModal from "@/components/QuestTItleModal";
 
 const Container = styled.div`
   background-color: #05050e;
@@ -19,6 +20,7 @@ export default function Layout({ children }: { children: any }) {
   return (
     <Web3Provider>
       <Login/>
+      <QuestTitleModal/>
       <Container>
         <Header />
         <Content>

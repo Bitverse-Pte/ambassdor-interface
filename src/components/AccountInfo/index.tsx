@@ -1,6 +1,6 @@
 import { abbreviateNumber } from "@/utils";
 import { useWeb3React } from "@web3-react/core";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import Button from "../Button";
 import Connect from "../Connect";
 import defaultAvatar from "@/assets/default-avatar.png";
@@ -14,6 +14,16 @@ import "tippy.js/dist/tippy.css";
 import CollectTokenDialog from "../CollectTokenDialog";
 import CollectPointsDialog from "../CollectPointsDialog";
 import { useMemo } from "react";
+
+const move = keyframes`
+from,to{
+  transform: translate(-50%, calc(100% + 19px));
+}
+50%{
+  transform: translate(-50%, calc(100% + 19px + 15%));
+}
+
+`
 
 const Container = styled.div`
   position: relative;
@@ -97,7 +107,11 @@ const Points = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+
+  &:last-of-type{
+    align-items: flex-end;
+  }
   .row-between {
     display: flex;
     align-items: center;
@@ -123,6 +137,21 @@ const Points = styled.div`
     margin-top: 9px;
   }
   .point-cache {
+    animation: ${move} linear 1s infinite;
+    &::after{
+      content: '';
+      width: 0;
+      height: 0;
+      border: 8px solid transparent;
+      border-bottom: 11px solid rgba(66, 66, 75, 0.6);
+      position: absolute;
+      top: -45%;
+      left: 50%;
+      transform: translate(-50%, 1px);
+      backdrop-filter: blur(6px);
+      z-index: -1;
+    }
+    position: relative;
     width: max-content;
     padding: 12px 24px;
     background: rgba(66, 66, 75, 0.6);
@@ -160,7 +189,7 @@ const UserPoints = ({ title, amount, actionName, action, children }: any) => {
 
   return (
     <Points>
-      <div className="row-between" style={{ width: "190px" }}>
+      <div className="row-between" >
         <div className="title">{title}</div>
         <div className="amount">{abbreviateNumber(amount)}</div>
       </div>
@@ -198,10 +227,6 @@ export default () => {
     collectTokensDialog,
     { setTrue: showCollectTokensDialog, setFalse: closeCollectTokensDialog },
   ] = useBoolean(false);
-
-
-  
-    console.log('contributor, ambassador', contributor, ambassador, user, curRole)
   
     // const prevLevel = useMemo(()=>{
     //   if(!curRole || user?.level) return '-'
@@ -246,7 +271,7 @@ export default () => {
             {user?.pointCache ? (
               <div className="point-cache">
                 <div className="star" >★</div>&nbsp;
-                You got&nbsp;<span style={{ color: "#00DBC9" }}>800 points </span>&nbsp;to
+                You got&nbsp;<span style={{ color: "#00DBC9" }}>{user?.pointCache || 0} points </span>&nbsp;to
                 collect!
               </div>
             ) : null}

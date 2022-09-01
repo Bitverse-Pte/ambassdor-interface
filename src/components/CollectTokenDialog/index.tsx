@@ -2,9 +2,11 @@ import { collectPoint } from "@/server";
 import { useBoolean, useRequest } from "ahooks";
 import { useEffect, useMemo, useState } from "react";
 import styled, { keyframes } from "styled-components";
+import { useModel } from "umi";
 import Button from "../Button";
 import Loading from "../Loading";
 import Modal from "../Modal";
+import warning from "@/assets/dialog/warning.svg";
 
 const StyledModal = styled(Modal)`
   .inner {
@@ -33,7 +35,16 @@ const StyledModal = styled(Modal)`
 
   .container {
     color: #fff;
-
+    .level-shadow{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-80%,-70%);
+      color: rgba(0, 219, 201, 0.06);
+      font-size: 273px;
+      font-weight: 700;
+      z-index: -1;
+    }
     .token-detail-table{
         margin: 40px 0;
     }
@@ -95,6 +106,9 @@ const successMsg = "has been Successflly added to your account！";
 const error = "";
 
 const CollectTokenDialog = (props: any) => {
+
+  const {user:{user, fetchUser}} = useModel('userInfo')
+
   const { loading, data, run, error } = useRequest(collectPoint, {
     manual: true,
   });
@@ -114,11 +128,13 @@ const CollectTokenDialog = (props: any) => {
   useEffect(() => {
     if (claimSuccess) {
       setCurrentTtile("Succeed");
+      fetchUser()
     }
   }, [claimSuccess]);
   useEffect(() => {
     if (claimFailed) {
       setCurrentTtile("Failed");
+      fetchUser()
     }
   }, [claimFailed]);
 
@@ -140,6 +156,11 @@ const CollectTokenDialog = (props: any) => {
   return (
     <StyledModal {...props} title={currentTitle}>
       <div className="container row-between">
+
+        {
+          user?.level && (<div className="level-shadow">{user?.level}</div>)
+        }
+
         <div className="left col">
           <div className="token-info row-between">
             <div className="col">
@@ -166,8 +187,13 @@ const CollectTokenDialog = (props: any) => {
 
             <div className="token-detail-table"></div>
 
+          <div className="tge" style={{margin: '-20px 0 40px', display: 'flex', alignItems: 'center', gap: '8px'}}>
+            <img src={warning} style={{width: '20px'}}/>
+            <span>$TELE token rewards will be able to release after Teleport’s TGE</span>
+          </div>
+
             <div className="claim-container row">
-                <Button radius={'12px'}>CLAIM NOW</Button>
+                <Button disabled radius={'12px'}>CLAIM NOW</Button>
                 <div>
                     claimable now：<span className="active">0 TELE</span>
                 </div>

@@ -16,8 +16,8 @@ export default () => {
   // @ts-ignore
   const { user: {auth} } = useModel('userInfo')
   
-  const ambassadorState = useMemo(()=>!data ? '' :data[0]?.data?.result, [data])
-  const contributorState = useMemo(()=>!data ? '' : data[0]?.data?.result, [data])
+  const ambassadorState = useMemo(()=>!data ? '' :data[0]?.data?.result?.records, [data])
+  const contributorState = useMemo(()=>!data ? '' : data[0]?.data?.result?.records, [data])
 
   useEffect(()=>{
     if(auth){

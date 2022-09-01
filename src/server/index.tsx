@@ -56,7 +56,13 @@ export const getActionList = async ({ questKey }: { questKey?: string | null }) 
 export const getJoinedQuest = async () => privateAxios.get('/jeecg-boot/am/profile/joined-quest')
 
 // 全部list
-export const getQuestList = async () => privateAxios.get('/jeecg-boot/am/profile/quest/list')
+export const getQuestList = async ({page, questKey}: any={page: 0, questKey: null}) => privateAxios.get('/jeecg-boot/amquest/quest/list', {
+  params:{
+    pageNo: page+1,
+    pageSize: 9,
+    questKey
+  }
+})
 
 // listActionDefByMainId
 export const filterActionList = async ({questFk, id}: any) => privateAxios.get('/jeecg-boot/amquest/quest/listActionDefByMainId', {
