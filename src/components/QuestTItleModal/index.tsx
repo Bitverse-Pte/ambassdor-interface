@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useModel } from "umi";
 import Loading from "../Loading";
 import Modal from "../Modal";
+import defaultImg from "@/assets/default-quest-bg.png"
 
 const StyledModal = styled(Modal)`
   .inner {
@@ -76,6 +77,8 @@ const StyledModal = styled(Modal)`
         width: 100%;
         height: 100%;
         object-fit: contain;
+        background: url(${defaultImg}) no-repeat;
+        background-size: contain;
       }
     }
     .link-desc {
