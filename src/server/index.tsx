@@ -30,6 +30,12 @@ privateAxios.interceptors.request.use(
   }
 )
 
+privateAxios.interceptors.response.use(config=>config, err=>{
+  console.log('err', err)
+  // @ts-ignore
+  window?.__toast && window?.__toast.error(err?.message)
+})
+
 export const login = async ({ address }: { address: string }) => {
   try {
     const loginRes = await axios.post('/jeecg-boot/sys/user-login', {

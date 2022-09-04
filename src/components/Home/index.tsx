@@ -13,13 +13,14 @@ import { useMemo, useState } from "react";
 import HomeTabContainer from "@/components/HomeTabContainer";
 import { useWeb3React } from "@web3-react/core";
 
-// import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { EffectCoverflow, Pagination } from "swiper";
 
-// // Import Swiper styles
-// import "swiper/css";
-// import "swiper/css/pagination";
-
-
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/effect-coverflow";
+import { useModel } from "umi";
 
 const questCard = [
   {
@@ -132,6 +133,40 @@ const Container = styled.div`
       /* font-size: 20px; */
       line-height: 30px;
     }
+    .mySwiper {
+      /* height: 850px; */
+      padding: 0px 0 270px 0;
+      margin-top: -110px;
+      .swiper-slide {
+        width: 370px;
+        /* margin: 0 30px; */
+      }
+
+      .swiper-slide > div {
+        transition: all linear 0.2s;
+        filter: opacity(0.5);
+        transform: translateY(0px);
+      }
+
+      .swiper-slide-prev,
+      .swiper-slide-next,
+      .swiper-slide-duplicate-prev,
+      .swiper-slide-duplicate-next {
+        & > div {
+          /* top: 110px; */
+          transform: translateY(110px);
+          filter: opacity(0.8);
+        }
+      }
+      .swiper-slide-active,
+      .swiper-slide-duplicate-active {
+        & > div {
+          /* top: 110px; */
+          transform: translateY(220px);
+          filter: opacity(1);
+        }
+      }
+    }
   }
 
   h1 {
@@ -146,7 +181,7 @@ const Container = styled.div`
     position: relative;
 
     color: #ffffff;
-    margin-bottom: 218px;
+    /* margin-bottom: 218px; */
     z-index: 1;
     &::after {
       content: "";
@@ -163,7 +198,7 @@ const Container = styled.div`
     }
   }
   .cards-wrap {
-    margin-top: 70px;
+    /* margin-top: -220px; */
     width: 100vw;
     display: flex;
     justify-content: center;
@@ -177,37 +212,18 @@ const Home = () => {
   const [questCardsOrder, setOrder]: any = useState(
     JSON.parse(JSON.stringify(questCard))
   );
-  console.log("questCardsOrder", questCardsOrder);
 
-  const [active, setActive] = useState(2)
-    
-  const cardsTransform = useMemo(()=>{
-    
-  }, [active])
+  const {
+    questModal: { questModalSetTrue, run: questModalRun },
+  } = useModel("questModal");
 
   const handleClick = (
-    i: { key: any; src: any; gradient: any; label: any; title: any; des: any },
+    i: { questKey: any, key: any; src: any; gradient: any; label: any; title: any; des: any },
     index: number
   ) => {
-    setActive(index)
-    // console.log(i, index);
-    // if (index === 2) return;
-    // // x % 5 + 2 > 4 ? x % 5 + 2 - 5 : x % 5 + 2
-    // setOrder((old: any[]) => {
-    //   const _old = JSON.parse(JSON.stringify(old));
-    //   const step = Math.abs(index - 2);
-
-    //   const prev = _old.filter((i: any, _index: number) => _index < index);
-    //   const last = _old.filter((i: any, _index: number) => _index > index);
-
-    //   if (index < 2) {
-    //     // plus
-    //     return [...last, _old[index], ...prev];
-    //   } else {
-    //     // minus
-    //     return [...prev, _old[index], ...last];
-    //   }
-    // });
+    console.log(i, index);
+    questModalRun({questKey: i?.questKey, page: 0})
+    questModalSetTrue()
   };
 
   return (
@@ -224,49 +240,68 @@ const Home = () => {
         </div>
       </section>
 
-      <section style={{marginTop: '84px'}}>
+      <section style={{ marginTop: "84px", marginBottom: "250px" }}>
         <HomeTabContainer />
       </section>
 
       <section className="cards-container">
         <h1>Popular quest</h1>
         <div className="row cards-wrap">
-          {questCardsOrder?.map(
-            (
-              i: {
-                key: any;
-                src: any;
-                gradient: any;
-                label: any;
-                title: any;
-                des: any;
-              },
-              index: number
-            ) => (
-              <QuestCard
-                onClick={() => handleClick(i, index)}
-                className="card-item"
-                key={i?.key}
-                src={i.src}
-                gradient={i.gradient}
-                label={i.label}
-                title={i.title}
-                des={i.des}
-                style={{
-                  margin: "0 30px",
-                  filter: `opacity(${1 / (Math.abs(index - 2) + 0.3)})`,
-                  top: `${-1 *
-                    Math.abs(index - 2) *
-                    110}px`
-                }}
-              >
-                <div className="card">
-                  <div>quest Rewards</div>
-                  <div>1000 points, cl1 NFT</div>
-                </div>
-              </QuestCard>
-            )
-          )}
+          <Swiper
+            effect={"coverflow"}
+            coverflowEffect={{
+              rotate: 0,
+              stretch: 0,
+              depth: 100,
+              modifier: 1,
+              slideShadows: false,
+            }}
+            slidesPerView={3.4}
+            loop
+            slideToClickedSlide
+            centeredSlides
+            modules={[EffectCoverflow]}
+            height={650}
+            // autoHeight
+            className="mySwiper"
+          >
+            {questCardsOrder?.map(
+              (
+                i: {
+                  questKey: any,
+                  key: any;
+                  src: any;
+                  gradient: any;
+                  label: any;
+                  title: any;
+                  des: any;
+                },
+                index: number
+              ) => (
+                <SwiperSlide onClick={() => handleClick(i, index)}>
+                  <QuestCard
+                    className="card-item"
+                    key={i?.key}
+                    src={i.src}
+                    gradient={i.gradient}
+                    label={i.label}
+                    title={i.title}
+                    des={i.des}
+                    style={{
+                      margin: "80px auto",
+                      // filter: `opacity(${1 / (Math.abs(index - 2) + 0.3)})`,
+                      // top: `${-1 * Math.abs(index - 2) * 110}px`,
+                    }}
+                  >
+                    <div className="card">
+                      <div>quest Rewards</div>
+                      <div>1000 points, cl1 NFT</div>
+                    </div>
+                  </QuestCard>
+                </SwiperSlide>
+              )
+            )}
+          </Swiper>
         </div>
       </section>
     </Container>

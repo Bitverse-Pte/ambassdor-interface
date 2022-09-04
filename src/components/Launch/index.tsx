@@ -1,3 +1,5 @@
+import { fuzzAddress } from "@/utils"
+import { useWeb3React } from "@web3-react/core"
 import styled from "styled-components"
 
 const ButtonContainer = styled.div`
@@ -16,6 +18,11 @@ const ButtonContainer = styled.div`
 `
 
 const LaunchApp = ()=>{
+
+    const {account} = useWeb3React()
+    if(account){
+        return <ButtonContainer>{fuzzAddress(account)}</ButtonContainer>
+    }
     return <ButtonContainer>Launch App</ButtonContainer>
 }
 

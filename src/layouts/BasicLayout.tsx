@@ -17,6 +17,7 @@ const Content = styled.div`
 `
 
 export default function Layout({ children }: { children: any }) {
+  
   return (
     <Web3Provider>
       <Login/>
