@@ -1,20 +1,20 @@
 import { getAmbassadorLevel, getContributorLevel, login } from "@/server";
 import { useWeb3React } from "@web3-react/core";
-import { useLocalStorageState, useRequest } from "ahooks";
+import { useLocalStorageState, usePrevious, useRequest } from "ahooks";
 import { useEffect, useMemo } from "react";
 import { toast } from "react-hot-toast";
 import "react-toastify/dist/ReactToastify.css";
 import { useModel } from "umi";
 
 const Login = () => {
-  const { account } = useWeb3React();
+  const { account, connector, hooks } = useWeb3React();
+  const previousAccount = usePrevious(account)
 
   // @ts-ignore
   const {
     user: { auth, updateUser, fetchUser, user, updateCurRole },
   } = useModel("userInfo");
-
-  // @ts-ignore
+  
   const {
     config: { contributor, ambassador },
   } = useModel("config");
@@ -44,10 +44,18 @@ const Login = () => {
   }, [user, contributor, ambassador, curRole]);
 
   useEffect(() => {
-    if (account && !auth) {
-      run({ address: account });
+    const storageAuth = window.localStorage.auth
+    const _s = JSON.parse(storageAuth)
+    if(_s && !auth){
+      updateUser(_s);
+
+      return;
     }
-  }, [account]);
+
+    if (account && !auth && !_s) {
+      run({address: account})
+    }
+  }, [account, auth]);
 
   useEffect(() => {
     // @ts-ignore
@@ -63,6 +71,22 @@ const Login = () => {
       fetchUser();
     }
   }, [auth]);
+
+  useEffect(()=>{
+    // @ts-ignore
+    window.__force_deactivate = ()=>{
+      if(connector && connector.deactivate){
+        connector.deactivate()
+      }
+    }
+  }, [])
+
+  useEffect(()=>{
+    if(previousAccount && !account){
+      window.localStorage.removeItem('auth')
+      updateUser('')
+    }
+  }, [account, previousAccount])
 
   return null;
 };

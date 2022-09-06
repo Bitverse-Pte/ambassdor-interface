@@ -1,7 +1,6 @@
 import { getProfile } from "@/server";
 import { useLocalStorageState, useRequest } from "ahooks";
 import { useMemo, useState } from "react";
-import { useModel } from "umi";
 
 export default () => {
   const [auth, updateUser] = useLocalStorageState('auth', {

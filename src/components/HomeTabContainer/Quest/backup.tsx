@@ -79,7 +79,6 @@ export default ({ show }: any) => {
 
     const { data: actionListData } = useRequest(getActionList)
     const { data: qustListData } = useRequest(getJoinedQuest)
-    console.log('qustListData', qustListData)
 
     const actions = useMemo(() => actionListData?.data?.result, [actionListData])
 
@@ -143,7 +142,6 @@ export default ({ show }: any) => {
         // },
     ]
 
-    console.log('actions', actions)
 
     if (!actions) return;
 

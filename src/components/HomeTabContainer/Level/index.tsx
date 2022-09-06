@@ -182,8 +182,6 @@ const steps = [
 export default ({ show }: any) => {
 
   const {user: {curRole}} = useModel('userInfo')
-  console.log('curRole', curRole)
-
 
   return (
     <Container>

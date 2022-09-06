@@ -221,7 +221,6 @@ const Home = () => {
     i: { questKey: any, key: any; src: any; gradient: any; label: any; title: any; des: any },
     index: number
   ) => {
-    console.log(i, index);
     questModalRun({questKey: i?.questKey, page: 0})
     questModalSetTrue()
   };

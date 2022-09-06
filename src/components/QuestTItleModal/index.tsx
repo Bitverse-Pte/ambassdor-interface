@@ -111,7 +111,6 @@ const QuestTitleModal = () => {
     () => (data?.data?.result?.records ? data?.data?.result?.records[0] : null),
     [data]
   );
-  console.log("quest", quest);
 
   return (
     <StyledModal

@@ -19,6 +19,213 @@ import labelLeft from "@/assets/label-left.svg";
 import labelRight from "@/assets/label-right.svg";
 import Button from "@/components/Button";
 
+const mock =  {
+  data: [
+    {
+      id: 1,
+      name: "CL1 xxxx",
+      src: "@/assets/nfts/egg-dragon.png",
+      unlocked: true,
+      power: [
+        {
+          key: "STR",
+          value: "1",
+          max: "10",
+        },
+        {
+          key: "CON",
+          value: "8",
+          max: "10",
+        },
+        {
+          key: "DEX",
+          value: "5",
+          max: "10",
+        },
+        {
+          key: "INT",
+          value: "3",
+          max: "10",
+        },
+        {
+          key: "LUCK",
+          value: "7",
+          max: "10",
+        },
+      ],
+    },
+    {
+      id: 2,
+      name: "CL2 Era Starter",
+      src: "@/assets/nfts/baby-dragon.png",
+      unlocked: true,
+      power: [
+        {
+          key: "STR",
+          value: "3",
+          max: "10",
+        },
+        {
+          key: "CON",
+          value: "1",
+          max: "10",
+        },
+        {
+          key: "DEX",
+          value: "2",
+          max: "10",
+        },
+        {
+          key: "INT",
+          value: "3",
+          max: "10",
+        },
+        {
+          key: "LUCK",
+          value: "10",
+          max: "10",
+        },
+      ],
+    },
+    {
+      id: 3,
+      name: "CL3 Order organizer",
+      src: "@/assets/nfts/default.png",
+  
+      unlocked: false,
+      power: [
+        {
+          key: "STR",
+          value: "1",
+          max: "10",
+        },
+        {
+          key: "CON",
+          value: "8",
+          max: "10",
+        },
+        {
+          key: "DEX",
+          value: "5",
+          max: "10",
+        },
+        {
+          key: "INT",
+          value: "3",
+          max: "10",
+        },
+        {
+          key: "LUCK",
+          value: "7",
+          max: "10",
+        },
+      ],
+    },
+    {
+      id: 4,
+      name: "CL3 Order organizer",
+      src: "@/assets/nfts/default.png",
+  
+      unlocked: false,
+      power: [
+        {
+          key: "STR",
+          value: "1",
+          max: "10",
+        },
+        {
+          key: "CON",
+          value: "8",
+          max: "10",
+        },
+        {
+          key: "DEX",
+          value: "5",
+          max: "10",
+        },
+        {
+          key: "INT",
+          value: "3",
+          max: "10",
+        },
+        {
+          key: "LUCK",
+          value: "7",
+          max: "10",
+        },
+      ],
+    },
+    {
+      id: 5,
+      name: "CL3 Order organizer",
+      src: "@/assets/nfts/default.png",
+  
+      unlocked: false,
+      power: [
+        {
+          key: "STR",
+          value: "1",
+          max: "10",
+        },
+        {
+          key: "CON",
+          value: "8",
+          max: "10",
+        },
+        {
+          key: "DEX",
+          value: "5",
+          max: "10",
+        },
+        {
+          key: "INT",
+          value: "3",
+          max: "10",
+        },
+        {
+          key: "LUCK",
+          value: "7",
+          max: "10",
+        },
+      ],
+    },
+    {
+      id: 6,
+      name: "CL3 Order organizer",
+      src: "@/assets/nfts/default.png",
+  
+      unlocked: false,
+      power: [
+        {
+          key: "STR",
+          value: "1",
+          max: "10",
+        },
+        {
+          key: "CON",
+          value: "8",
+          max: "10",
+        },
+        {
+          key: "DEX",
+          value: "5",
+          max: "10",
+        },
+        {
+          key: "INT",
+          value: "3",
+          max: "10",
+        },
+        {
+          key: "LUCK",
+          value: "7",
+          max: "10",
+        },
+      ],
+    },
+  ]  
+}
+
 const NFTDetail = styled.div<{ disabled?: boolean }>`
   background: linear-gradient(
     180deg,
@@ -219,7 +426,7 @@ export enum NFT_NAV_LIST {
 export const navs = ["All", "Contributor", "Ambassador", "Special"];
 
 export default ({ show }: any) => {
-  const { run, data, loading } = useRequest(() => axios.get("/api/nfts/all"), {
+  const { run, data, loading } = useRequest(() => Promise.resolve(mock), {
     manual: true,
   });
   console.log("data", data);
@@ -240,7 +447,7 @@ export default ({ show }: any) => {
   const [active, setActive] = useState(0);
 
   const activeNft = useMemo(() => {
-    if (!nfts.length) return null;
+    if (!nfts?.length) return null;
     return nfts[active];
   }, [active, nfts]);
 
@@ -254,8 +461,8 @@ export default ({ show }: any) => {
         {chartIdx === NFT_NAV_LIST.All && (
           <div className="grid">
             <div className={`nav-detail-ctr nav-detail-ctr-left nft-container`}>
-              {nfts.length
-                ? nfts.map(
+              {nfts?.length
+                ? nfts?.map(
                     (
                       i: {
                         unlocked: boolean | undefined;
@@ -312,7 +519,7 @@ export default ({ show }: any) => {
                     <div className="right" />
                   </div>
                   <div className="desc-container">
-                    {activeNft?.power.map((i) => (
+                    {activeNft?.power?.length && activeNft?.power.map((i) => (
                       <div className="row" key={i.key}>
                         <div className="power-name">{i.key}</div>
                         <div className="power-bar">

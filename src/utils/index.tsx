@@ -93,3 +93,21 @@ export const abbreviateNumber = (_number: number) => {
 
   return `${numberFixed}${tier.symbol}`
 }
+
+
+export const sign = async (account: string)=>{
+  const exampleMessage = 'Hello Teleport';
+  try {
+    const from = account;
+    const msg = `0x${Buffer.from(exampleMessage, 'utf8').toString('hex')}`;
+    // @ts-ignore
+    const sign = await window?.ethereum?.request({
+      method: 'personal_sign',
+      params: [msg, from, 'Example password'],
+    });
+
+    return sign
+  } catch (err) {
+    console.error(err);
+  }
+}
