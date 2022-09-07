@@ -96,7 +96,10 @@ export const abbreviateNumber = (_number: number) => {
 
 
 export const sign = async (account: string)=>{
-  const exampleMessage = 'Hello Teleport';
+  const exampleMessage = `Welcome Dear Teleporter!
+  Gear up and embark on your Quests to win level-up points in the Ambassador Program as a Contributor or Ambassador.
+  Your journey to becoming a seasoned Teleporter begins now...`;
+  
   try {
     const from = account;
     const msg = `0x${Buffer.from(exampleMessage, 'utf8').toString('hex')}`;
