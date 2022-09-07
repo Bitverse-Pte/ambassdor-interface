@@ -45,10 +45,10 @@ const Login = () => {
 
   useEffect(() => {
     const storageAuth = window.localStorage.auth
-    const _s = JSON.parse(storageAuth)
+    // const _s = JSON.parse(storageAuth)
+    const _s = storageAuth ? JSON.parse(storageAuth) : undefined
     if(_s && !auth){
       updateUser(_s);
-
       return;
     }
 
