@@ -1,19 +1,19 @@
-import { getJoinedQuest, getActionList } from '@/server';
-import { useBoolean, useClickAway, useRequest } from 'ahooks';
-import React, { useEffect, useMemo } from 'react';
-import styled from 'styled-components';
-import ToggleIcon from '@/components/ToggleIcon';
-import IconExpandArrow from '@/components/Icons/IconExpandArrow';
-import IconTopRightArrow from '@/components/Icons/IconTopRightArrow';
-import Loading from '@/components/Loading';
-import { format } from 'date-fns';
-import { DayPicker, DateRange } from 'react-day-picker';
-import 'react-day-picker/dist/style.css';
-import IconCalendar from '@/components/Icons/IconCalendar';
-import Button from '@/components/Button';
-import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css';
-import { useModel } from 'umi';
+import { getJoinedQuest, getActionList } from "@/server";
+import { useBoolean, useClickAway, useRequest } from "ahooks";
+import React, { useEffect, useMemo } from "react";
+import styled from "styled-components";
+import ToggleIcon from "@/components/ToggleIcon";
+import IconExpandArrow from "@/components/Icons/IconExpandArrow";
+import IconTopRightArrow from "@/components/Icons/IconTopRightArrow";
+import Loading from "@/components/Loading";
+import { format } from "date-fns";
+import { DayPicker, DateRange } from "react-day-picker";
+import "react-day-picker/dist/style.css";
+import IconCalendar from "@/components/Icons/IconCalendar";
+import Button from "@/components/Button";
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
+import { useModel } from "umi";
 
 const DayPickerContainer = styled.div`
   position: relative;
@@ -48,10 +48,10 @@ const DayPickerContainer = styled.div`
     z-index: 8;
 
     --rdp-cell-size: 40px;
-    --rdp-accent-color: #00DBC9;
+    --rdp-accent-color: #00dbc9;
     --rdp-background-color: transparent;
-    --rdp-accent-color-dark: #00DBC9;
-    --rdp-background-color-dark: #00DBC9;
+    --rdp-accent-color-dark: #00dbc9;
+    --rdp-background-color-dark: #00dbc9;
     --rdp-outline: none;
     --rdp-outline-selected: none;
   }
@@ -81,13 +81,13 @@ const DayPickerContainer = styled.div`
     }
   }
 
-  .rdp-tbody{
-    .rdp-row > .rdp-cell:first-of-type > button{
+  .rdp-tbody {
+    .rdp-row > .rdp-cell:first-of-type > button {
       border-top-left-radius: 50%;
       border-bottom-left-radius: 50%;
     }
 
-    .rdp-row > .rdp-cell:last-of-type > button{
+    .rdp-row > .rdp-cell:last-of-type > button {
       border-top-right-radius: 50%;
       border-bottom-right-radius: 50%;
     }
@@ -142,19 +142,19 @@ const DayPickerContainer = styled.div`
       }
     }
 
-    .rdp:not([dir='rtl']) .rdp-day_range_start:not(.rdp-day_range_end) {
+    .rdp:not([dir="rtl"]) .rdp-day_range_start:not(.rdp-day_range_end) {
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
-      &:after{
-        content: '';
+      &:after {
+        content: "";
       }
     }
 
-    .rdp:not([dir='rtl']) .rdp-day_range_end:not(.rdp-day_range_start) {
+    .rdp:not([dir="rtl"]) .rdp-day_range_end:not(.rdp-day_range_start) {
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
-      &:after{
-        content: '';
+      &:after {
+        content: "";
       }
     }
   }
@@ -167,6 +167,13 @@ const Container = styled.div`
   line-height: 24px;
   padding-bottom: 47px;
   margin-top: 29px;
+
+  .ell {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .grid-title,
   .grid-content {
     display: grid;
@@ -188,6 +195,7 @@ const Container = styled.div`
     padding: 12px;
     transition: all linear 0.2s;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
     & > div {
       display: flex;
       align-items: center;
@@ -254,10 +262,13 @@ const Container = styled.div`
 
 const ExpandContainer = ({ row, children }: any) => {
   const [status, { toggle }] = useBoolean(false);
-  const { run, loading, data, error } = useRequest((id) => getActionList({ questKey: id }), {
-    manual: true,
-  });
-  
+  const { run, loading, data, error } = useRequest(
+    (id) => getActionList({ questKey: id }),
+    {
+      manual: true,
+    }
+  );
+
   useEffect(() => {
     if (status) {
       run(row?.id);
@@ -268,37 +279,44 @@ const ExpandContainer = ({ row, children }: any) => {
 
   const columns = [
     {
-      name: 'No.',
-      key: 'id',
-      id: 'id',
+      name: "No.",
+      key: "id",
+      id: "id",
       formatter({ index }: any) {
-        return <div>/</div>;
+        return null;
       },
     },
     {
-      name: 'Quest',
-      key: 'title',
-      id: 'Quest',
-      grid: 'span 2',
+      name: "Quest",
+      key: "title",
+      id: "Quest",
+      grid: "span 2",
       formatter({ row }: any) {
         return (
-          <a style={{ color: 'rgba(255,255,255,.4)', textDecoration: 'none' }} href={row?.landingUrl} target="_blank">
+          <a
+            style={{
+              color: "rgba(255,255,255,.4)",
+              textDecoration: "none",
+              width: "100%",
+            }}
+            href={row?.landingUrl}
+            target="_blank"
+          >
             <Tippy content={row?.title}>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div style={{ display: "flex", alignItems: "center" }}>
                 <span
                   style={{
-                    maxWidth: '262px',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                    marginRight: '4px',
-                    display: 'block',
+                    maxWidth: "262px",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    marginRight: "4px",
+                    display: "block",
                     flex: 1,
                   }}
                 >
-                  {row?.title || '/'}
-                </span>{' '}
-                <IconTopRightArrow />
+                  {row?.title || "/"}
+                </span>
               </div>
             </Tippy>
           </a>
@@ -306,48 +324,48 @@ const ExpandContainer = ({ row, children }: any) => {
       },
     },
     {
-      name: 'Rewards',
-      key: 'rewards',
-      id: 'Rewards',
+      name: "Rewards",
+      key: "rewards",
+      id: "Rewards",
       formatter({ row }: any) {
-        return row?.rewards || 0 + ' points';
+        return row?.rewards || 0 + " points";
       },
     },
     {
-      name: 'Type',
-      key: 'type',
-      id: 'Type',
+      name: "Type",
+      key: "type",
+      id: "Type",
       formatter({ row }: any) {
-        return row?.actionType || '/';
+        return row?.type || "/";
       },
     },
     {
-      name: 'Post Date',
-      key: 'updateTime',
-      id: 'Post Date',
-      grid: 'span 2',
+      name: "Post Date",
+      key: "updateTime",
+      id: "Post Date",
+      grid: "span 2",
     },
     {
-      name: 'Status',
-      key: 'deadlineTime',
-      id: 'Status',
+      name: "Status",
+      key: "status",
+      id: "Status",
       formatter({ row }: any) {
-        return <div>{row?.status || '/'}</div>;
+        return <div>{row?.status === undefined ? '/' : +row?.status ? 'Completed' : 'Incompleted' }</div>;
       },
     },
     {
-      key: 'available',
-      name: '',
-      grid: 'none',
-      width: '32px',
+      key: "available",
+      name: "",
+      grid: "none",
+      width: "32px",
       formatter({ row, onExpandClick, expandStatus, ...props }: any) {
-        return <div style={{ width: '32px' }} />;
+        return <div style={{ width: "32px" }} />;
       },
     },
   ];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
+    <div style={{ display: "flex", flexDirection: "column" }}>
       {React.cloneElement(children, {
         expandStatus: status,
         onExpandClick: toggle,
@@ -362,11 +380,11 @@ const ExpandContainer = ({ row, children }: any) => {
         ) : (
           <div
             style={{
-              margin: '36px 0',
-              width: '100%',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              margin: "36px 0",
+              width: "100%",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
             <Loading />
@@ -391,13 +409,15 @@ const Row = ({ columns, index, i, onExpandClick, expandStatus }: any) => {
     <div className="grid-content" key={columns[index]?.key}>
       {columns?.map((j: any) => (
         <div
-          key={j.key + 'row'}
+          key={j.key + "row"}
           style={{
-            width: i?.width || 'auto',
-            gridColumnStart: `${j?.grid || 'span 1'}`,
+            width: i?.width || "auto",
+            gridColumnStart: `${j?.grid || "span 1"}`,
           }}
         >
-          {j?.formatter ? j?.formatter({ row: i, index, onExpandClick, expandStatus }) : i[j.key]}
+          {j?.formatter
+            ? j?.formatter({ row: i, index, onExpandClick, expandStatus })
+            : i[j.key]}
         </div>
       ))}
     </div>
@@ -414,97 +434,114 @@ export default ({ show }: any) => {
     questModal: { questModalSetTrue, run: questModalRun },
   } = useModel("questModal");
 
-  const handleClick = (questKey: string)=>{
-    questModalRun({questKey, page: 0})
-    questModalSetTrue()
-  }
+  const handleClick = (questKey: string) => {
+    questModalRun({ questKey, page: 0 });
+    questModalSetTrue();
+  };
 
   const columns = useMemo(
     () => [
       {
-        name: 'No.',
-        key: 'id',
-        id: 'id',
+        name: "No.",
+        key: "id",
+        id: "id",
         formatter({ index }: any) {
           return <>{index + 1}</>;
         },
       },
       {
-        name: 'Quest',
-        key: 'title',
-        id: 'Quest',
-        grid: 'span 2',
+        name: "Quest",
+        key: "title",
+        id: "Quest",
+        grid: "span 2",
         formatter({ row }: any) {
           return (
-              <Tippy content={row?.title}>
-                <div style={{ display: 'flex', alignItems: 'center' }} onClick={()=>handleClick(row?.questKey)}>
-                  <span
-                    style={{
-                      maxWidth: '262px',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                      marginRight: '4px',
-                      flex: 1,
-                      display: 'block',
-                    }}
-                  >
-                    {row?.title}
-                  </span>
-                  <IconTopRightArrow />
-                </div>
-              </Tippy>
+            <Tippy content={row?.title}>
+              <div
+                className="ell"
+                style={{ display: "flex", alignItems: "center" }}
+                onClick={() => handleClick(row?.questKey)}
+              >
+                <span
+                  style={{
+                    maxWidth: "262px",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    marginRight: "4px",
+                    flex: 1,
+                    display: "block",
+                    cursor: "pointer",
+                  }}
+                >
+                  {row?.title}
+                </span>
+                <IconTopRightArrow />
+              </div>
+            </Tippy>
           );
         },
       },
       {
-        name: 'Rewards',
-        key: 'rewards',
-        id: 'Rewards',
+        name: "Rewards",
+        key: "rewards",
+        id: "Rewards",
         formatter({ row }: any) {
-          return row?.rewards || 0 + ' points';
+          return row?.rewards || 0 + " points";
         },
       },
       {
-        name: 'Type',
-        key: 'type',
-        id: 'Type',
+        name: "Type",
+        key: "type",
+        id: "Type",
         formatter({ row }: any) {
-          return row?.type || '/';
+          return row?.type || "/";
         },
       },
       {
-        name: 'Post Date',
-        key: 'issueDate',
-        id: 'Post Date',
-        grid: 'span 2',
+        name: "Post Date",
+        key: "issueDate",
+        id: "Post Date",
+        grid: "span 2",
       },
       {
-        name: 'Status',
-        key: 'deadlineTime',
-        id: 'Status',
+        name: "Status",
+        key: "deadlineTime",
+        id: "Status",
         formatter({ row }: any) {
-          return <div style={{ opacity: 0.4 }}>{row?.type || '/'}</div>;
+          return <div style={{ opacity: 0.4 }}>{row?.status === undefined ? '/' : +row?.status ? 'Completed' : 'Incompleted' }</div>;
         },
       },
       {
-        key: 'available',
-        name: '',
-        grid: 'none',
-        width: '32px',
+        key: "available",
+        name: "",
+        grid: "none",
+        width: "32px",
         formatter({ row, onExpandClick, expandStatus, ...props }: any) {
-          return <Expand row={row} expandStatus={expandStatus} onExpandClick={onExpandClick} />;
+          return (
+            <Expand
+              row={row}
+              expandStatus={expandStatus}
+              onExpandClick={onExpandClick}
+            />
+          );
         },
       },
     ],
-    [],
+    []
   );
 
   const [showDayPicker, { setFalse, setTrue }] = useBoolean(false);
 
   const [selected, setSelected] = React.useState<DateRange | undefined>();
-  const fromDate = useMemo(() => (selected?.from ? format(selected?.from, 'yyyy-MM-dd') : '-'), [selected?.from]);
-  const toDate = useMemo(() => (selected?.to ? format(selected?.to, 'yyyy-MM-dd') : '-'), [selected?.to]);
+  const fromDate = useMemo(
+    () => (selected?.from ? format(selected?.from, "yyyy-MM-dd") : "-"),
+    [selected?.from]
+  );
+  const toDate = useMemo(
+    () => (selected?.to ? format(selected?.to, "yyyy-MM-dd") : "-"),
+    [selected?.to]
+  );
 
   useClickAway(
     () => {
@@ -512,14 +549,14 @@ export default ({ show }: any) => {
         setFalse();
       }
     },
-    () => document.getElementsByClassName('daypicker-target')[0],
+    () => document.getElementsByClassName("daypicker-target")[0]
   );
 
   return (
     <Container>
       <DayPickerContainer className="daypicker-target">
         <DayPicker
-          style={{ display: showDayPicker ? 'inline-block' : 'none' }}
+          style={{ display: showDayPicker ? "inline-block" : "none" }}
           showOutsideDays
           fromYear={2022}
           toYear={2100}
@@ -530,11 +567,11 @@ export default ({ show }: any) => {
           footer={
             <div
               style={{
-                marginTop: '18px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: '16px',
+                marginTop: "18px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: "16px",
               }}
             >
               <Button className="" type="cancel" onClick={setFalse}>
@@ -551,7 +588,7 @@ export default ({ show }: any) => {
             <div>{fromDate}</div>
             <IconCalendar />
           </div>
-          <div style={{ margin: '0 16px' }}>-</div>
+          <div style={{ margin: "0 16px" }}>-</div>
           <div className="date-trigger to-date" onClick={setTrue}>
             <div>{toDate}</div>
             <IconCalendar />
@@ -563,8 +600,8 @@ export default ({ show }: any) => {
         {columns?.map((i) => (
           <div
             style={{
-              width: i?.width || 'auto',
-              gridColumnStart: `${i?.grid || 'span 1'}`,
+              width: i?.width || "auto",
+              gridColumnStart: `${i?.grid || "span 1"}`,
             }}
             key={i?.key}
           >
@@ -575,7 +612,7 @@ export default ({ show }: any) => {
       {questList ? (
         <div className="grid-container">
           {questList?.map((i: any, index: number) => (
-            <ExpandContainer row={i}>
+            <ExpandContainer row={i} key={index}>
               <Row columns={columns} i={i} index={index} />
             </ExpandContainer>
           ))}
@@ -583,11 +620,11 @@ export default ({ show }: any) => {
       ) : (
         <div
           style={{
-            marginTop: '48px',
-            width: '100%',
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            marginTop: "48px",
+            width: "100%",
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
           <Loading />

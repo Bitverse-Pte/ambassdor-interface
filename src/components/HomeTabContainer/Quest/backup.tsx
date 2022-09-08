@@ -50,9 +50,9 @@ const Table = ({ columns, data }: any) => {
         <>
             <StyledTable {...getTableProps()}>
                 <thead>
-                    {headerGroups.map(headerGroup => (
-                        <tr {...headerGroup.getHeaderGroupProps()}>
-                            {headerGroup.headers.map(column => (
+                    {headerGroups.map((headerGroup, index) => (
+                        <tr {...headerGroup.getHeaderGroupProps()} key={index}>
+                            {headerGroup.headers.map((column, index) => (
                                 <th {...column.getHeaderProps()}>{column.render('Header')}</th>
                             ))}
                         </tr>
@@ -62,7 +62,7 @@ const Table = ({ columns, data }: any) => {
                     {rows.map((row, i) => {
                         prepareRow(row)
                         return (
-                            <tr {...row.getRowProps()}>
+                            <tr {...row.getRowProps()} key={i}>
                                 {row.cells.map(cell => {
                                     return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                                 })}

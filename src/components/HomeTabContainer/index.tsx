@@ -106,7 +106,7 @@ export default () => {
               <div className="block" style={{transform: `translate(${currentSubNav * 100}%, 0)`}}/>
               {
                 questSubLevel?.map((i, index)=>(
-                  <div className={index === currentSubNav ? 'active': ''} onClick={()=>{setCurrentSubNav(index)}}>{i}</div>
+                  <div key={index} className={index === currentSubNav ? 'active': ''} onClick={()=>{setCurrentSubNav(index)}}>{i}</div>
                 ))
               }
             </div>)
@@ -122,10 +122,10 @@ export default () => {
         {chartIdx === NAVLIST.Quest && (
           <div className={`nav-detail-ctr nav-detail-ctr-left`}>
             {
-              currentSubNav === 0 && (<CardTypeQuest color="linear-gradient(90deg, #10CEC3 3.8%, #006B69 95.11%);" label={questSubLevel[currentSubNav]} show={chartIdx === NAVLIST.Quest} />)
+              currentSubNav === 0 && (<CardTypeQuest type="monthly" color="linear-gradient(90deg, #10CEC3 3.8%, #006B69 95.11%);" label={questSubLevel[currentSubNav]} show={chartIdx === NAVLIST.Quest} />)
             }
             {
-              currentSubNav === 1 && (<CardTypeQuest color="linear-gradient(90deg, #FFA826 -6.84%, #FF7A00 103.42%);" label={questSubLevel[currentSubNav]} show={chartIdx === NAVLIST.Quest} />)
+              currentSubNav === 1 && (<CardTypeQuest type="storyline" color="linear-gradient(90deg, #FFA826 -6.84%, #FF7A00 103.42%);" label={questSubLevel[currentSubNav]} show={chartIdx === NAVLIST.Quest} />)
             }
             {
               currentSubNav === 2 && (<Quest show={chartIdx === NAVLIST.Quest} />)

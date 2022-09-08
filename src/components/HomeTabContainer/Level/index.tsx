@@ -180,9 +180,6 @@ const steps = [
 ];
 
 export default ({ show }: any) => {
-
-  const {user: {curRole}} = useModel('userInfo')
-
   return (
     <Container>
       <Swiper

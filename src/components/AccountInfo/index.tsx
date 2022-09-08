@@ -212,7 +212,7 @@ export default () => {
   const { account } = useWeb3React();
   // @ts-ignore
   const {
-    user: { user, loading, curRole },
+    user: { auth, user, loading },
   } = useModel("userInfo");
 
   // @ts-ignore
@@ -239,7 +239,7 @@ export default () => {
 
   return (
     <Container>
-      {account ? (
+      {(account && auth) ? (
         <div className="row-between p-0-40">
           <UserAvatar src={user?.avatar} />
           <div className="column">

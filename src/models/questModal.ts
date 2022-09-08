@@ -2,10 +2,20 @@ import {
   getActionList, getQuestList,
 } from "@/server";
 import { useBoolean, useRequest } from "ahooks";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default () => {
-  const { run, data, loading, error } = useRequest(getQuestList, {
+  const [actions, setActions] = useState(null)
+
+    const { run, data, loading, error } = useRequest(async ()=>{
+    const res = await getQuestList()
+    const quest = res?.data?.result?.records ? res?.data?.result?.records[0] : null
+    if(quest){
+      const actions = await getActionList({questKey: quest?.questKey})
+      setActions(actions?.data?.result)
+    }
+    return Promise.resolve(res)
+  }, {
     manual: true,
   });
 
@@ -23,6 +33,7 @@ export default () => {
   const questModal = {
     run,
     data,
+    actions,
     loading,
     error,
     questKey,

@@ -1,49 +1,68 @@
 import { getAmbassadorLevel, getContributorLevel } from "@/server";
 import { useLocalStorageState, useRequest } from "ahooks";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useModel } from "umi";
 
 export default () => {
-  const [contributor, updateContributor] = useLocalStorageState('contributor', {
-    defaultValue: ''
-  })  
-  const [ambassador, updateAmbassador] = useLocalStorageState('ambassador', {
-    defaultValue: ''
-  })  
+  const [contributor, updateContributor] = useState("contributor");
+  const [ambassador, updateAmbassador] = useState("ambassador");
 
-  const {run, data, loading, error} = useRequest(()=>Promise.all([getAmbassadorLevel(), getContributorLevel()]), {manual: true})
+  const { run, data, loading, error } = useRequest(
+    (role: string) => {
+      console.log(role);
+      if (role === "ambassador") {
+        return getAmbassadorLevel();
+      }
+      if (role === "contributor") {
+        return getContributorLevel();
+      }
+      return Promise.reject("Invalid Role");
+    },
+    { manual: true }
+  );
 
   // @ts-ignore
-  const { user: {auth} } = useModel('userInfo')
-  
-  const ambassadorState = useMemo(()=>!data ? '' :data[0]?.data?.result?.records, [data])
-  const contributorState = useMemo(()=>!data ? '' : data[0]?.data?.result?.records, [data])
+  const {
+    user: { isContributor, isAmbassador },
+  } = useModel("userInfo");
 
-  useEffect(()=>{
-    if(auth){
-        run()
+  const ambassadorState = useMemo(
+    () => (!data ? "" : data?.data?.result?.records),
+    [data]
+  );
+  const contributorState = useMemo(
+    () => (!data ? "" : data?.data?.result?.records),
+    [data]
+  );
+
+  useEffect(() => {
+    if (isAmbassador) {
+      run(isAmbassador);
     }
-  }, [auth])
-
-  useEffect(()=>{
-    if(ambassadorState){
-        updateAmbassador(ambassadorState)
+    if (isContributor) {
+      run(isContributor);
     }
-  }, [ambassadorState])
+  }, [isContributor, isAmbassador]);
 
-  useEffect(()=>{
-    if(contributorState){
-        updateContributor(contributorState)
+  useEffect(() => {
+    if (ambassadorState) {
+      updateAmbassador(ambassadorState);
     }
-  }, [contributorState])
+  }, [ambassadorState]);
 
-    const config = {
-      run,
-      contributor,
-      ambassador,
-      loading, 
-      error
-    };
-   
-    return { config };
+  useEffect(() => {
+    if (contributorState) {
+      updateContributor(contributorState);
+    }
+  }, [contributorState]);
+
+  const config = {
+    run,
+    contributor,
+    ambassador,
+    loading,
+    error,
   };
+
+  return { config };
+};

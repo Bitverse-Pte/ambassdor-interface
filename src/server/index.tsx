@@ -91,6 +91,8 @@ export const login = async ({
     // window.localStorage.auth = loginRes?.data?.result?.token
     return Promise.resolve(loginRes);
   } catch (err) {
+    // @ts-ignore
+    window?.__toast && window?.__toast.error(err?.message);
     return Promise.reject(err);
   }
 };
@@ -113,13 +115,15 @@ export const getJoinedQuest = async () =>
 
 // 全部list
 export const getQuestList = async (
-  { page, questKey }: any = { page: 0, questKey: null }
+  { page, questKey, assignTo, type }: any = { page: 0, questKey: null, assignTo: null, type: null }
 ) =>
   privateAxios.get("/jeecg-boot/amquest/quest/list", {
     params: {
-      pageNo: page + 1,
+      pageNo: (page||1) ,
       pageSize: 9,
       questKey,
+      assignTo,
+      type
     },
   });
 

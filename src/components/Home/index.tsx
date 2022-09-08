@@ -277,7 +277,7 @@ const Home = () => {
                 },
                 index: number
               ) => (
-                <SwiperSlide onClick={() => handleClick(i, index)}>
+                <SwiperSlide key={i?.questKey} onClick={() => handleClick(i, index)}>
                   <QuestCard
                     className="card-item"
                     key={i?.key}

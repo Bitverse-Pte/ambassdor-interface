@@ -58,5 +58,5 @@ export default ({precent, duration, loading}: {precent: number, duration?: strin
     }, [precent])
 
 
-    return <Progress loading={loading} duration={duration} precent={tempPercent}/>
+    return <Progress loading={!!loading} duration={duration} precent={tempPercent}/>
 }

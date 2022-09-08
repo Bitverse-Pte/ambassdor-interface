@@ -1,70 +1,37 @@
-import { getAmbassadorLevel, getContributorLevel, login } from "@/server";
 import { useWeb3React } from "@web3-react/core";
-import { useLocalStorageState, usePrevious, useRequest } from "ahooks";
-import { useEffect, useMemo } from "react";
-import { toast } from "react-hot-toast";
+import { usePrevious } from "ahooks";
+import { useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { useModel } from "umi";
 
 const Login = () => {
-  const { account, connector, hooks } = useWeb3React();
-  const previousAccount = usePrevious(account)
+  const { account, connector } = useWeb3React();
+  const previousAccount = usePrevious(account);
+
+  const disconnect = ()=>{
+    if(connector.deactivate){
+      connector.deactivate()
+    }else{
+      connector.resetState()
+    }
+    window.localStorage.removeItem('auth')
+    updateAuth('')
+  }
 
   // @ts-ignore
   const {
-    user: { auth, updateUser, fetchUser, user, updateCurRole },
+    user: { auth, updateAuth, fetchUser, user, updateCurRole },
   } = useModel("userInfo");
   
   const {
     config: { contributor, ambassador },
   } = useModel("config");
 
-  const curRole = useMemo(() => {
-    if(!user?.role) return;
-    const cr = user?.role;
-    switch (cr) {
-      case "ambassador":
-        return ambassador;
-      case "contributor":
-        return contributor;
-      default:
-        return contributor;
-    }
-  }, [contributor, ambassador, user]);
-
-  const { run, loading, data, error } = useRequest(
-    ({ address }) => login({ address }),
-    { manual: true }
-  );
-
   useEffect(() => {
-    if (user && contributor && ambassador) {
-      updateCurRole(curRole)
+    if (user && (contributor || ambassador)) {
+      updateCurRole(contributor || ambassador)
     }
-  }, [user, contributor, ambassador, curRole]);
-
-  useEffect(() => {
-    const storageAuth = window.localStorage.auth
-    // const _s = JSON.parse(storageAuth)
-    const _s = storageAuth ? JSON.parse(storageAuth) : undefined
-    if(_s && !auth){
-      updateUser(_s);
-      return;
-    }
-
-    if (account && !auth && !_s) {
-      run({address: account})
-    }
-  }, [account, auth]);
-
-  useEffect(() => {
-    // @ts-ignore
-    if (data?.data?.result?.token) {
-      toast("Login Success!");
-      // @ts-ignore
-      updateUser(data?.data?.result?.token);
-    }
-  }, [data]);
+  }, [user, contributor, ambassador]);
 
   useEffect(() => {
     if (auth) {
@@ -74,19 +41,17 @@ const Login = () => {
 
   useEffect(()=>{
     // @ts-ignore
-    window.__force_deactivate = ()=>{
-      if(connector && connector.deactivate){
-        connector.deactivate()
-      }
-    }
+    window.__force_deactivate = disconnect
   }, [])
 
+  
   useEffect(()=>{
-    if(previousAccount && !account){
-      window.localStorage.removeItem('auth')
-      updateUser('')
+    // 登出/切换account
+    if((previousAccount && !account) || (previousAccount && account && previousAccount !== account)){
+      disconnect()
     }
   }, [account, previousAccount])
+
 
   return null;
 };

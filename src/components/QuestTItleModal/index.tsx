@@ -3,13 +3,16 @@ import styled from "styled-components";
 import { useModel } from "umi";
 import Loading from "../Loading";
 import Modal from "../Modal";
-import defaultImg from "@/assets/default-quest-bg.png"
+import defaultImg from "@/assets/default-quest-bg.png";
+import { format } from "date-fns";
+import Button from "../Button";
 
 const StyledModal = styled(Modal)`
   .inner {
     max-width: inherit;
     width: 890px;
     height: max-content;
+    padding: 48px 50px;
   }
   .content {
     margin-top: 40px;
@@ -30,11 +33,14 @@ const StyledModal = styled(Modal)`
   }
 
   .loading {
-    padding: 80px 0 30px;
+    padding: 30px 0;
   }
 
   .container {
-    align-items: flex-start !important;
+    align-items: stretch !important;
+    .left {
+      flex: 1;
+    }
   }
 
   .label {
@@ -61,9 +67,17 @@ const StyledModal = styled(Modal)`
   }
 
   .desc {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    padding: 24px;
+    overflow: scroll;
+    max-height: 408px;
+
     & * {
       color: #fff !important;
       text-align: left !important;
+      line-height: 1.3;
     }
   }
   .right {
@@ -76,7 +90,7 @@ const StyledModal = styled(Modal)`
       img {
         width: 100%;
         height: 100%;
-        object-fit: contain;
+        object-fit: cover;
         background: url(${defaultImg}) no-repeat;
         background-size: contain;
       }
@@ -87,7 +101,8 @@ const StyledModal = styled(Modal)`
       margin-bottom: 26px;
       color: #fff;
     }
-    .period.rewards {
+    .period.rewards,
+    .period.link {
       margin-bottom: 0 !important;
     }
     .period.rewards {
@@ -98,19 +113,21 @@ const StyledModal = styled(Modal)`
 
 const QuestTitleModal = () => {
   const {
-    questModal: { run, data, loading, questModalState, questModalSetFalse },
+    questModal: {
+      data,
+      loading,
+      actions,
+      questModalState,
+      questModalSetFalse,
+    },
   } = useModel("questModal");
-
-  //   useEffect(()=>{
-  //     if(questModalState){
-  //         // run()
-  //     }
-  //   }, [questModalState])
 
   const quest = useMemo(
     () => (data?.data?.result?.records ? data?.data?.result?.records[0] : null),
     [data]
   );
+
+  console.log("actions", actions);
 
   return (
     <StyledModal
@@ -121,37 +138,41 @@ const QuestTitleModal = () => {
     >
       {!loading && quest ? (
         <div className="container row-between">
-          <div className="col left">
+          <div className="column left">
             <div className="row">
-              <div className="label">Story Line</div>
-              <div className="label">Story Line</div>
-              <div className="label">Story Line</div>
+              <div className="label">{quest?.type}</div>
             </div>
             <div className="period">
-              Valid period:&nbsp;<span>11/11/2022-11/11/2022</span>
+              Valid period:&nbsp;
+              <span>
+                {format(new Date(quest?.issueDate), "dd/MM/yyyy")}-
+                {format(new Date(quest?.deadline), "dd/MM/yyyy")}
+              </span>
             </div>
             <div className="desc">
               <div dangerouslySetInnerHTML={{ __html: quest?.description }} />
             </div>
           </div>
 
-          <div className="right col">
+          <div className="right column">
             <div className="period rewards">
-              rewards:&nbsp;<span>1000 TELE ｜ 1 NFT</span>
+              rewards:&nbsp;<span>{quest?.rewards || "-"}</span>
             </div>
             <div className="period date">
-              Date:&nbsp;<span>11/11/2022</span>
+              Date:&nbsp;
+              <span>{format(new Date(quest?.issueDate), "dd/MM/yyyy")}</span>
             </div>
 
-            <div className="img-container col">
+            <div className="img-container column">
               <img src={quest?.image} alt="" />
             </div>
-            <div className="col">
+            <div className="column">
               <span className="link-desc">Please enter the link below</span>
-              <div className="period col">
-                <div style={{marginBottom: '12px'}}>Quest url link:</div>
+              <div className="period column link">
+                <div style={{ marginBottom: "12px" }}>Quest url link:</div>
+                <div style={{ marginBottom: "32px" }}>{quest?.url}</div>
                 <a target={"_blank"} href={quest?.url}>
-                  {quest?.url}
+                  <Button>Enter</Button>
                 </a>
               </div>
             </div>

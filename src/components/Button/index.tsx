@@ -1,6 +1,7 @@
 import * as React from "react";
 import classNames from "classnames";
 import styled, { keyframes } from "styled-components";
+import Loading from "../Loading";
 
 export const tuple = <T extends string[]>(...args: T) => args;
 
@@ -122,6 +123,9 @@ const Wrapper = styled.button<{ radius?: number | string }>`
     border-radius: ${({ radius }) => radius || "6px"};
     font-weight: 600;
     font-size: 14px;
+    .loader{
+      height: 44px;
+    }
   }
   &.lg {
     width: 100%;
@@ -129,6 +133,15 @@ const Wrapper = styled.button<{ radius?: number | string }>`
       line-height: 68px;
       font-weight: 600;
       font-size: 18px;
+  }
+
+  .loader{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    svg {
+      height: 100%;
+    }
   }
 `;
 
@@ -209,8 +222,8 @@ const Button: React.FC<ButtonProps> = React.forwardRef(
         onClick={handleClick}
         radius={radius}
       >
-        {loading && <i className="iconfont icon-loading" />}
-        {children && <>{children}</>}
+        {loading && <Loading/>}
+        {!loading && children && <>{children}</>}
       </Wrapper>
     );
   }

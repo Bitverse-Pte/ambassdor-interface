@@ -66,7 +66,8 @@ const Container = styled.div`
   }
 `;
 
-const Card = styled.div<{ backgroundColor?: string }>`
+const Card = styled.div<{ backgroundColor?: string, active?: boolean }>`
+  filter: grayscale(${({active})=> active ? 0 : 1});
   background: ${({ backgroundColor }) => backgroundColor};
   aspect-ratio: 425/224;
   border-radius: 12px;
@@ -76,6 +77,7 @@ const Card = styled.div<{ backgroundColor?: string }>`
   flex-direction: column;
   align-items: center;
   color: #fff;
+  cursor: pointer;
 
   .col {
     display: flex;
@@ -180,13 +182,13 @@ const Card = styled.div<{ backgroundColor?: string }>`
   }
 `;
 
-const CardTypeQuest = ({ show, label, color }: any) => {
+const CardTypeQuest = ({ type, show, label, color }: any) => {
   const { loading, data, run, error } = useRequest(getQuestList, {
     manual: true,
   });
 
   const {
-    user: { auth },
+    user: { auth, isAmbassador, isContributor },
   } = useModel("userInfo");
 
   const {
@@ -194,10 +196,14 @@ const CardTypeQuest = ({ show, label, color }: any) => {
   } = useModel("questModal");
 
   useEffect(() => {
-    if (auth) {
-      run();
+    if (isAmbassador || isContributor) {
+      run({page: 1, 
+        pageSize: 9,
+        assignTo: isContributor ? 'contributor' : 'ambassador',
+        type
+      });
     }
-  }, [auth]);
+  }, [isAmbassador, isContributor, type]);
 
   const quests = useMemo(() => data?.data?.result?.records, [data]);
   const currentPage = useMemo(() => data?.data?.result?.current, [data]);
@@ -218,7 +224,7 @@ const CardTypeQuest = ({ show, label, color }: any) => {
         <div className="list">
           <div className="grid">
             {quests?.map((i) => (
-              <Card key={i?.id} backgroundColor={color} onClick={()=>handleClick(i?.questKey)}>
+              <Card active={i?.active === 'Y'} key={i?.id} backgroundColor={color} onClick={()=>handleClick(i?.questKey)}>
                 <div className="top">
                   <div className="left">Quest Rewards</div>
                   <div className="vertical-divider" />
