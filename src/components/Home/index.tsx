@@ -21,6 +21,8 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/effect-coverflow";
 import { useModel } from "umi";
+import { useRequest } from "ahooks";
+import { getPublicQuestList, getQuestList } from "@/server";
 
 const questCard = [
   {
@@ -224,6 +226,9 @@ const Home = () => {
     questModalRun({questKey: i?.questKey, page: 0})
     questModalSetTrue()
   };
+
+  // const {data, loading} = useRequest(getPublicQuestList)
+  // console.log('dta', data)
 
   return (
     <Container>

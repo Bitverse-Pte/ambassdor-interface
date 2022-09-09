@@ -71,8 +71,9 @@ const StyledModal = styled(Modal)`
     background: rgba(255, 255, 255, 0.1);
     border-radius: 14px;
     padding: 24px;
-    overflow: scroll;
     max-height: 408px;
+    overflow-x: hidden;
+    overflow-y: auto;
 
     & * {
       color: #fff !important;
