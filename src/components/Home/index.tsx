@@ -169,6 +169,7 @@ const Container = styled.div`
         line-height: 24px;
       }
     }
+
     .mySwiper {
       /* height: 850px; */
       padding: 0px 0 270px 0;
@@ -333,22 +334,21 @@ const Home = () => {
                   label={i?.type}
                   title={i?.title}
                   des={i?.description}
+                  valid={i?.status}
                   style={{
                     margin: "80px auto",
-                    // filter: `opacity(${1 / (Math.abs(index - 2) + 0.3)})`,
-                    // top: `${-1 * Math.abs(index - 2) * 110}px`,
                   }}
                 >
-                  {i.status ? (
+                  {i?.status ? (
                     <div className="card">
                       <div>quest Rewards</div>
                       <div>{i?.rewrds || 0} points</div>
                     </div>
-                  ) : (
+                  ) : loading ? (
                     <div className="card">
                       <Loading />
                     </div>
-                  )}
+                  ) : null}
                 </QuestCard>
               </SwiperSlide>
             ))}

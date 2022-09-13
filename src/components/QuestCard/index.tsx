@@ -1,3 +1,5 @@
+import { useSize } from "ahooks";
+import { useRef } from "react";
 import styled from "styled-components";
 
 const Container = styled.div<{ gradient?: string }>`
@@ -92,17 +94,37 @@ const Container = styled.div<{ gradient?: string }>`
   }
   .p {
     padding: 0 20px;
-    align-items: flex-start!important;
+    align-items: flex-start !important;
   }
   .ellipsis {
     overflow: hidden; //超出的文本隐藏
     text-overflow: ellipsis; //溢出用省略号显示
     white-space: nowrap; //溢出不换行
   }
+
+  .coming-soon {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    border-radius: 0px 0px 17px 17px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-family: "Dela Gothic One";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 35px;
+  }
 `;
 
 const removeHtmlStyle = (html: string) =>
-html ? html.replaceAll(/style="[^\"]*?"/g, "") : '';
+  html ? html.replaceAll(/style="[^\"]*?"/g, "") : "";
 
 export default ({
   onClick,
@@ -113,11 +135,15 @@ export default ({
   label,
   children,
   style,
+  valid,
 }: any) => {
+  const ref: any = useRef()
+  const size = useSize(ref)
+  
   return (
     <Container gradient={gradient} style={style} onClick={onClick}>
       <img src={src} alt={title} />
-      <div className="inner">
+      <div className="inner" ref={ref}>
         <div className="row p">
           <div className="f-20">{title}</div>
           <div className="label">{label}</div>
@@ -129,6 +155,7 @@ export default ({
         />
         <div className="insert">{children}</div>
       </div>
+      {!valid && <div style={{height: size?.height || 210 + 'px'}} className="coming-soon">Coming Soon...</div>}
     </Container>
   );
 };
