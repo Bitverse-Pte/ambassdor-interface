@@ -30,6 +30,7 @@ const Container = styled.div<{ gradient?: string }>`
     line-height: 20px;
     color: #05050e;
     padding: 0 17px 3px;
+    margin-top: 5px;
   }
 
   :hover {
@@ -91,6 +92,7 @@ const Container = styled.div<{ gradient?: string }>`
   }
   .p {
     padding: 0 20px;
+    align-items: flex-start!important;
   }
   .ellipsis {
     overflow: hidden; //超出的文本隐藏
