@@ -273,10 +273,10 @@ const Home = () => {
   const { data, loading } = useRequest(getPublicQuestList);
   const popularQuest = useMemo(() => {
     if (!data?.data?.result?.records) return questCard;
-    return data?.data?.result?.records.map((i: any, index: any) => ({
-      ...questCard[index],
+    return questCard.map((i: any, index: any) => ({
       ...i,
-      status: true,
+      ...data?.data?.result?.records[index],
+      status: data?.data?.result?.records[index] ? true : false,
     }));
   }, [data]);
 

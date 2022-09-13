@@ -51,6 +51,7 @@ const Container = styled.div<{ gradient?: string }>`
   }
 
   .inner {
+    min-height: 210px;
     width: calc(100% - 8px);
     margin: 0 auto;
     background: rgba(0, 0, 0, 0.6);
@@ -155,7 +156,7 @@ export default ({
         />
         <div className="insert">{children}</div>
       </div>
-      {!valid && <div style={{height: size?.height || 210 + 'px'}} className="coming-soon">Coming Soon...</div>}
+      {!valid && <div style={{ height: size?.height || 210 + 'px'}} className="coming-soon">Coming Soon...</div>}
     </Container>
   );
 };
