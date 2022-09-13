@@ -91,6 +91,17 @@ const DayPickerContainer = styled.div`
       border-top-right-radius: 50%;
       border-bottom-right-radius: 50%;
     }
+
+    .rdp-row
+      > .rdp-cell:first-of-type
+      > .rdp-day_range_start:not(.rdp-day_range_end),
+    .rdp-row
+      > .rdp-cell:last-of-type
+      > .rdp-day_range_end:not(.rdp-day_range_start) {
+      position: relative;
+      border-radius: 50%;
+      overflow: visible;
+    }
   }
 
   .rdp-cell {
@@ -123,7 +134,7 @@ const DayPickerContainer = styled.div`
 
     .rdp-day_range_middle {
       background: rgba(0, 236, 201, 0.2);
-      &:hover {
+      :hover {
         border-radius: 0 !important;
       }
       span {
@@ -132,6 +143,11 @@ const DayPickerContainer = styled.div`
     }
 
     .rdp-day {
+      overflow: visible;
+      & span {
+        position: relative;
+        z-index: 1;
+      }
       &:hover {
         span {
           color: #f8f7fa !important;
@@ -142,19 +158,62 @@ const DayPickerContainer = styled.div`
       }
     }
 
-    .rdp:not([dir="rtl"]) .rdp-day_range_start:not(.rdp-day_range_end) {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-      &:after {
-        content: "";
+    .rdp-day_range_start:not(.rdp-day_range_end)::before,
+    .rdp-day_range_end:not(.rdp-day_range_start)::before {
+      content: "";
+      position: absolute;
+      width: calc(var(--rdp-cell-size) / 2);
+      height: var(--rdp-cell-size);
+      background: var(--rdp-background-color-dark);
+      top: 50%;
+      left: 50%;
+      transition: all linear 0.1s;
+      z-index: 1;
+    }
+
+    .rdp-day_range_start:not(.rdp-day_range_end)::after,
+    .rdp-day_range_end:not(.rdp-day_range_start)::after {
+      content: "";
+      position: absolute;
+      width: calc(var(--rdp-cell-size) / 2);
+      height: var(--rdp-cell-size);
+      background: rgba(0, 236, 201, 0.2);
+      top: 50%;
+      left: 50%;
+      z-index: 0;
+    }
+
+    .rdp-day_range_start:not(.rdp-day_range_end)::before {
+      clip-path: circle(20px at left);
+    }
+    .rdp-day_range_end:not(.rdp-day_range_start)::before {
+      clip-path: circle(20px at right);
+    }
+
+    .rdp-day_range_start:not(.rdp-day_range_end)::before,
+    .rdp-day_range_start:not(.rdp-day_range_end)::after {
+      transform: translate(0px, -50%);
+    }
+    .rdp-day_range_end:not(.rdp-day_range_start)::before,
+    .rdp-day_range_end:not(.rdp-day_range_start)::after {
+      transform: translate(-20px, -50%);
+    }
+
+    .rdp-day_range_start:not(.rdp-day_range_end) {
+      border-top-right-radius: 50% !important;
+      border-bottom-right-radius: 50% !important;
+      transition: all linear 0.1s;
+      &:hover::before {
+        background: #3d3d4d;
       }
     }
 
-    .rdp:not([dir="rtl"]) .rdp-day_range_end:not(.rdp-day_range_start) {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-      &:after {
-        content: "";
+    .rdp-day_range_end:not(.rdp-day_range_start) {
+      border-top-left-radius: 50% !important;
+      border-bottom-left-radius: 50% !important;
+      transition: all linear 0.1s;
+      &:hover::before {
+        background: #3d3d4d;
       }
     }
   }
@@ -350,7 +409,15 @@ const ExpandContainer = ({ row, children }: any) => {
       key: "status",
       id: "Status",
       formatter({ row }: any) {
-        return <div>{row?.status === undefined ? '/' : +row?.status ? 'Completed' : 'Incompleted' }</div>;
+        return (
+          <div>
+            {row?.status === undefined
+              ? "/"
+              : +row?.status
+              ? "Completed"
+              : "Incompleted"}
+          </div>
+        );
       },
     },
     {
@@ -509,7 +576,15 @@ export default ({ show }: any) => {
         key: "deadlineTime",
         id: "Status",
         formatter({ row }: any) {
-          return <div style={{ opacity: 0.4 }}>{row?.status === undefined ? '/' : +row?.status ? 'Completed' : 'Incompleted' }</div>;
+          return (
+            <div style={{ opacity: 0.4 }}>
+              {row?.status === undefined
+                ? "/"
+                : +row?.status
+                ? "Completed"
+                : "Incompleted"}
+            </div>
+          );
         },
       },
       {

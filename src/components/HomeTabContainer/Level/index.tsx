@@ -14,7 +14,7 @@ import "swiper/css/navigation";
 import { Navigation } from "swiper";
 import Lock from "@/components/Icons/Lock";
 import { useModel } from "umi";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 
 const Container = styled.div`
   max-width: 1400px;
@@ -76,24 +76,18 @@ const Container = styled.div`
   }
   .swiper-button-next,
   .swiper-button-prev {
-    background: #05050e;
     width: 112px;
     height: 112px;
     border-radius: 50%;
-    color: #fff;
   }
 
-  .swiper-button-next {
-    box-shadow: -5px -5px 20px -6px #ffbe83, -5px 5px 20px -6px #064cff,
-      5px 5px 20px -6px #599cff, 5px -5px 20px -6px #59c3aa;
-      margin-right: 10px;
+  /* .swiper-button-next {
+    margin-right: 10px;
   }
 
   .swiper-button-prev {
-    box-shadow: 5px -5px 20px -6px #ffbe83, 5px 5px 20px -6px #064cff,
-      -5px 5px 20px -6px #599cff, -5px -5px 20px -6px #59c3aa;
-      margin-left: 10px;
-  }
+    margin-left: 10px;
+  } */
 `;
 
 const mockLevel = [
@@ -180,6 +174,9 @@ const steps = [
 ];
 
 export default ({ show }: any) => {
+  const nextRef = useRef(null);
+  const prevRef = useRef(null);
+
   return (
     <Container>
       <Swiper
@@ -192,10 +189,295 @@ export default ({ show }: any) => {
         pagination={{
           clickable: true,
         }}
-        navigation={true}
+        navigation={{
+          nextEl: nextRef.current,
+          prevEl: prevRef.current,
+        }}
         modules={[Navigation]}
         className="mySwiper"
       >
+          <svg
+        ref={nextRef}
+        className="swiper-button-next"
+        width="164"
+        height="173"
+        viewBox="0 0 164 173"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g filter="url(#filter0_f_334_6734)">
+          <circle
+            cx="94.5"
+            cy="76.5"
+            r="37.5"
+            transform="rotate(-90 94.5 76.5)"
+            fill="#59C3AA"
+          />
+        </g>
+        <g filter="url(#filter1_f_334_6734)">
+          <circle
+            cx="94.5"
+            cy="102.5"
+            r="37.5"
+            transform="rotate(-90 94.5 102.5)"
+            fill="#599CFF"
+          />
+        </g>
+        <g filter="url(#filter2_f_334_6734)">
+          <circle
+            cx="77.5"
+            cy="69.5"
+            r="37.5"
+            transform="rotate(-90 77.5 69.5)"
+            fill="#FFBE83"
+          />
+        </g>
+        <g filter="url(#filter3_f_334_6734)">
+          <circle
+            cx="69.5"
+            cy="103.5"
+            r="37.5"
+            transform="rotate(-90 69.5 103.5)"
+            fill="#064CFF"
+          />
+        </g>
+        <circle
+          cx="82"
+          cy="92"
+          r="56"
+          transform="rotate(-90 82 92)"
+          fill="#05050E"
+        />
+        <path d="M67 92L97 92" stroke="white" stroke-width="3" />
+        <path
+          d="M82.25 108L98.5 91.75L82.25 75.5"
+          stroke="white"
+          stroke-width="3"
+        />
+        <defs>
+          <filter
+            id="filter0_f_334_6734"
+            x="25"
+            y="7"
+            width="139"
+            height="139"
+            filterUnits="userSpaceOnUse"
+            color-interpolation-filters="sRGB"
+          >
+            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feBlend
+              mode="normal"
+              in="SourceGraphic"
+              in2="BackgroundImageFix"
+              result="shape"
+            />
+            <feGaussianBlur
+              stdDeviation="16"
+              result="effect1_foregroundBlur_334_6734"
+            />
+          </filter>
+          <filter
+            id="filter1_f_334_6734"
+            x="25"
+            y="33"
+            width="139"
+            height="139"
+            filterUnits="userSpaceOnUse"
+            color-interpolation-filters="sRGB"
+          >
+            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feBlend
+              mode="normal"
+              in="SourceGraphic"
+              in2="BackgroundImageFix"
+              result="shape"
+            />
+            <feGaussianBlur
+              stdDeviation="16"
+              result="effect1_foregroundBlur_334_6734"
+            />
+          </filter>
+          <filter
+            id="filter2_f_334_6734"
+            x="8"
+            y="0"
+            width="139"
+            height="139"
+            filterUnits="userSpaceOnUse"
+            color-interpolation-filters="sRGB"
+          >
+            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feBlend
+              mode="normal"
+              in="SourceGraphic"
+              in2="BackgroundImageFix"
+              result="shape"
+            />
+            <feGaussianBlur
+              stdDeviation="16"
+              result="effect1_foregroundBlur_334_6734"
+            />
+          </filter>
+          <filter
+            id="filter3_f_334_6734"
+            x="0"
+            y="34"
+            width="139"
+            height="139"
+            filterUnits="userSpaceOnUse"
+            color-interpolation-filters="sRGB"
+          >
+            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feBlend
+              mode="normal"
+              in="SourceGraphic"
+              in2="BackgroundImageFix"
+              result="shape"
+            />
+            <feGaussianBlur
+              stdDeviation="16"
+              result="effect1_foregroundBlur_334_6734"
+            />
+          </filter>
+        </defs>
+      </svg>
+
+      <svg
+        ref={prevRef}
+        className="swiper-button-prev"
+        width="164"
+        height="173"
+        viewBox="0 0 164 173"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g filter="url(#filter0_f_334_6742)">
+          <circle
+            r="37.5"
+            transform="matrix(4.37114e-08 -1 -1 -4.37114e-08 69.5 76.5)"
+            fill="#59C3AA"
+          />
+        </g>
+        <g filter="url(#filter1_f_334_6742)">
+          <circle
+            r="37.5"
+            transform="matrix(4.37114e-08 -1 -1 -4.37114e-08 69.5 102.5)"
+            fill="#599CFF"
+          />
+        </g>
+        <g filter="url(#filter2_f_334_6742)">
+          <circle
+            r="37.5"
+            transform="matrix(4.37114e-08 -1 -1 -4.37114e-08 86.5 69.5)"
+            fill="#FFBE83"
+          />
+        </g>
+        <g filter="url(#filter3_f_334_6742)">
+          <circle
+            r="37.5"
+            transform="matrix(4.37114e-08 -1 -1 -4.37114e-08 94.5 103.5)"
+            fill="#064CFF"
+          />
+        </g>
+        <circle
+          r="56"
+          transform="matrix(4.37114e-08 -1 -1 -4.37114e-08 82 92)"
+          fill="#05050E"
+        />
+        <path d="M97 92L67 92" stroke="white" stroke-width="3" />
+        <path
+          d="M81.75 108L65.5 91.75L81.75 75.5"
+          stroke="white"
+          stroke-width="3"
+        />
+        <defs>
+          <filter
+            id="filter0_f_334_6742"
+            x="0"
+            y="7"
+            width="139"
+            height="139"
+            filterUnits="userSpaceOnUse"
+            color-interpolation-filters="sRGB"
+          >
+            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feBlend
+              mode="normal"
+              in="SourceGraphic"
+              in2="BackgroundImageFix"
+              result="shape"
+            />
+            <feGaussianBlur
+              stdDeviation="16"
+              result="effect1_foregroundBlur_334_6742"
+            />
+          </filter>
+          <filter
+            id="filter1_f_334_6742"
+            x="0"
+            y="33"
+            width="139"
+            height="139"
+            filterUnits="userSpaceOnUse"
+            color-interpolation-filters="sRGB"
+          >
+            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feBlend
+              mode="normal"
+              in="SourceGraphic"
+              in2="BackgroundImageFix"
+              result="shape"
+            />
+            <feGaussianBlur
+              stdDeviation="16"
+              result="effect1_foregroundBlur_334_6742"
+            />
+          </filter>
+          <filter
+            id="filter2_f_334_6742"
+            x="17"
+            y="0"
+            width="139"
+            height="139"
+            filterUnits="userSpaceOnUse"
+            color-interpolation-filters="sRGB"
+          >
+            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feBlend
+              mode="normal"
+              in="SourceGraphic"
+              in2="BackgroundImageFix"
+              result="shape"
+            />
+            <feGaussianBlur
+              stdDeviation="16"
+              result="effect1_foregroundBlur_334_6742"
+            />
+          </filter>
+          <filter
+            id="filter3_f_334_6742"
+            x="25"
+            y="34"
+            width="139"
+            height="139"
+            filterUnits="userSpaceOnUse"
+            color-interpolation-filters="sRGB"
+          >
+            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feBlend
+              mode="normal"
+              in="SourceGraphic"
+              in2="BackgroundImageFix"
+              result="shape"
+            />
+            <feGaussianBlur
+              stdDeviation="16"
+              result="effect1_foregroundBlur_334_6742"
+            />
+          </filter>
+        </defs>
+      </svg>
+
         {mockLevel.map((i) => (
           <SwiperSlide key={i.title}>
             <div className="column">

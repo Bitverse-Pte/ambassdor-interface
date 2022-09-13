@@ -24,17 +24,17 @@ const Container = styled.div<{ gradient?: string }>`
     border: 1px solid #ffffff;
     border-radius: 6px;
     font-weight: 400;
-    font-size: 37%;
-    /* font-size: 14px; */
+    /* font-size: 37%; */
+    font-size: 14px;
     font-family: "Dela Gothic One";
     line-height: 20px;
     color: #05050e;
     padding: 0 17px 3px;
   }
 
-  :hover{
-    img{
-        transform: translate(-50%, -25%);
+  :hover {
+    img {
+      transform: translate(-50%, -25%);
     }
   }
 
@@ -44,7 +44,7 @@ const Container = styled.div<{ gradient?: string }>`
     top: 0;
     left: 50%;
     transform: translate(-50%, -15%);
-    transition: all linear .12s;
+    transition: all linear 0.12s;
   }
 
   .inner {
@@ -66,8 +66,8 @@ const Container = styled.div<{ gradient?: string }>`
 
   .f-20 {
     font-weight: 500;
-    /* font-size: 20px; */
-    font-size: 55%;
+    font-size: 20px;
+    /* font-size: 55%; */
     line-height: 30px;
     /* identical to box height */
     text-transform: capitalize;
@@ -76,23 +76,42 @@ const Container = styled.div<{ gradient?: string }>`
 
   .f-16 {
     font-weight: 500;
-    /* font-size: 16px; */
-    font-size: 42%;
+    font-size: 16px;
+    /* font-size: 42%; */
     line-height: 24px;
     /* identical to box height */
     text-transform: capitalize;
     color: #ffffff;
     opacity: 0.5;
   }
-  .desc{
+  .desc {
     margin-top: 4px;
+    /* width: 164px; */
+    height: 24px;
   }
-  .p{
+  .p {
     padding: 0 20px;
+  }
+  .ellipsis {
+    overflow: hidden; //超出的文本隐藏
+    text-overflow: ellipsis; //溢出用省略号显示
+    white-space: nowrap; //溢出不换行
   }
 `;
 
-export default ({ onClick, src, title, des, gradient, label, children, style }: any) => {
+const removeHtmlStyle = (html: string) =>
+html ? html.replaceAll(/style="[^\"]*?"/g, "") : '';
+
+export default ({
+  onClick,
+  src,
+  title,
+  des,
+  gradient,
+  label,
+  children,
+  style,
+}: any) => {
   return (
     <Container gradient={gradient} style={style} onClick={onClick}>
       <img src={src} alt={title} />
@@ -102,7 +121,10 @@ export default ({ onClick, src, title, des, gradient, label, children, style }: 
           <div className="label">{label}</div>
         </div>
 
-        <div className="f-16 desc p">{des}</div>
+        <div
+          className="f-16 desc p ellipsis"
+          dangerouslySetInnerHTML={{ __html: removeHtmlStyle(des) }}
+        />
         <div className="insert">{children}</div>
       </div>
     </Container>

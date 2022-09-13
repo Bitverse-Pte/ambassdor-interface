@@ -23,7 +23,7 @@ from,to{
   transform: translate(-50%, calc(100% + 19px + 15%));
 }
 
-`
+`;
 
 const Container = styled.div`
   position: relative;
@@ -58,7 +58,7 @@ const Container = styled.div`
     }
   }
   .active {
-    color: #00DBC9;
+    color: #00dbc9;
   }
   .login-dragon {
     transform: translate(0px, -8%);
@@ -79,7 +79,31 @@ const Avatar = styled.div`
   width: 180px;
   height: 180px;
   border-radius: 50%;
-  border: 2px dashed #00DBC9;
+  margin-right: 22px;
+  /* border: 2px dashed #00DBC9; */
+  position: relative;
+  svg{
+    stroke:#00ECC9;
+      stroke-width: 2;
+      stroke-dasharray: 7;
+      position: absolute;
+      fill: transparent;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 180px;
+    height: 180px;
+  }
+
+  background-image: linear-gradient(
+    to right,
+    #000 0%,
+    #000 50%,
+    transparent 75%
+  );
+  background-size: 20px 10px;
+  background-repeat: repeat-x;
+
   padding: 10px;
   display: flex;
   align-items: center;
@@ -87,7 +111,7 @@ const Avatar = styled.div`
   box-sizing: border-box;
   div {
     background: #4a4a4a;
-    border: 2px solid #00DBC9;
+    border: 2px solid #00dbc9;
     width: 100%;
     height: 100%;
     border-radius: 50%;
@@ -104,15 +128,20 @@ const Avatar = styled.div`
 `;
 
 const Points = styled.div`
+  flex: 1;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 
-  &:last-of-type{
-    align-items: flex-end;
+  &:last-of-type {
+    margin-left: 4%;
+  }
+  &:first-of-type {
+    margin-right: 4%;
   }
   .row-between {
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -138,8 +167,8 @@ const Points = styled.div`
   }
   .point-cache {
     animation: ${move} linear 1s infinite;
-    &::after{
-      content: '';
+    &::after {
+      content: "";
       width: 0;
       height: 0;
       border: 8px solid transparent;
@@ -167,7 +196,7 @@ const Points = styled.div`
     display: flex;
     align-items: center;
     .star {
-      color: #FFF849;
+      color: #fff849;
     }
   }
 `;
@@ -175,6 +204,13 @@ const Points = styled.div`
 const UserAvatar = ({ src }: { src: string }) => {
   return (
     <Avatar>
+      <svg xmlns="http://www.w3.org/2000/svg">
+        <circle
+          cx="90"
+          cy="90"
+          r="90"
+        />
+      </svg>
       <div>
         <img src={src} alt="" />
       </div>
@@ -189,16 +225,11 @@ const UserPoints = ({ title, amount, actionName, action, children }: any) => {
 
   return (
     <Points>
-      <div className="row-between" >
+      <div className="row-between">
         <div className="title">{title}</div>
         <div className="amount">{abbreviateNumber(amount)}</div>
       </div>
-      <Button
-        style={{ width: "190px" }}
-        className="action-btn"
-        radius="60px"
-        onClick={handleClick}
-      >
+      <Button className="action-btn" radius="60px" onClick={handleClick}>
         {actionName}
       </Button>
       {children}
@@ -216,7 +247,9 @@ export default () => {
   } = useModel("userInfo");
 
   // @ts-ignore
-  const { config: { contributor, ambassador } } = useModel('config')
+  const {
+    config: { contributor, ambassador },
+  } = useModel("config");
 
   const [
     collectPointsDialog,
@@ -227,19 +260,19 @@ export default () => {
     collectTokensDialog,
     { setTrue: showCollectTokensDialog, setFalse: closeCollectTokensDialog },
   ] = useBoolean(false);
-  
-    // const prevLevel = useMemo(()=>{
-    //   if(!curRole || user?.level) return '-'
-    //   const c = curRole.filter(i=>i?.name === user?.level)
-    //   if(!c.length) return '-'
-    //   return c[0]
-    //   console.log('c', c)
 
-    // }, [curRole])
+  // const prevLevel = useMemo(()=>{
+  //   if(!curRole || user?.level) return '-'
+  //   const c = curRole.filter(i=>i?.name === user?.level)
+  //   if(!c.length) return '-'
+  //   return c[0]
+  //   console.log('c', c)
+
+  // }, [curRole])
 
   return (
     <Container>
-      {(account && auth) ? (
+      {account && auth ? (
         <div className="row-between p-0-40">
           <UserAvatar src={user?.avatar} />
           <div className="column">
@@ -262,26 +295,38 @@ export default () => {
             </div>
           </div>
 
-          <UserPoints
-            title={"Point"}
-            amount={user?.point || 0}
-            action={showCollectPointsDialog}
-            actionName={"Collect"}
+          <div
+            style={{
+              marginLeft: "44px",
+              padding: "0 44px",
+              display: "flex",
+              alignItems: "center",
+              flex: 1,
+            }}
           >
-            {user?.pointCache ? (
-              <div className="point-cache">
-                <div className="star" >★</div>&nbsp;
-                You got&nbsp;<span style={{ color: "#00DBC9" }}>{user?.pointCache || 0} points </span>&nbsp;to
-                collect!
-              </div>
-            ) : null}
-          </UserPoints>
-          <UserPoints
-            title={"Token"}
-            amount={user?.token || 0}
-            action={showCollectTokensDialog}
-            actionName={"Details"}
-          />
+            <UserPoints
+              title={"Point"}
+              amount={user?.point || 0}
+              action={showCollectPointsDialog}
+              actionName={"Collect"}
+            >
+              {user?.pointCache ? (
+                <div className="point-cache">
+                  <div className="star">★</div>&nbsp; You got&nbsp;
+                  <span style={{ color: "#00DBC9" }}>
+                    {user?.pointCache || 0} points{" "}
+                  </span>
+                  &nbsp;to collect!
+                </div>
+              ) : null}
+            </UserPoints>
+            <UserPoints
+              title={"Token"}
+              amount={user?.token || 0}
+              action={showCollectTokensDialog}
+              actionName={"Details"}
+            />
+          </div>
 
           <img className="login-dragon" src={teleportDragon} />
         </div>

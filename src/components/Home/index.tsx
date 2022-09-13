@@ -23,48 +23,74 @@ import "swiper/css/effect-coverflow";
 import { useModel } from "umi";
 import { useRequest } from "ahooks";
 import { getPublicQuestList, getQuestList } from "@/server";
+import Loading from "../Loading";
+
+// active: "N"
+// assignTo: "contributor"
+// assignTo_dictText: "contributor"
+// createBy: null
+// createTime: "2022-08-25 03:54:25"
+// deadline: "2022-08-06 15:59:59"
+// description: "<h2>Teleport Network</h2><h2> Content &amp; Marketing Task<br></h2><div style=\"font-size: 14px;text-align: center;\"><br></div><div style=\"font-size: 14px;text-align: center;\">Please complete below TASK</div><p><br></p><div style=\"font-size: 14px;text-align: center;\"><b>TIME: 8th, Jul - 8th, Agu, 2022(UTC)</b></div><p><br></p><div style=\"font-size: 14px;text-align: center;\"><i><div>Points will be added to your personal account after the task is completed</div></i></div>"
+// fraudType: null
+// gleamCreateAt: "2022-07-06 21:30:31"
+// gradient: "linear-gradient(90deg, #4ABE91 0%, #F2D524 106.68%)"
+// id: "9KN2l"
+// image: "https://gleam-prod-user-assets.s3.amazonaws.com/user-assets/1956602/mcmuJUDrgwo19MLc/contributor-task.png"
+// issueDate: "2022-07-09 01:00:00"
+// questKey: "9KN2l"
+// rewards: null
+// src: "/static/galaxy.81453237.png"
+// syncTime: "2022-08-25 03:54:25"
+// sysOrgCode: null
+// title: "Content & Marketing Task- Clv"
+// type: "Monthly"
+// type_dictText: "Monthly"
+// updateBy: "admin"
+// updateTime: "2022-09-02 00:05:18"
+// url: "https://gleam.io/9KN2l/content-marketing-task-c"
 
 const questCard = [
   {
+    status: false,
+    title: "-",
+    des: "-",
+    label: "-",
     src: einstein,
     gradient:
       "linear-gradient(90deg, #F95136 0%, #C54152 67.19%, #872E72 100%)",
-    title: "Quest Title",
-    des: "This is a description",
-    label: "Hot",
-    key: "einstein",
   },
   {
+    status: false,
+    title: "-",
+    des: "-",
+    label: "-",
     src: guardians,
     gradient: "linear-gradient(92.04deg, #009EFD 0.04%, #12EFCF 126.57%)",
-    title: "Quest Title2",
-    des: "This is a description",
-    label: "Hot",
-    key: "guardians",
   },
   {
+    status: false,
+    title: "-",
+    des: "-",
+    label: "-",
     src: psychedelic,
     gradient: "linear-gradient(90deg, #4ABE91 0%, #F2D524 106.68%)",
-    title: "Quest Title3",
-    des: "This is a description",
-    label: "Hot",
-    key: "psychedelic",
   },
   {
+    status: false,
+    title: "-",
+    des: "-",
+    label: "-",
     src: galaxy,
     gradient: "linear-gradient(90deg, #4ABE91 0%, #F2D524 106.68%)",
-    title: "Quest Title4",
-    des: "This is a description",
-    label: "Hot",
-    key: "galaxy",
   },
   {
+    status: false,
+    title: "-",
+    des: "-",
+    label: "-",
     src: explore,
     gradient: "linear-gradient(90deg, #4ABE91 0%, #F2D524 106.68%)",
-    title: "Quest Title5",
-    des: "This is a description",
-    label: "Hot",
-    key: "explore",
   },
 ];
 
@@ -84,6 +110,7 @@ const Container = styled.div`
     z-index: 2;
     padding: 70px 0;
     background: url(${tunnel});
+    background-repeat: no-repeat;
     .status-container {
       margin: auto;
       max-width: 1440px;
@@ -131,9 +158,16 @@ const Container = styled.div`
       background: rgba(0, 0, 0, 0.4);
       border-radius: 12px;
       font-weight: 500;
-      font-size: 55%;
-      /* font-size: 20px; */
-      line-height: 30px;
+      /* font-size: 55%; */
+
+      & div:nth-of-type(1) {
+        font-size: 20px;
+        line-height: 30px;
+      }
+      & div:nth-of-type(2) {
+        font-size: 16px;
+        line-height: 24px;
+      }
     }
     .mySwiper {
       /* height: 850px; */
@@ -171,7 +205,7 @@ const Container = styled.div`
     }
   }
 
-  h1 {
+  .h1 {
     font-family: "Dela Gothic One";
     font-style: normal;
     font-weight: 400;
@@ -220,15 +254,32 @@ const Home = () => {
   } = useModel("questModal");
 
   const handleClick = (
-    i: { questKey: any, key: any; src: any; gradient: any; label: any; title: any; des: any },
+    i: {
+      questKey: any;
+      key: any;
+      src: any;
+      gradient: any;
+      label: any;
+      title: any;
+      des: any;
+    },
     index: number
   ) => {
-    questModalRun({questKey: i?.questKey, page: 0})
-    questModalSetTrue()
+    questModalRun({ questKey: i?.questKey, page: 0 });
+    questModalSetTrue();
   };
 
-  // const {data, loading} = useRequest(getPublicQuestList)
-  // console.log('dta', data)
+  const { data, loading } = useRequest(getPublicQuestList);
+  const popularQuest = useMemo(() => {
+    if (!data?.data?.result?.records) return questCard;
+    return data?.data?.result?.records.map((i: any, index: any) => ({
+      ...questCard[index],
+      ...i,
+      status: true,
+    }));
+  }, [data]);
+
+  console.log(popularQuest);
 
   return (
     <Container>
@@ -249,7 +300,7 @@ const Home = () => {
       </section>
 
       <section className="cards-container">
-        <h1>Popular quest</h1>
+        <h1 className="h1">Popular quest</h1>
         <div className="row cards-wrap">
           <Swiper
             effect={"coverflow"}
@@ -269,42 +320,38 @@ const Home = () => {
             // autoHeight
             className="mySwiper"
           >
-            {questCardsOrder?.map(
-              (
-                i: {
-                  questKey: any,
-                  key: any;
-                  src: any;
-                  gradient: any;
-                  label: any;
-                  title: any;
-                  des: any;
-                },
-                index: number
-              ) => (
-                <SwiperSlide key={i?.questKey} onClick={() => handleClick(i, index)}>
-                  <QuestCard
-                    className="card-item"
-                    key={i?.key}
-                    src={i.src}
-                    gradient={i.gradient}
-                    label={i.label}
-                    title={i.title}
-                    des={i.des}
-                    style={{
-                      margin: "80px auto",
-                      // filter: `opacity(${1 / (Math.abs(index - 2) + 0.3)})`,
-                      // top: `${-1 * Math.abs(index - 2) * 110}px`,
-                    }}
-                  >
+            {popularQuest?.map((i: any, index: number) => (
+              <SwiperSlide
+                key={i?.questKey}
+                onClick={() => handleClick(i, index)}
+              >
+                <QuestCard
+                  className="card-item"
+                  key={i?.questKey}
+                  src={i?.src}
+                  gradient={i?.gradient}
+                  label={i?.type}
+                  title={i?.title}
+                  des={i?.description}
+                  style={{
+                    margin: "80px auto",
+                    // filter: `opacity(${1 / (Math.abs(index - 2) + 0.3)})`,
+                    // top: `${-1 * Math.abs(index - 2) * 110}px`,
+                  }}
+                >
+                  {i.status ? (
                     <div className="card">
                       <div>quest Rewards</div>
-                      <div>1000 points, cl1 NFT</div>
+                      <div>{i?.rewrds || 0} points</div>
                     </div>
-                  </QuestCard>
-                </SwiperSlide>
-              )
-            )}
+                  ) : (
+                    <div className="card">
+                      <Loading />
+                    </div>
+                  )}
+                </QuestCard>
+              </SwiperSlide>
+            ))}
           </Swiper>
         </div>
       </section>

@@ -157,4 +157,8 @@ export const collectPoint = async () =>
 export const getAmbassadorUser = async () =>
   privateAxios.get("/jeecg-boot/amuser/ambassadorUser/list");
 
-export const getPublicQuestList = async ()=>publicAxios.get('/jeecg-boot/ambassador/quest/list')
+export const getPublicQuestList = async ()=>publicAxios.get('/jeecg-boot/ambassador/quest/list', {
+  params:{
+    pageSize: 5,
+  }
+})

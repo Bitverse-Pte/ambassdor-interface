@@ -3,12 +3,16 @@ import styled from "styled-components";
 const Container = styled.div`
     max-width: 312px;
     aspect-ratio: 1;
+    overflow: visible!important;
 
 
     position: relative;
+    img{
+      border-radius: 21px;
+    }
     svg{
-        width: 100%;
-        height: 100%;
+        width: 150%;
+        height: 150%;
         position: absolute;
         top:50%;
         left:50%;
@@ -89,6 +93,7 @@ export default ({ children }: any) => (
   <Container>
     {children}
     <svg
+      className="meteor"
       width="424"
       height="450"
       viewBox="0 0 424 450"

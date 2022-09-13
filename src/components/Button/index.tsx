@@ -121,8 +121,13 @@ const Wrapper = styled.button<{ radius?: number | string }>`
     width: 100%;
     height: 44px;
     border-radius: ${({ radius }) => radius || "6px"};
-    font-weight: 600;
-    font-size: 14px;
+    /* font-weight: 600; */
+    /* font-size: 14px; */
+
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 24px;
+
     .loader{
       height: 44px;
     }
