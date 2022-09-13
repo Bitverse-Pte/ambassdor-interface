@@ -14,6 +14,7 @@ import Button from "@/components/Button";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import { useModel } from "umi";
+import ReactPaginate from "react-paginate";
 
 const DayPickerContainer = styled.div`
   position: relative;
@@ -317,6 +318,38 @@ const Container = styled.div`
       }
     }
   }
+
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 40px;
+
+    li {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      a {
+        color: #fff;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+    .selected {
+      background: #00c6a9;
+    }
+    .disabled {
+      filter: opacity(0.5);
+    }
+  }
 `;
 
 const ExpandContainer = ({ row, children }: any) => {
@@ -493,7 +526,7 @@ const Row = ({ columns, index, i, onExpandClick, expandStatus }: any) => {
 
 export default ({ show }: any) => {
   // const { data: actionListData } = useRequest(getActionList)
-  const { data: qustListData } = useRequest(getJoinedQuest);
+  const { run, data: qustListData } = useRequest(getJoinedQuest);
   // const actions = useMemo(() => actionListData?.data?.result, [actionListData])
   const questList = useMemo(() => qustListData?.data?.result, [qustListData]);
 
@@ -627,6 +660,14 @@ export default ({ show }: any) => {
     () => document.getElementsByClassName("daypicker-target")[0]
   );
 
+  const handlePageClick = (event: any) => {
+    run({ page: event?.selected });
+  };
+
+  const totalPage = useMemo(() => qustListData?.data?.result?.pages, [
+    qustListData,
+  ]);
+
   return (
     <Container>
       <DayPickerContainer className="daypicker-target">
@@ -704,6 +745,18 @@ export default ({ show }: any) => {
         >
           <Loading />
         </div>
+      )}
+
+      {totalPage && (
+        <ReactPaginate
+          className="pagination"
+          breakLabel="..."
+          nextLabel=">"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={3}
+          pageCount={totalPage}
+          previousLabel="<"
+        />
       )}
     </Container>
   );

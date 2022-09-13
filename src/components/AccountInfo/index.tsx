@@ -123,6 +123,8 @@ const Avatar = styled.div`
       width: 100%;
       height: 100%;
       border-radius: 50%;
+      min-width: 160px;
+      min-height: 160px;
     }
   }
 `;

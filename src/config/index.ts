@@ -4,6 +4,7 @@ import { Network } from '@web3-react/network'
 import { Connector } from '@web3-react/types'
 import { WalletConnect } from '@web3-react/walletconnect'
 import { RPC_URLS } from './rpc'
+import { Teleport } from './teleport'
 
 export const testAddress = '0x3e6011f549c8e17ecdfe854c0e6434401837db17'
 
@@ -37,7 +38,7 @@ export const networkConnection: Connection = {
   type: ConnectionType.NETWORK,
 }
 
-const [web3Injected, web3InjectedHooks] = initializeConnector<MetaMask>((actions) => new MetaMask({ actions, onError }))
+const [web3Injected, web3InjectedHooks] = initializeConnector<Teleport>((actions) => new Teleport({ actions, onError }))
 export const injectedConnection: Connection = {
   connector: web3Injected,
   hooks: web3InjectedHooks,

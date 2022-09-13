@@ -110,8 +110,12 @@ export const getActionList = async ({
   });
 
 // 先查quest 再通过id查询action
-export const getJoinedQuest = async () =>
-  privateAxios.get("/jeecg-boot/am/profile/joined-quest");
+export const getJoinedQuest = async ({page}: any = { page: 0 }) =>
+  privateAxios.get("/jeecg-boot/am/profile/joined-quest", {
+    params: {
+      pageNo: (page||1) ,
+    }
+  });
 
 // 全部list
 export const getQuestList = async (
@@ -160,5 +164,6 @@ export const getAmbassadorUser = async () =>
 export const getPublicQuestList = async ()=>publicAxios.get('/jeecg-boot/ambassador/quest/list', {
   params:{
     pageSize: 5,
+    active: 'Y'
   }
 })

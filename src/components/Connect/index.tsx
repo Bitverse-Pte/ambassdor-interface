@@ -1,11 +1,12 @@
 import { useWeb3React } from "@web3-react/core";
+import { useEffect } from "react";
 import { useModel } from "umi";
 import WalletModal from "../WalletModal";
 
 const Connect = ({ children }: { children: any }) => {
   const { account } = useWeb3React();
   const {
-    walletModal: { walletModalStatus, displayModal, hiddenModal },
+    walletModal: { displayModal },
   } = useModel("walletModal");
 
   const {
@@ -15,8 +16,6 @@ const Connect = ({ children }: { children: any }) => {
   const handleConnect = () => {
     displayModal();
   };
-
-  console.log("account && auth", account, auth);
 
   return (
     <>

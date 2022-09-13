@@ -19,18 +19,6 @@ const modals = [
     icon: require("@/assets/teleportWallet.png"),
     connector: injectedConnection.connector,
   },
-  {
-    key: "metamask",
-    name: "Metamask",
-    icon: require("@/assets/metamask.png"),
-    connector: injectedConnection.connector,
-  },
-  {
-    key: "keplr",
-    name: "Keplr",
-    icon: require("@/assets/keplr.png"),
-    connector: injectedConnection.connector,
-  },
 ];
 
 const Wallets = styled.div`
@@ -122,7 +110,7 @@ export default () => {
   );
 
   const {
-    walletModal: { walletModalStatus, displayModal, hiddenModal },
+    walletModal: { walletModalStatus, hiddenModal },
   } = useModel("walletModal");
   const {
     wallet: { updateWalletType },
@@ -139,9 +127,13 @@ export default () => {
     try {
       await connector.activate();
       updateWalletType(connectionType);
+      // @ts-ignore
+      const address = connector?.provider?.selectedAddress
+      run({address})
     } catch (error: any) {
       console.debug(`web3-react connection error: ${error}`);
       toast.error(error?.message);
+      // todo 引流下载钱包链接
     }
   };
 
@@ -180,9 +172,9 @@ export default () => {
           // sign
           <>
             <TeleportIcon width={98} height={98} />
-            <div className="recommend">Recommended: Recover Your Account</div>
+            <div className="recommend">Recommended: Sign Your Wallet to Check Your Account</div>
             <Button loading={loading} onClick={handleSign}>
-              Recover
+              Sign
             </Button>
           </>
         ) : step ? (

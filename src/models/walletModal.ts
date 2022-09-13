@@ -4,11 +4,11 @@ export default () => {
 
   const [walletModalStatus, {setTrue, setFalse}] = useBoolean(false)
 
-  const displayModal = (val: ConnectionType)=>{
+  const displayModal = ()=>{
     setTrue()
   }
 
-  const hiddenModal = (val: ConnectionType)=>{
+  const hiddenModal = ()=>{
     setFalse()
   }
 
