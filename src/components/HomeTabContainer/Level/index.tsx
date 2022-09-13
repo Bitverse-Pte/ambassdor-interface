@@ -248,11 +248,11 @@ export default ({ show }: any) => {
           transform="rotate(-90 82 92)"
           fill="#05050E"
         />
-        <path d="M67 92L97 92" stroke="white" stroke-width="3" />
+        <path d="M67 92L97 92" stroke="white" strokeWidth="3" />
         <path
           d="M82.25 108L98.5 91.75L82.25 75.5"
           stroke="white"
-          stroke-width="3"
+          strokeWidth="3"
         />
         <defs>
           <filter
@@ -262,9 +262,9 @@ export default ({ show }: any) => {
             width="139"
             height="139"
             filterUnits="userSpaceOnUse"
-            color-interpolation-filters="sRGB"
+            colorInterpolationFilters="sRGB"
           >
-            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feFlood floodOpacity="0" result="BackgroundImageFix" />
             <feBlend
               mode="normal"
               in="SourceGraphic"
@@ -283,9 +283,9 @@ export default ({ show }: any) => {
             width="139"
             height="139"
             filterUnits="userSpaceOnUse"
-            color-interpolation-filters="sRGB"
+            colorInterpolationFilters="sRGB"
           >
-            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feFlood floodOpacity="0" result="BackgroundImageFix" />
             <feBlend
               mode="normal"
               in="SourceGraphic"
@@ -304,9 +304,9 @@ export default ({ show }: any) => {
             width="139"
             height="139"
             filterUnits="userSpaceOnUse"
-            color-interpolation-filters="sRGB"
+            colorInterpolationFilters="sRGB"
           >
-            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feFlood floodOpacity="0" result="BackgroundImageFix" />
             <feBlend
               mode="normal"
               in="SourceGraphic"
@@ -325,9 +325,9 @@ export default ({ show }: any) => {
             width="139"
             height="139"
             filterUnits="userSpaceOnUse"
-            color-interpolation-filters="sRGB"
+            colorInterpolationFilters="sRGB"
           >
-            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feFlood floodOpacity="0" result="BackgroundImageFix" />
             <feBlend
               mode="normal"
               in="SourceGraphic"
@@ -384,11 +384,11 @@ export default ({ show }: any) => {
           transform="matrix(4.37114e-08 -1 -1 -4.37114e-08 82 92)"
           fill="#05050E"
         />
-        <path d="M97 92L67 92" stroke="white" stroke-width="3" />
+        <path d="M97 92L67 92" stroke="white" strokeWidth="3" />
         <path
           d="M81.75 108L65.5 91.75L81.75 75.5"
           stroke="white"
-          stroke-width="3"
+          strokeWidth="3"
         />
         <defs>
           <filter
@@ -398,9 +398,9 @@ export default ({ show }: any) => {
             width="139"
             height="139"
             filterUnits="userSpaceOnUse"
-            color-interpolation-filters="sRGB"
+            colorInterpolationFilters="sRGB"
           >
-            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feFlood floodOpacity="0" result="BackgroundImageFix" />
             <feBlend
               mode="normal"
               in="SourceGraphic"
@@ -419,9 +419,9 @@ export default ({ show }: any) => {
             width="139"
             height="139"
             filterUnits="userSpaceOnUse"
-            color-interpolation-filters="sRGB"
+            colorInterpolationFilters="sRGB"
           >
-            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feFlood floodOpacity="0" result="BackgroundImageFix" />
             <feBlend
               mode="normal"
               in="SourceGraphic"
@@ -440,9 +440,9 @@ export default ({ show }: any) => {
             width="139"
             height="139"
             filterUnits="userSpaceOnUse"
-            color-interpolation-filters="sRGB"
+            colorInterpolationFilters="sRGB"
           >
-            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feFlood floodOpacity="0" result="BackgroundImageFix" />
             <feBlend
               mode="normal"
               in="SourceGraphic"
@@ -461,9 +461,9 @@ export default ({ show }: any) => {
             width="139"
             height="139"
             filterUnits="userSpaceOnUse"
-            color-interpolation-filters="sRGB"
+            colorInterpolationFilters="sRGB"
           >
-            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feFlood floodOpacity="0" result="BackgroundImageFix" />
             <feBlend
               mode="normal"
               in="SourceGraphic"

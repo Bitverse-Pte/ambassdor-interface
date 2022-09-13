@@ -323,7 +323,7 @@ const Home = () => {
           >
             {popularQuest?.map((i: any, index: number) => (
               <SwiperSlide
-                key={i?.questKey}
+                key={index}
                 onClick={() => handleClick(i, index)}
               >
                 <QuestCard

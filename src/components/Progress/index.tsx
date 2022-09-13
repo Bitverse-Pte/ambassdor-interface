@@ -11,7 +11,7 @@ const loadingProgress = keyframes`
 
 `
 
-const Progress = styled.div<{precent: number; duration?: string, loading?: boolean }>`
+const Progress = styled.div<{precent: number; duration?: string, loading?: number }>`
     width: 100%;
     background: #3E3E3E;
     border-radius: 6px;
@@ -58,5 +58,5 @@ export default ({precent, duration, loading}: {precent: number, duration?: strin
     }, [precent])
 
 
-    return <Progress loading={!!loading} duration={duration} precent={tempPercent}/>
+    return <Progress loading={loading ? 1 : 0} duration={duration} precent={tempPercent}/>
 }
