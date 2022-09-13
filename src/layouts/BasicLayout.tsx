@@ -8,11 +8,12 @@ import QuestTitleModal from "@/components/QuestTItleModal";
 const Container = styled.div`
   background-color: #05050e;
   color: #fff;
+  /* width: max; */
 `;
 
 const Content = styled.div`
   background-color: #05050e;
-  min-width: 100vw;
+  min-width: 1440px;
   min-height: calc(100vh - 60px);
 `
 

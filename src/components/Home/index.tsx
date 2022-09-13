@@ -111,10 +111,11 @@ const Container = styled.div`
     padding: 70px 0;
     background: url(${tunnel});
     background-repeat: no-repeat;
+    background-size: cover;
     .status-container {
       margin: auto;
-      max-width: 1440px;
-      width: 100vw;
+      width: 1440px;
+      /* width: 100vw; */
       height: 200px;
       background: rgba(18, 23, 21, 0.5);
       border: 1px solid rgba(255, 255, 255, 0.2);
@@ -141,9 +142,9 @@ const Container = styled.div`
     flex-wrap: wrap;
     flex-direction: column;
     justify-content: center;
-    width: 100vw;
+    width: 100%;
     overflow: hidden;
-    margin-top: 134px;
+    margin: 134px auto 0;
     .card {
       width: calc(100% - 16px);
       box-sizing: border-box;
@@ -236,7 +237,7 @@ const Container = styled.div`
   }
   .cards-wrap {
     /* margin-top: -220px; */
-    width: 100vw;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -280,8 +281,6 @@ const Home = () => {
     }));
   }, [data]);
 
-  console.log(popularQuest);
-
   return (
     <Container>
       <section className="user-container">
@@ -296,7 +295,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section style={{ marginTop: "84px", marginBottom: "250px" }}>
+      <section style={{ margin: "84px auto 250px", width: '1440px' }}>
         <HomeTabContainer />
       </section>
 

@@ -20,7 +20,7 @@ const Container = styled.div`
     padding: 168px 0 117px;
     display: grid;
     grid-gap: 84px;
-    justify-content: center;
+    justify-content: flex-start;
     grid-template-columns: repeat(
       auto-fit,
       min(424px, calc(100% / 3 - 28px * 2))
