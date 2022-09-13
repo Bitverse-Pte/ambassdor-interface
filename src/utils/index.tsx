@@ -104,13 +104,15 @@ Your journey to becoming a seasoned Teleporter begins now...`;
     const from = account;
     const msg = `0x${Buffer.from(exampleMessage, 'utf8').toString('hex')}`;
     // @ts-ignore
-    const sign = await window?.ethereum?.request({
+    const sign = await window?.teleport?.request({
       method: 'personal_sign',
-      params: [msg, from, 'Example password'],
+      params: [msg, from, 'Teleport Ambassador'],
     });
 
     return sign
   } catch (err) {
+    // @ts-ignore
+    window?.__toast && window?.__toast.error(err?.message);
     console.error(err);
   }
 }
