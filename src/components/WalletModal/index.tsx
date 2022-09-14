@@ -128,8 +128,12 @@ export default () => {
       await connector.activate();
       updateWalletType(connectionType);
       // @ts-ignore
-      const address = connector?.provider?.selectedAddress
-      run({address})
+      const address: [string] = await connector?.provider.request({ method: 'eth_requestAccounts' }) 
+      if(address[0]){
+        run({address: address[0]})
+      }else{
+        toast.error('error');
+      }
     } catch (error: any) {
       console.debug(`web3-react connection error: ${error}`);
       toast.error(error?.message);
