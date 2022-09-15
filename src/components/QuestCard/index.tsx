@@ -92,12 +92,18 @@ const Container = styled.div<{ gradient?: string }>`
     margin-top: 4px;
     /* width: 164px; */
     height: 24px;
+    * {
+    overflow: hidden; //超出的文本隐藏
+    text-overflow: ellipsis; //溢出用省略号显示
+    white-space: nowrap; //溢出不换行
+    }
   }
   .p {
     padding: 0 20px;
     align-items: flex-start !important;
   }
   .ellipsis {
+    display: block;
     overflow: hidden; //超出的文本隐藏
     text-overflow: ellipsis; //溢出用省略号显示
     white-space: nowrap; //溢出不换行

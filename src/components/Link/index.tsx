@@ -1,12 +1,10 @@
 import { ReactNode } from "react"
 import { Link } from "umi"
 
-const tuple = <T extends string[]>(...args: T) => args
-
-export default ({to, children, ...props}: {to: string, children: ReactNode, props?: tuple})=>{
+export default ({to, children, className, ...props}: {to: string, children: ReactNode, className?: string,  props?: any})=>{
     const ifUseLink = !to.startsWith('http')
 
-    if(ifUseLink) return (<Link to={to} {...props}>{children}</Link>)
+    if(ifUseLink) return (<Link to={to} className={className} {...props}>{children}</Link>)
 
-    return <a href={to} {...props} target="_blank">{children}</a>
+    return <a href={to} className={className} {...props} target="_blank">{children}</a>
 }

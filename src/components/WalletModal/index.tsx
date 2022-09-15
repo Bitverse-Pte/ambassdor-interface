@@ -10,6 +10,7 @@ import styled from "styled-components";
 import { useModel } from "umi";
 import Button from "../Button";
 import TeleportIcon from "../Icons/TeleportIcon";
+import TeleportSignIcon from "../Icons/TeleportSignIcon";
 import Modal from "../Modal";
 
 const modals = [
@@ -62,11 +63,39 @@ const Wallets = styled.div`
     }
   }
   .wallet-item {
+    padding: 30px 0;
     cursor: pointer;
     &:last-of-type {
       .divider {
         margin-bottom: 0;
       }
+    }
+  }
+
+  .wallet-download-link {
+    text-decoration: none;
+    margin-top: 3px;
+    margin-bottom: 0;
+    width: 100%;
+    background: rgba(217, 217, 217, 0.1);
+    border-radius: 4px;
+    padding: 7px 0;
+    color: #00ebc9;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    &:hover {
+      svg {
+        transform: translate(8px, 0);
+      }
+    }
+    svg {
+      transition: all linear 0.2s;
+      margin-left: 12px;
     }
   }
 `;
@@ -86,6 +115,33 @@ const ModalContainer = styled.div`
     text-align: center;
     margin: 24px 0 36px;
   }
+
+  .download-link {
+    text-decoration: none;
+    margin-bottom: 36px;
+    width: 100%;
+    background: rgba(217, 217, 217, 0.1);
+    border-radius: 4px;
+    padding: 7px 0;
+    color: #00ebc9;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    &:hover {
+      svg {
+        transform: translate(8px, 0);
+      }
+    }
+    svg {
+      transition: all linear 0.2s;
+      margin-left: 12px;
+    }
+  }
+
   button.md {
     font-weight: 600;
     font-size: 20px;
@@ -93,7 +149,7 @@ const ModalContainer = styled.div`
     padding: 11px 0;
     height: max-content;
     border-radius: 12px;
-    .loader{
+    .loader {
       height: 30px;
     }
   }
@@ -128,13 +184,15 @@ export default () => {
       await connector.activate();
       updateWalletType(connectionType);
       // @ts-ignore
-      const address: [string] = await connector?.provider.request({ method: 'eth_requestAccounts' }) 
-      if(address[0]){
-        run({address: address[0]})
-      }else{
-        toast.error('error');
+      const address: [string] = await connector?.provider.request({
+        method: "eth_requestAccounts",
+      });
+      if (address[0]) {
+        run({ address: address[0] });
+      } else {
+        toast.error("error");
       }
-    } catch (error: any) {
+    } catch (error) {
       console.debug(`web3-react connection error: ${error}`);
       toast.error(error?.message);
       // todo 引流下载钱包链接
@@ -169,14 +227,14 @@ export default () => {
     <Modal
       visible={walletModalStatus}
       onClose={hiddenModal}
-      title="Connect your wallet"
+      title={account ? "Sign" : "Connect your wallet"}
     >
-      <ModalContainer>
+      <ModalContainer style={{ minWidth: "526px" }}>
         {account ? (
           // sign
           <>
-            <TeleportIcon width={98} height={98} />
-            <div className="recommend">Recommended: Sign Your Wallet to Check Your Account</div>
+            <TeleportSignIcon width={98} height={98} />
+            <div className="recommend">Please sign in your wallet</div>
             <Button loading={loading} onClick={handleSign}>
               Sign
             </Button>
@@ -198,9 +256,31 @@ export default () => {
                   </div>
                   <div className={`dot ${active === i.key ? "active" : ""}`} />
                 </div>
-                <div className="divider" />
+                {/* <div className="divider" /> */}
               </div>
             ))}
+
+            <a
+              className="wallet-download-link"
+              target="_blank"
+              href="https://chrome.google.com/webstore/detail/teleport-wallet/gkeelndblnomfmjnophbhfhcjbcnemka"
+            >
+              Download Teleport Wallet Here
+              <svg
+                width="22"
+                height="10"
+                viewBox="0 0 22 10"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16 9.5L20.1741 5.74329C20.6155 5.34605 20.6155 4.65395 20.1741 4.25671L16 0.5"
+                  stroke="#00EBC9"
+                  strokeLinecap="round"
+                />
+                <rect y="4.5" width="20" height="1" rx="0.5" fill="#00EBC9" />
+              </svg>
+            </a>
           </Wallets>
         ) : (
           <>
@@ -210,6 +290,29 @@ export default () => {
               rewards (tokens, NFTs) will be bound with the Teleport Wallet
               address you filled in entry-level task list.
             </div>
+
+            <a
+              className="download-link"
+              target="_blank"
+              href="https://chrome.google.com/webstore/detail/teleport-wallet/gkeelndblnomfmjnophbhfhcjbcnemka"
+            >
+              Download Teleport Wallet Here
+              <svg
+                width="22"
+                height="10"
+                viewBox="0 0 22 10"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16 9.5L20.1741 5.74329C20.6155 5.34605 20.6155 4.65395 20.1741 4.25671L16 0.5"
+                  stroke="#00EBC9"
+                  strokeLinecap="round"
+                />
+                <rect y="4.5" width="20" height="1" rx="0.5" fill="#00EBC9" />
+              </svg>
+            </a>
+
             <Button
               onClick={() => {
                 setStep(1);

@@ -81,13 +81,15 @@ const Container = styled.div`
     border-radius: 50%;
   }
 
-  /* .swiper-button-next {
-    margin-right: 10px;
+  .swiper-button-next {
+    right: 0;
+    transform: translate(8px, 0);
   }
 
   .swiper-button-prev {
-    margin-left: 10px;
-  } */
+    left: 0;
+    transform: translate(-8px, 0);
+  }
 `;
 
 const mockLevel = [

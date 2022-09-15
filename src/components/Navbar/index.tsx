@@ -1,52 +1,57 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 
 const Navbar = styled.div`
-&.x-nav-bar {
-  position: relative;
-  display: flex;
-  align-items: flex-end!important;
-  padding: 0 16px;
-  align-items: center;
-  /* border-bottom: 1px solid var(--trade-line-grey); */
-  height: 100px;
+  &.x-nav-bar {
+    position: relative;
+    display: flex;
+    align-items: flex-end !important;
+    padding: 0 16px;
+    align-items: center;
+    /* border-bottom: 1px solid var(--trade-line-grey); */
+    height: 100px;
 
-  .x-nav-item {
-    flex: 1;
-    max-width: 242px;
-    margin-right: 86px;
-    cursor: pointer;
-    user-select: none;
-    white-space: nowrap;
-    color: #fff;
-    font-weight: 400;
-    font-size: 40px;
-    line-height: 60px;
-    font-family: 'Dela Gothic One';
-    transition: all 0.1s linear;
-    opacity: 0.6;
-    &:hover{
-      opacity: .8;
+    .x-nav-item {
+      flex: 1;
+      max-width: 242px;
+      margin-right: 86px;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+      color: #fff;
+      font-weight: 400;
+      font-size: 40px;
+      line-height: 60px;
+      font-family: "Dela Gothic One";
+      transition: all 0.1s linear;
+      opacity: 0.6;
+      display: flex;
+      align-items: center;
+      svg{
+        margin-left: 13px;
+      }
+      &:hover {
+        opacity: 0.8;
+      }
+      &.x-nav-item-active {
+        opacity: 1;
+      }
     }
-    &.x-nav-item-active {
-      opacity: 1;
+
+    .x-nav-indicator {
+      position: absolute;
+      bottom: -1px;
+      left: 16px;
+      height: 1px;
+      width: 20px;
+      background: var(--trade-color-operate);
+      transition: all 0ms linear;
     }
   }
-
-  .x-nav-indicator {
-    position: absolute;
-    bottom: -1px;
-    left: 16px;
-    height: 1px;
-    width: 20px;
-    background: var(--trade-color-operate);
-    transition: all 0ms linear;
-  }
-}
-`
+`;
 
 interface NavBarOptions {
-  list: string[];
+  list: any[];
   currentIdx: number;
   onChange?: (idx: number) => void;
   className?: string;
@@ -62,9 +67,11 @@ export default function NavBar(options: NavBarOptions) {
   const handleNavClick = (ev: React.MouseEvent) => {
     const target = ev.target as HTMLElement;
 
-    if (target.className.includes('x-nav-item') && barRef.current) {
+    if(!target?.className || !target.className.includes) return;
+
+    if (target.className.includes("x-nav-item") && barRef.current) {
       const itemList = Array.from(
-        barRef.current.querySelectorAll<HTMLElement>('.x-nav-item')
+        barRef.current.querySelectorAll<HTMLElement>(".x-nav-item")
       );
       let getIdx = -1;
 
@@ -96,18 +103,19 @@ export default function NavBar(options: NavBarOptions) {
 
   return (
     <Navbar
-      className={`x-nav-bar${className ? ` ${className}`: ''}`}
+      className={`x-nav-bar${className ? ` ${className}` : ""}`}
       onClick={handleNavClick}
       ref={barRef}
     >
       {list.map((item, idx) => (
         <div
-          key={item}
+          key={item?.item}
           className={
-            idx === curIdx ? 'x-nav-item x-nav-item-active' : 'x-nav-item'
+            idx === curIdx ? "x-nav-item x-nav-item-active" : "x-nav-item"
           }
         >
-          {item}
+          {item?.item}
+          {item?.suffix}
         </div>
       ))}
       {/* <div

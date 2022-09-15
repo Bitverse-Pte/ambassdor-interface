@@ -167,3 +167,8 @@ export const getPublicQuestList = async ()=>publicAxios.get('/jeecg-boot/ambassa
     active: 'Y'
   }
 })
+
+export const getPublicNFTList = async ()=>publicAxios.get('/jeecg-boot/ambassador/nft/list')
+
+export const getPublicContributorNFTList = async ()=>publicAxios.get('/jeecg-boot/contributor/nft/list')
+

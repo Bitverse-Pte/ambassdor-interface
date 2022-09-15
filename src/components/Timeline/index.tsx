@@ -24,11 +24,11 @@ const Container = styled.div`
     }
 
     60% {
-      transform: translate(-50%, -50%) scale(.8);
+      transform: translate(-50%, -50%) scale(0.8);
       opacity: 0.06;
     }
-    70%{
-      transform: translate(-50%, -50%) scale(.8);
+    70% {
+      transform: translate(-50%, -50%) scale(0.8);
       opacity: 0;
     }
   }
@@ -71,7 +71,8 @@ const Container = styled.div`
 
   &.timeline {
     position: relative;
-    width: 100%;
+    width: calc(100% - 36px);
+    margin: auto;
     .tooltip {
       width: 100%;
       position: absolute;
@@ -130,6 +131,19 @@ const Container = styled.div`
       flex-direction: column;
       align-items: center;
       position: relative;
+
+      .hover-label {
+        opacity: 0;
+        margin-left: 16px;
+        transition: all linear 0.08s;
+        position: absolute;
+        left: 18px;
+      }
+      &:hover {
+        .hover-label {
+          opacity: 1;
+        }
+      }
     }
 
     .status {
@@ -137,13 +151,14 @@ const Container = styled.div`
       border-radius: 50%;
       width: 14px;
       height: 14px;
-      box-shadow: 0px 0px 4px #00aa91;
+      /* box-shadow: 0px 0px 4px #00aa91; */
     }
 
-    .status--checked{
+    .status--checked {
       background: #00ebc9;
+      box-shadow: 0px 0px 4px #00aa91;
       & ~ span {
-        color: #00EBC9;
+        color: #00ebc9;
       }
     }
 
@@ -154,8 +169,8 @@ const Container = styled.div`
       font-weight: 500;
       font-size: 16px;
       line-height: 24px;
-      color: #B3B4B3;
-      &.top{
+      color: #b3b4b3;
+      &.top {
         top: -50px;
       }
     }
@@ -166,8 +181,8 @@ const Container = styled.div`
       position: absolute;
       border-radius: 50%;
       z-index: 1;
-      background: #00EBC9;
-      box-shadow: 0px 0px 4px #00AA91;
+      background: #00ebc9;
+      box-shadow: 0px 0px 4px #00aa91;
       .circle {
         /* 72 48 30 14 */
         height: 72px;
@@ -180,7 +195,7 @@ const Container = styled.div`
         transform: translate(-50%, -50%);
         opacity: 0;
       }
-      .middle{
+      .middle {
         width: 8px;
         height: 8px;
         background: #fff;
@@ -192,10 +207,10 @@ const Container = styled.div`
         animation: waves 4s linear infinite;
       }
       .delay2 {
-        animation: waves 4s linear .4s forwards infinite;
+        animation: waves 4s linear 0.4s forwards infinite;
       }
       .delay3 {
-        animation: waves 4s linear .8s forwards infinite;
+        animation: waves 4s linear 0.8s forwards infinite;
       }
       .delay4 {
         animation: waves 4s linear 1.2s forwards infinite;
@@ -254,9 +269,10 @@ export default function Timeline({ milestones }: any) {
                 </div>
               )}
               <span className="milestone-label top">
-                {`${m.label}${
+                <span>{`${m.label}${
                   m.date ? ` ${new Date(m.date).toLocaleDateString()}` : ""
-                }`}
+                }`}</span>
+                <span className="hover-label">123</span>
               </span>
               <span className="milestone-label">
                 {`${m.value}${

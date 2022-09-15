@@ -14,7 +14,7 @@ import HomeTabContainer from "@/components/HomeTabContainer";
 import { useWeb3React } from "@web3-react/core";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { EffectCoverflow, Pagination } from "swiper";
+import { EffectCoverflow } from "swiper";
 
 // Import Swiper styles
 import "swiper/css";
@@ -22,8 +22,12 @@ import "swiper/css/pagination";
 import "swiper/css/effect-coverflow";
 import { useModel } from "umi";
 import { useRequest } from "ahooks";
-import { getPublicQuestList, getQuestList } from "@/server";
+import {
+  getPublicQuestList,
+  getPublicNFTList,
+} from "@/server";
 import Loading from "../Loading";
+import Link from "../Link";
 
 // active: "N"
 // assignTo: "contributor"
@@ -156,7 +160,7 @@ const Container = styled.div`
       /* padding: 20px 46px; */
       padding: 5.7% 13.2%;
       gap: 2px;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.2);
       border-radius: 12px;
       font-weight: 500;
       /* font-size: 55%; */
@@ -236,12 +240,38 @@ const Container = styled.div`
     }
   }
   .cards-wrap {
+    position: relative;
     /* margin-top: -220px; */
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     /* transform: perspective(1200px) rotateX(25deg); */
+  }
+  .see-all {
+    position: absolute;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    text-decoration: none;
+    text-transform: capitalize;
+    color: #00ebc9;
+    z-index: 2;
+    cursor: pointer;
+    bottom: 15%;
+    right: 10%;
+    z-index: 2;
+    transform: translate(0px, -50%);
+
+    &:hover {
+      svg {
+        transform: translate(8px, 0);
+      }
+    }
+    svg {
+      transition: all linear 0.2s;
+      margin-left: 12px;
+    }
   }
 `;
 
@@ -271,6 +301,12 @@ const Home = () => {
     questModalSetTrue();
   };
 
+  const { data: publicNft, loading: publicNftLoading } = useRequest(
+    getPublicNFTList
+  );
+
+  console.log("publicNft", publicNft);
+
   const { data, loading } = useRequest(getPublicQuestList);
   const popularQuest = useMemo(() => {
     if (!data?.data?.result?.records) return questCard;
@@ -295,7 +331,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section style={{ margin: "84px auto 250px", width: '1440px' }}>
+      <section style={{ margin: "84px auto 250px", width: "1440px" }}>
         <HomeTabContainer />
       </section>
 
@@ -321,10 +357,7 @@ const Home = () => {
             className="mySwiper"
           >
             {popularQuest?.map((i: any, index: number) => (
-              <SwiperSlide
-                key={index}
-                onClick={() => handleClick(i, index)}
-              >
+              <SwiperSlide key={index} onClick={() => handleClick(i, index)}>
                 <QuestCard
                   className="card-item"
                   key={i?.questKey}
@@ -352,6 +385,24 @@ const Home = () => {
               </SwiperSlide>
             ))}
           </Swiper>
+
+          <Link to="/allquest" className="see-all">
+              See All
+              <svg
+                width="22"
+                height="10"
+                viewBox="0 0 22 10"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16 9.5L20.1741 5.74329C20.6155 5.34605 20.6155 4.65395 20.1741 4.25671L16 0.5"
+                  stroke="#00EBC9"
+                  strokeLinecap="round"
+                />
+                <rect y="4.5" width="20" height="1" rx="0.5" fill="#00EBC9" />
+              </svg>
+          </Link>
         </div>
       </section>
     </Container>
