@@ -253,7 +253,7 @@ const CardTypeQuest = ({ type, show, label, color }: any) => {
                       </div>
                     </Tippy>
                   </div>
-                  <div className="label">{label}</div>
+                  <div className="label">{i?.active === 'Y' ? label : 'EXPIRED'}</div>
                 </div>
               </Card>
             ))}

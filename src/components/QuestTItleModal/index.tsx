@@ -128,7 +128,7 @@ const QuestTitleModal = () => {
     [data]
   );
 
-  console.log("actions", actions);
+  console.log("actions", quest);
 
   return (
     <StyledModal
@@ -141,7 +141,7 @@ const QuestTitleModal = () => {
         <div className="container row-between">
           <div className="column left">
             <div className="row">
-              <div className="label">{quest?.type}</div>
+              <div className="label">{quest?.active === 'Y' ? quest?.type : 'EXPIRED'}</div>
             </div>
             <div className="period">
               Valid period:&nbsp;

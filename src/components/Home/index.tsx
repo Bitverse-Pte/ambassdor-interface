@@ -22,10 +22,7 @@ import "swiper/css/pagination";
 import "swiper/css/effect-coverflow";
 import { useModel } from "umi";
 import { useRequest } from "ahooks";
-import {
-  getPublicQuestList,
-  getPublicNFTList,
-} from "@/server";
+import { getPublicQuestList, getPublicNFTList } from "@/server";
 import Loading from "../Loading";
 import Link from "../Link";
 
@@ -357,7 +354,13 @@ const Home = () => {
             className="mySwiper"
           >
             {popularQuest?.map((i: any, index: number) => (
-              <SwiperSlide key={index} onClick={() => handleClick(i, index)}>
+              <SwiperSlide
+                key={index}
+                onClick={() => {
+                  if (!i?.status) return;
+                  handleClick(i, index);
+                }}
+              >
                 <QuestCard
                   className="card-item"
                   key={i?.questKey}
@@ -387,21 +390,21 @@ const Home = () => {
           </Swiper>
 
           <Link to="/allquest" className="see-all">
-              See All
-              <svg
-                width="22"
-                height="10"
-                viewBox="0 0 22 10"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M16 9.5L20.1741 5.74329C20.6155 5.34605 20.6155 4.65395 20.1741 4.25671L16 0.5"
-                  stroke="#00EBC9"
-                  strokeLinecap="round"
-                />
-                <rect y="4.5" width="20" height="1" rx="0.5" fill="#00EBC9" />
-              </svg>
+            See All
+            <svg
+              width="22"
+              height="10"
+              viewBox="0 0 22 10"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M16 9.5L20.1741 5.74329C20.6155 5.34605 20.6155 4.65395 20.1741 4.25671L16 0.5"
+                stroke="#00EBC9"
+                strokeLinecap="round"
+              />
+              <rect y="4.5" width="20" height="1" rx="0.5" fill="#00EBC9" />
+            </svg>
           </Link>
         </div>
       </section>

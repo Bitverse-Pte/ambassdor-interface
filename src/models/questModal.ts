@@ -7,8 +7,8 @@ import { useState } from "react";
 export default () => {
   const [actions, setActions] = useState(null)
 
-    const { run, data, loading, error } = useRequest(async ()=>{
-    const res = await getQuestList()
+    const { run, data, loading, error } = useRequest(async (props)=>{
+    const res = await getQuestList({...props})
     const quest = res?.data?.result?.records ? res?.data?.result?.records[0] : null
     if(quest){
       const actions = await getActionList({questKey: quest?.questKey})
