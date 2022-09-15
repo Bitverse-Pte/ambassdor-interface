@@ -8,12 +8,40 @@ import CardTypeQuest from "./Quest/CardTypeQuest";
 import Modal from "../Modal";
 import { useBoolean } from "ahooks";
 
+import Zmage from 'react-zmage'
+import Portal from "../Portal";
+
+const FullScreen = styled.div`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 667;
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  img{
+    /* width: ; */
+    height: 90vh;
+  }
+`;
+
 const StyledModal = styled(Modal)`
   .inner {
     max-width: 50vw;
     .content {
-      max-height: 80vh;
+      margin-top: 36px;
+      max-height: 60vh;
       overflow: auto;
+      img {
+        width: 500px;
+        cursor: pointer;
+      }
     }
   }
 `;
@@ -104,6 +132,7 @@ export const questSubLevel = ["Monthly", "Storyline", "History"];
 export default () => {
   const [chartIdx, setChartIdx] = useState(NAVLIST.Level);
   const [showLevelDialog, { setTrue, setFalse }] = useBoolean(false);
+  const [tvFullScreenStatus, { setTrue: tvFullScreenTrue, setFalse: tvFullScreenFalse }] = useBoolean(false);
 
   const navList = useMemo(
     () =>
@@ -202,9 +231,19 @@ export default () => {
 
       <StyledModal visible={showLevelDialog} onClose={setFalse}>
         <div>
-          <img src={require("@/assets/level.png")} alt="" />
+          <img onClick={tvFullScreenTrue} src={require("@/assets/level.png")} alt="" />
         </div>
       </StyledModal>
+
+
+      {tvFullScreenStatus && (
+        <Portal>
+          <FullScreen onClick={tvFullScreenFalse} >
+            <img src={require("@/assets/level.png")} alt="" />
+          </FullScreen>
+        </Portal>
+      )}
+          
     </Container>
   );
 };

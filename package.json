@@ -37,6 +37,7 @@
     "react-table": "^7.8.0",
     "react-toastify": "^9.0.8",
     "react-tooltip": "^4.2.21",
+    "react-zmage": "^0.8.5-beta.37",
     "styled-components": "^5.3.5",
     "swiper": "^8.3.2",
     "umi": "^4.0.8"
