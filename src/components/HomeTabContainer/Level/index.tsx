@@ -15,6 +15,7 @@ import { Navigation } from "swiper";
 import Lock from "@/components/Icons/Lock";
 import { useModel } from "umi";
 import { useMemo, useRef } from "react";
+import useLevelList from "@/hooks/useLevelList";
 
 const Container = styled.div`
   max-width: 1400px;
@@ -116,68 +117,124 @@ const mockLevel = [
   },
 ];
 
-const steps = [
-  {
-    label: "CL1",
-    value: 0,
-    steps: 0,
-    stepsCompleted: 0,
-    date: null,
-    hasIncident: false,
-  },
-  {
-    label: "CL2",
-    value: 1000,
-    steps: 1000,
-    stepsCompleted: 1000,
-    date: null,
-    hasIncident: false,
-  },
-  {
-    label: "CL3",
-    value: 2000,
-    steps: 1000,
-    stepsCompleted: 230,
-    date: null,
-    hasIncident: false,
-  },
-  {
-    label: "CL4",
-    value: 3000,
-    steps: 1000,
-    stepsCompleted: 0,
-    date: null,
-    hasIncident: false,
-  },
-  {
-    label: "CL5",
-    value: 4000,
-    steps: 1000,
-    stepsCompleted: 0,
-    date: null,
-    hasIncident: false,
-  },
-  {
-    label: "CL6",
-    value: 5000,
-    steps: 1000,
-    stepsCompleted: 0,
-    date: null,
-    hasIncident: false,
-  },
-  {
-    label: "CL7",
-    value: 6000,
-    steps: 1000,
-    stepsCompleted: 0,
-    date: null,
-    hasIncident: false,
-  },
-];
+// const steps = [
+//   {
+//     label: "CL1",
+//     value: 0,
+//     steps: 0,
+//     stepsCompleted: 0,
+//     date: null,
+//     hasIncident: false,
+//   },
+//   {
+//     label: "CL2",
+//     value: 1000,
+//     steps: 1000,
+//     stepsCompleted: 1000,
+//     date: null,
+//     hasIncident: false,
+//   },
+//   {
+//     label: "CL3",
+//     value: 2000,
+//     steps: 1000,
+//     stepsCompleted: 230,
+//     date: null,
+//     hasIncident: false,
+//   },
+//   {
+//     label: "CL4",
+//     value: 3000,
+//     steps: 1000,
+//     stepsCompleted: 0,
+//     date: null,
+//     hasIncident: false,
+//   },
+//   {
+//     label: "CL5",
+//     value: 4000,
+//     steps: 1000,
+//     stepsCompleted: 0,
+//     date: null,
+//     hasIncident: false,
+//   },
+//   {
+//     label: "CL6",
+//     value: 5000,
+//     steps: 1000,
+//     stepsCompleted: 0,
+//     date: null,
+//     hasIncident: false,
+//   },
+//   {
+//     label: "CL7",
+//     value: 6000,
+//     steps: 1000,
+//     stepsCompleted: 0,
+//     date: null,
+//     hasIncident: false,
+//   },
+// ];
 
 export default ({ show }: any) => {
   const nextRef = useRef(null);
   const prevRef = useRef(null);
+  const levelList = useLevelList();
+
+  const {
+    user: { user, curRole },
+  } = useModel("userInfo");
+
+  // @ts-ignore
+  const {
+    config: { contributor },
+  }: any = useModel("config");
+
+  // {
+  //   label: "CL1",
+  //   value: 0,
+  //   steps: 0,
+  //   stepsCompleted: 0,
+  //   date: null,
+  //   hasIncident: false,
+  // },
+
+  // {
+  //   createBy: "admin";
+  //   createTime: "2022-08-11 21:56:12";
+  //   id: "1557606789925388289";
+  //   name: "ALV1";
+  //   points: 30000;
+  //   sysOrgCode: "A01";
+  //   token: 10000;
+  //   updateBy: null;
+  //   updateTime: null;
+  // }
+
+
+  const steps = useMemo(() => {
+    if (contributor === "contributor") return null;
+    const t = levelList.map(
+      (
+        i: {
+          [x: string]: any;
+          name: any;
+          points: any;
+        },
+        index: any
+      ) => ({
+        ...i,
+        label: i.name,
+        value: i.min,
+        steps: i.max,
+        stepsCompleted: user.point < i.min ? 0 : user.point >= i.max ? i.max : user.point,
+        date: null,
+        hasIncident: false,
+      })
+    );
+
+    return t;
+  }, [levelList, user]);
 
   return (
     <Container>
@@ -198,287 +255,287 @@ export default ({ show }: any) => {
         modules={[Navigation]}
         className="mySwiper"
       >
-          <svg
-        ref={nextRef}
-        className="swiper-button-next"
-        width="164"
-        height="173"
-        viewBox="0 0 164 173"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <g filter="url(#filter0_f_334_6734)">
+        <svg
+          ref={nextRef}
+          className="swiper-button-next"
+          width="164"
+          height="173"
+          viewBox="0 0 164 173"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g filter="url(#filter0_f_334_6734)">
+            <circle
+              cx="94.5"
+              cy="76.5"
+              r="37.5"
+              transform="rotate(-90 94.5 76.5)"
+              fill="#59C3AA"
+            />
+          </g>
+          <g filter="url(#filter1_f_334_6734)">
+            <circle
+              cx="94.5"
+              cy="102.5"
+              r="37.5"
+              transform="rotate(-90 94.5 102.5)"
+              fill="#599CFF"
+            />
+          </g>
+          <g filter="url(#filter2_f_334_6734)">
+            <circle
+              cx="77.5"
+              cy="69.5"
+              r="37.5"
+              transform="rotate(-90 77.5 69.5)"
+              fill="#FFBE83"
+            />
+          </g>
+          <g filter="url(#filter3_f_334_6734)">
+            <circle
+              cx="69.5"
+              cy="103.5"
+              r="37.5"
+              transform="rotate(-90 69.5 103.5)"
+              fill="#064CFF"
+            />
+          </g>
           <circle
-            cx="94.5"
-            cy="76.5"
-            r="37.5"
-            transform="rotate(-90 94.5 76.5)"
-            fill="#59C3AA"
+            cx="82"
+            cy="92"
+            r="56"
+            transform="rotate(-90 82 92)"
+            fill="#05050E"
           />
-        </g>
-        <g filter="url(#filter1_f_334_6734)">
-          <circle
-            cx="94.5"
-            cy="102.5"
-            r="37.5"
-            transform="rotate(-90 94.5 102.5)"
-            fill="#599CFF"
+          <path d="M67 92L97 92" stroke="white" strokeWidth="3" />
+          <path
+            d="M82.25 108L98.5 91.75L82.25 75.5"
+            stroke="white"
+            strokeWidth="3"
           />
-        </g>
-        <g filter="url(#filter2_f_334_6734)">
-          <circle
-            cx="77.5"
-            cy="69.5"
-            r="37.5"
-            transform="rotate(-90 77.5 69.5)"
-            fill="#FFBE83"
-          />
-        </g>
-        <g filter="url(#filter3_f_334_6734)">
-          <circle
-            cx="69.5"
-            cy="103.5"
-            r="37.5"
-            transform="rotate(-90 69.5 103.5)"
-            fill="#064CFF"
-          />
-        </g>
-        <circle
-          cx="82"
-          cy="92"
-          r="56"
-          transform="rotate(-90 82 92)"
-          fill="#05050E"
-        />
-        <path d="M67 92L97 92" stroke="white" strokeWidth="3" />
-        <path
-          d="M82.25 108L98.5 91.75L82.25 75.5"
-          stroke="white"
-          strokeWidth="3"
-        />
-        <defs>
-          <filter
-            id="filter0_f_334_6734"
-            x="25"
-            y="7"
-            width="139"
-            height="139"
-            filterUnits="userSpaceOnUse"
-            colorInterpolationFilters="sRGB"
-          >
-            <feFlood floodOpacity="0" result="BackgroundImageFix" />
-            <feBlend
-              mode="normal"
-              in="SourceGraphic"
-              in2="BackgroundImageFix"
-              result="shape"
-            />
-            <feGaussianBlur
-              stdDeviation="16"
-              result="effect1_foregroundBlur_334_6734"
-            />
-          </filter>
-          <filter
-            id="filter1_f_334_6734"
-            x="25"
-            y="33"
-            width="139"
-            height="139"
-            filterUnits="userSpaceOnUse"
-            colorInterpolationFilters="sRGB"
-          >
-            <feFlood floodOpacity="0" result="BackgroundImageFix" />
-            <feBlend
-              mode="normal"
-              in="SourceGraphic"
-              in2="BackgroundImageFix"
-              result="shape"
-            />
-            <feGaussianBlur
-              stdDeviation="16"
-              result="effect1_foregroundBlur_334_6734"
-            />
-          </filter>
-          <filter
-            id="filter2_f_334_6734"
-            x="8"
-            y="0"
-            width="139"
-            height="139"
-            filterUnits="userSpaceOnUse"
-            colorInterpolationFilters="sRGB"
-          >
-            <feFlood floodOpacity="0" result="BackgroundImageFix" />
-            <feBlend
-              mode="normal"
-              in="SourceGraphic"
-              in2="BackgroundImageFix"
-              result="shape"
-            />
-            <feGaussianBlur
-              stdDeviation="16"
-              result="effect1_foregroundBlur_334_6734"
-            />
-          </filter>
-          <filter
-            id="filter3_f_334_6734"
-            x="0"
-            y="34"
-            width="139"
-            height="139"
-            filterUnits="userSpaceOnUse"
-            colorInterpolationFilters="sRGB"
-          >
-            <feFlood floodOpacity="0" result="BackgroundImageFix" />
-            <feBlend
-              mode="normal"
-              in="SourceGraphic"
-              in2="BackgroundImageFix"
-              result="shape"
-            />
-            <feGaussianBlur
-              stdDeviation="16"
-              result="effect1_foregroundBlur_334_6734"
-            />
-          </filter>
-        </defs>
-      </svg>
+          <defs>
+            <filter
+              id="filter0_f_334_6734"
+              x="25"
+              y="7"
+              width="139"
+              height="139"
+              filterUnits="userSpaceOnUse"
+              colorInterpolationFilters="sRGB"
+            >
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="BackgroundImageFix"
+                result="shape"
+              />
+              <feGaussianBlur
+                stdDeviation="16"
+                result="effect1_foregroundBlur_334_6734"
+              />
+            </filter>
+            <filter
+              id="filter1_f_334_6734"
+              x="25"
+              y="33"
+              width="139"
+              height="139"
+              filterUnits="userSpaceOnUse"
+              colorInterpolationFilters="sRGB"
+            >
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="BackgroundImageFix"
+                result="shape"
+              />
+              <feGaussianBlur
+                stdDeviation="16"
+                result="effect1_foregroundBlur_334_6734"
+              />
+            </filter>
+            <filter
+              id="filter2_f_334_6734"
+              x="8"
+              y="0"
+              width="139"
+              height="139"
+              filterUnits="userSpaceOnUse"
+              colorInterpolationFilters="sRGB"
+            >
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="BackgroundImageFix"
+                result="shape"
+              />
+              <feGaussianBlur
+                stdDeviation="16"
+                result="effect1_foregroundBlur_334_6734"
+              />
+            </filter>
+            <filter
+              id="filter3_f_334_6734"
+              x="0"
+              y="34"
+              width="139"
+              height="139"
+              filterUnits="userSpaceOnUse"
+              colorInterpolationFilters="sRGB"
+            >
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="BackgroundImageFix"
+                result="shape"
+              />
+              <feGaussianBlur
+                stdDeviation="16"
+                result="effect1_foregroundBlur_334_6734"
+              />
+            </filter>
+          </defs>
+        </svg>
 
-      <svg
-        ref={prevRef}
-        className="swiper-button-prev"
-        width="164"
-        height="173"
-        viewBox="0 0 164 173"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <g filter="url(#filter0_f_334_6742)">
+        <svg
+          ref={prevRef}
+          className="swiper-button-prev"
+          width="164"
+          height="173"
+          viewBox="0 0 164 173"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g filter="url(#filter0_f_334_6742)">
+            <circle
+              r="37.5"
+              transform="matrix(4.37114e-08 -1 -1 -4.37114e-08 69.5 76.5)"
+              fill="#59C3AA"
+            />
+          </g>
+          <g filter="url(#filter1_f_334_6742)">
+            <circle
+              r="37.5"
+              transform="matrix(4.37114e-08 -1 -1 -4.37114e-08 69.5 102.5)"
+              fill="#599CFF"
+            />
+          </g>
+          <g filter="url(#filter2_f_334_6742)">
+            <circle
+              r="37.5"
+              transform="matrix(4.37114e-08 -1 -1 -4.37114e-08 86.5 69.5)"
+              fill="#FFBE83"
+            />
+          </g>
+          <g filter="url(#filter3_f_334_6742)">
+            <circle
+              r="37.5"
+              transform="matrix(4.37114e-08 -1 -1 -4.37114e-08 94.5 103.5)"
+              fill="#064CFF"
+            />
+          </g>
           <circle
-            r="37.5"
-            transform="matrix(4.37114e-08 -1 -1 -4.37114e-08 69.5 76.5)"
-            fill="#59C3AA"
+            r="56"
+            transform="matrix(4.37114e-08 -1 -1 -4.37114e-08 82 92)"
+            fill="#05050E"
           />
-        </g>
-        <g filter="url(#filter1_f_334_6742)">
-          <circle
-            r="37.5"
-            transform="matrix(4.37114e-08 -1 -1 -4.37114e-08 69.5 102.5)"
-            fill="#599CFF"
+          <path d="M97 92L67 92" stroke="white" strokeWidth="3" />
+          <path
+            d="M81.75 108L65.5 91.75L81.75 75.5"
+            stroke="white"
+            strokeWidth="3"
           />
-        </g>
-        <g filter="url(#filter2_f_334_6742)">
-          <circle
-            r="37.5"
-            transform="matrix(4.37114e-08 -1 -1 -4.37114e-08 86.5 69.5)"
-            fill="#FFBE83"
-          />
-        </g>
-        <g filter="url(#filter3_f_334_6742)">
-          <circle
-            r="37.5"
-            transform="matrix(4.37114e-08 -1 -1 -4.37114e-08 94.5 103.5)"
-            fill="#064CFF"
-          />
-        </g>
-        <circle
-          r="56"
-          transform="matrix(4.37114e-08 -1 -1 -4.37114e-08 82 92)"
-          fill="#05050E"
-        />
-        <path d="M97 92L67 92" stroke="white" strokeWidth="3" />
-        <path
-          d="M81.75 108L65.5 91.75L81.75 75.5"
-          stroke="white"
-          strokeWidth="3"
-        />
-        <defs>
-          <filter
-            id="filter0_f_334_6742"
-            x="0"
-            y="7"
-            width="139"
-            height="139"
-            filterUnits="userSpaceOnUse"
-            colorInterpolationFilters="sRGB"
-          >
-            <feFlood floodOpacity="0" result="BackgroundImageFix" />
-            <feBlend
-              mode="normal"
-              in="SourceGraphic"
-              in2="BackgroundImageFix"
-              result="shape"
-            />
-            <feGaussianBlur
-              stdDeviation="16"
-              result="effect1_foregroundBlur_334_6742"
-            />
-          </filter>
-          <filter
-            id="filter1_f_334_6742"
-            x="0"
-            y="33"
-            width="139"
-            height="139"
-            filterUnits="userSpaceOnUse"
-            colorInterpolationFilters="sRGB"
-          >
-            <feFlood floodOpacity="0" result="BackgroundImageFix" />
-            <feBlend
-              mode="normal"
-              in="SourceGraphic"
-              in2="BackgroundImageFix"
-              result="shape"
-            />
-            <feGaussianBlur
-              stdDeviation="16"
-              result="effect1_foregroundBlur_334_6742"
-            />
-          </filter>
-          <filter
-            id="filter2_f_334_6742"
-            x="17"
-            y="0"
-            width="139"
-            height="139"
-            filterUnits="userSpaceOnUse"
-            colorInterpolationFilters="sRGB"
-          >
-            <feFlood floodOpacity="0" result="BackgroundImageFix" />
-            <feBlend
-              mode="normal"
-              in="SourceGraphic"
-              in2="BackgroundImageFix"
-              result="shape"
-            />
-            <feGaussianBlur
-              stdDeviation="16"
-              result="effect1_foregroundBlur_334_6742"
-            />
-          </filter>
-          <filter
-            id="filter3_f_334_6742"
-            x="25"
-            y="34"
-            width="139"
-            height="139"
-            filterUnits="userSpaceOnUse"
-            colorInterpolationFilters="sRGB"
-          >
-            <feFlood floodOpacity="0" result="BackgroundImageFix" />
-            <feBlend
-              mode="normal"
-              in="SourceGraphic"
-              in2="BackgroundImageFix"
-              result="shape"
-            />
-            <feGaussianBlur
-              stdDeviation="16"
-              result="effect1_foregroundBlur_334_6742"
-            />
-          </filter>
-        </defs>
-      </svg>
+          <defs>
+            <filter
+              id="filter0_f_334_6742"
+              x="0"
+              y="7"
+              width="139"
+              height="139"
+              filterUnits="userSpaceOnUse"
+              colorInterpolationFilters="sRGB"
+            >
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="BackgroundImageFix"
+                result="shape"
+              />
+              <feGaussianBlur
+                stdDeviation="16"
+                result="effect1_foregroundBlur_334_6742"
+              />
+            </filter>
+            <filter
+              id="filter1_f_334_6742"
+              x="0"
+              y="33"
+              width="139"
+              height="139"
+              filterUnits="userSpaceOnUse"
+              colorInterpolationFilters="sRGB"
+            >
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="BackgroundImageFix"
+                result="shape"
+              />
+              <feGaussianBlur
+                stdDeviation="16"
+                result="effect1_foregroundBlur_334_6742"
+              />
+            </filter>
+            <filter
+              id="filter2_f_334_6742"
+              x="17"
+              y="0"
+              width="139"
+              height="139"
+              filterUnits="userSpaceOnUse"
+              colorInterpolationFilters="sRGB"
+            >
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="BackgroundImageFix"
+                result="shape"
+              />
+              <feGaussianBlur
+                stdDeviation="16"
+                result="effect1_foregroundBlur_334_6742"
+              />
+            </filter>
+            <filter
+              id="filter3_f_334_6742"
+              x="25"
+              y="34"
+              width="139"
+              height="139"
+              filterUnits="userSpaceOnUse"
+              colorInterpolationFilters="sRGB"
+            >
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="BackgroundImageFix"
+                result="shape"
+              />
+              <feGaussianBlur
+                stdDeviation="16"
+                result="effect1_foregroundBlur_334_6742"
+              />
+            </filter>
+          </defs>
+        </svg>
 
         {mockLevel.map((i) => (
           <SwiperSlide key={i.title}>
@@ -503,7 +560,10 @@ export default ({ show }: any) => {
           </SwiperSlide>
         ))}
       </Swiper>
-      <Timeline milestones={steps} />
+      {/* {
+        steps 
+      } */}
+      <Timeline milestones={steps} curStepsCompleted={user?.point||0} max={steps?.lastIndex ? steps[steps?.lastIndex]?.min : 0}/>
     </Container>
   );
 };

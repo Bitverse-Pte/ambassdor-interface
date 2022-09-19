@@ -115,7 +115,7 @@ const Container = styled.div`
     background-size: cover;
     .status-container {
       margin: auto;
-      width: 1440px;
+      max-width: 1440px;
       /* width: 100vw; */
       height: 200px;
       background: rgba(18, 23, 21, 0.5);

@@ -81,7 +81,7 @@ export const login = async ({
     if(!signature) {
       return new Error("Login Failed");
     }
-    const loginRes = await publicAxios.post("/jeecg-boot/sys/user-login", {
+    const loginRes = await publicAxios.post("/jeecg-boot/am/user-login", {
       address,
       sign: signature,
     });
@@ -114,6 +114,7 @@ export const getJoinedQuest = async ({page}: any = { page: 0 }) =>
   privateAxios.get("/jeecg-boot/am/profile/joined-quest", {
     params: {
       pageNo: (page||1) ,
+      pageSize: 9
     }
   });
 

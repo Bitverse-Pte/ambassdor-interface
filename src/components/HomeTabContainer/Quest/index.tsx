@@ -428,7 +428,7 @@ const ExpandContainer = ({ row, children }: any) => {
       key: "type",
       id: "Type",
       formatter({ row }: any) {
-        return row?.type || "/";
+        return row?.active === 'N' ? 'EXPIRED' : row?.type || "/" ;
       },
     },
     {
@@ -595,7 +595,8 @@ export default ({ show }: any) => {
         key: "type",
         id: "Type",
         formatter({ row }: any) {
-          return row?.type || "/";
+          return row?.active === 'N' ? 'EXPIRED' : row?.type || "/" 
+          // return row?.type || "/";
         },
       },
       {

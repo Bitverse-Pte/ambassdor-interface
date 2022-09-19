@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -76,7 +76,7 @@ const Container = styled.div`
     .tooltip {
       width: 100%;
       position: absolute;
-      top: 26px;
+      top: 24px;
       font-weight: 500;
       font-size: 16px;
       line-height: 24px;
@@ -94,6 +94,11 @@ const Container = styled.div`
         margin: auto auto 3px auto;
         height: 0;
         width: 0;
+      }
+      span{
+        display: block;
+        margin-top: 3px;
+        line-height: 1;
       }
     }
     .line {
@@ -134,7 +139,7 @@ const Container = styled.div`
 
       .hover-label {
         opacity: 0;
-        margin-left: 16px;
+        margin-left: 28px;
         transition: all linear 0.08s;
         position: absolute;
         left: 18px;
@@ -219,48 +224,70 @@ const Container = styled.div`
   }
 `;
 
-export default function Timeline({ milestones }: any) {
+export default function Timeline({ milestones, curStepsCompleted, max }: any) {
   if (!Array.isArray(milestones)) {
     return null;
   }
 
   const [totalSteps, totalStepsCompleted, lastCompleted] = milestones.reduce(
     (prev, m, i) => [
-      prev[0] + m.steps,
-      prev[1] + m.stepsCompleted,
+      +prev[0] + +m.steps,
+      +prev[1] + +m.stepsCompleted,
       m.steps === m.stepsCompleted ? i : prev[2],
     ],
     [0, 0, -1]
   );
+
+  const curCompleting = useMemo(()=>lastCompleted+1, [lastCompleted])
+
+  const stepWidth = useMemo(()=>1 / (milestones.length - 1), [milestones])
+
+  const dis = useMemo(()=>{
+    // const nextIndex = lastCompleted+1 >= milestones.length ? milestones.length : lastCompleted+1;
+    const dis = milestones[curCompleting]?.max - milestones[curCompleting]?.min
+    const cur = (milestones[curCompleting]?.stepsCompleted - milestones[curCompleting]?.min) / dis * stepWidth
+    return curCompleting * stepWidth + cur
+  }, [stepWidth, curCompleting, milestones])
 
   return (
     <Container className="timeline">
       <div className="line">
         <div
           className="line-progression"
-          style={{ width: `${(totalStepsCompleted / totalSteps) * 100}%` }}
+          // style={{ width: `${(totalStepsCompleted / totalSteps) * 100}%` }}
+          style={{
+            width: `calc(${dis * 100}% - 7px)`,
+          }}
         ></div>
       </div>
       <div className="tooltip">
-        <div style={{ left: `${(totalStepsCompleted / totalSteps) * 100}%` }}>
+        <div
+          // style={{ left: `${(totalStepsCompleted / totalSteps) * 100}%` }}
+          style={{
+            left: `calc(${dis * 100}% - 7px)`,
+          }}
+        >
           <div className="triangle" />
-          <span>{totalStepsCompleted}</span>
+          <span>{curStepsCompleted}</span>
         </div>
       </div>
       <ol>
         {milestones.map((m, i) => (
           <li
             className="milestone"
-            style={{ width: `${(m.steps / totalSteps) * 100}%` }}
+            // style={{ width: `${(m.steps / totalSteps) * 100}%` }}
+            style={{
+              width: i === 0 ? 0 : `${stepWidth * 100}%`,
+            }}
             key={m.label + i}
           >
             <div className="content">
               <span
                 className={`status${
-                  m.steps === m.stepsCompleted ? " status--checked" : ""
+                  (m.max > m.stepsCompleted && m.min <= m.stepsCompleted || m.stepsCompleted === m.steps) ? " status--checked" : ""
                 }`}
               />
-              {lastCompleted === i && (
+              {m.max > m.stepsCompleted && m.min <= m.stepsCompleted && (
                 <div className="pulse">
                   <div className="circle middle" />
                   <div className="circle delay1" />
@@ -272,7 +299,7 @@ export default function Timeline({ milestones }: any) {
                 <span>{`${m.label}${
                   m.date ? ` ${new Date(m.date).toLocaleDateString()}` : ""
                 }`}</span>
-                <span className="hover-label">123</span>
+                <span className="hover-label">{m.points}</span>
               </span>
               <span className="milestone-label">
                 {`${m.value}${

@@ -14,6 +14,7 @@ import "tippy.js/dist/tippy.css";
 import CollectTokenDialog from "../CollectTokenDialog";
 import CollectPointsDialog from "../CollectPointsDialog";
 import { useMemo } from "react";
+import useNextLevel from "@/hooks/useNextLevel";
 
 const move = keyframes`
 from,to{
@@ -242,16 +243,13 @@ const UserPoints = ({ title, amount, actionName, action, children }: any) => {
 const precent = 20;
 
 export default () => {
+  const nextLevel = useNextLevel()
+
   const { account } = useWeb3React();
   // @ts-ignore
   const {
     user: { auth, user, loading },
   } = useModel("userInfo");
-
-  // @ts-ignore
-  const {
-    config: { contributor, ambassador },
-  } = useModel("config");
 
   const [
     collectPointsDialog,
@@ -262,15 +260,6 @@ export default () => {
     collectTokensDialog,
     { setTrue: showCollectTokensDialog, setFalse: closeCollectTokensDialog },
   ] = useBoolean(false);
-
-  // const prevLevel = useMemo(()=>{
-  //   if(!curRole || user?.level) return '-'
-  //   const c = curRole.filter(i=>i?.name === user?.level)
-  //   if(!c.length) return '-'
-  //   return c[0]
-  //   console.log('c', c)
-
-  // }, [curRole])
 
   return (
     <Container>
@@ -291,7 +280,7 @@ export default () => {
                   {user?.level || "---"}
                 </span>
                 <span className={precent >= 100 ? "active" : ""}>
-                  {user?.level || "---"}
+                  {nextLevel?.name || "---"}
                 </span>
               </div>
             </div>

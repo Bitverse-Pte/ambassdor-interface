@@ -48,7 +48,7 @@ export default ({title, storyLine, rewards}: any) => {
     </div>
     <div className="divider"/>
     <div className="rewards column">
-        <div className="sub f-18">rewords</div>
+        <div className="sub f-18">rewards</div>
         <div className="f-16">{rewards}</div>
     </div>
   </Container>;
