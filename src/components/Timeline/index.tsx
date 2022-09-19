@@ -1,4 +1,5 @@
-import React, { useMemo } from "react";
+import { useHover } from "ahooks";
+import React, { useMemo, useRef } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -95,7 +96,7 @@ const Container = styled.div`
         height: 0;
         width: 0;
       }
-      span{
+      span {
         display: block;
         margin-top: 3px;
         line-height: 1;
@@ -141,12 +142,14 @@ const Container = styled.div`
         opacity: 0;
         margin-left: 28px;
         transition: all linear 0.08s;
-        position: absolute;
-        left: 18px;
+        display: none;
+        /* position: absolute; */
+        /* left: 18px; */
       }
       &:hover {
         .hover-label {
           opacity: 1;
+          display: inline-block;
         }
       }
     }
@@ -177,6 +180,13 @@ const Container = styled.div`
       color: #b3b4b3;
       &.top {
         top: -50px;
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+        z-index: 22;
+        span{
+          transition: all linear .2s;
+        }
       }
     }
 
@@ -224,6 +234,23 @@ const Container = styled.div`
   }
 `;
 
+const Hover = ({m}: any) => {
+  const ref = useRef(null);
+  const ifHover = useHover(ref);
+
+  return (
+    <span className="milestone-label top" ref={ref}>
+      {ifHover ? (
+        <span>
+          {m.label}&nbsp;&nbsp;{m.name}
+        </span>
+      ) : (
+        <span>{m.label}</span>
+      )}
+    </span>
+  );
+};
+
 export default function Timeline({ milestones, curStepsCompleted, max }: any) {
   if (!Array.isArray(milestones)) {
     return null;
@@ -238,16 +265,20 @@ export default function Timeline({ milestones, curStepsCompleted, max }: any) {
     [0, 0, -1]
   );
 
-  const curCompleting = useMemo(()=>lastCompleted+1, [lastCompleted])
+  const curCompleting = useMemo(() => lastCompleted + 1, [lastCompleted]);
 
-  const stepWidth = useMemo(()=>1 / (milestones.length - 1), [milestones])
+  const stepWidth = useMemo(() => 1 / (milestones.length - 1), [milestones]);
 
-  const dis = useMemo(()=>{
+  const dis = useMemo(() => {
     // const nextIndex = lastCompleted+1 >= milestones.length ? milestones.length : lastCompleted+1;
-    const dis = milestones[curCompleting]?.max - milestones[curCompleting]?.min
-    const cur = (milestones[curCompleting]?.stepsCompleted - milestones[curCompleting]?.min) / dis * stepWidth
-    return curCompleting * stepWidth + cur
-  }, [stepWidth, curCompleting, milestones])
+    const dis = milestones[curCompleting]?.max - milestones[curCompleting]?.min;
+    const cur =
+      ((milestones[curCompleting]?.stepsCompleted -
+        milestones[curCompleting]?.min) /
+        dis) *
+      stepWidth;
+    return curCompleting * stepWidth + cur;
+  }, [stepWidth, curCompleting, milestones]);
 
   return (
     <Container className="timeline">
@@ -284,7 +315,10 @@ export default function Timeline({ milestones, curStepsCompleted, max }: any) {
             <div className="content">
               <span
                 className={`status${
-                  (m.max > m.stepsCompleted && m.min <= m.stepsCompleted || m.stepsCompleted === m.steps) ? " status--checked" : ""
+                  (m.max > m.stepsCompleted && m.min <= m.stepsCompleted) ||
+                  m.stepsCompleted === m.steps
+                    ? " status--checked"
+                    : ""
                 }`}
               />
               {m.max > m.stepsCompleted && m.min <= m.stepsCompleted && (
@@ -295,17 +329,8 @@ export default function Timeline({ milestones, curStepsCompleted, max }: any) {
                   <div className="circle delay3" />
                 </div>
               )}
-              <span className="milestone-label top">
-                <span>{`${m.label}${
-                  m.date ? ` ${new Date(m.date).toLocaleDateString()}` : ""
-                }`}</span>
-                <span className="hover-label">{m.points}</span>
-              </span>
-              <span className="milestone-label">
-                {`${m.value}${
-                  m.date ? ` ${new Date(m.date).toLocaleDateString()}` : ""
-                }`}
-              </span>
+              <Hover m={m}/>
+              <span className="milestone-label">{m.value}</span>
             </div>
           </li>
         ))}

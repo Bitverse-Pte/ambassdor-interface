@@ -164,6 +164,7 @@ export default ({ show }: any) => {
         index: any
       ) => ({
         ...i,
+        ...curRoleNft[index],
         label: i.name,
         value: i.min,
         steps: i.max,
