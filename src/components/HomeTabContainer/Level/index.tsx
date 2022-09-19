@@ -211,6 +211,7 @@ export default ({ show }: any) => {
   //   updateTime: null;
   // }
 
+  // const point = 900000
 
   const steps = useMemo(() => {
     if (contributor === "contributor") return null;
@@ -227,7 +228,7 @@ export default ({ show }: any) => {
         label: i.name,
         value: i.min,
         steps: i.max,
-        stepsCompleted: user.point < i.min ? 0 : user.point >= i.max ? i.max : user.point,
+        stepsCompleted: user?.point < i.min ? 0 : user?.point >= i.max ? i.max : user?.point,
         date: null,
         hasIncident: false,
       })
