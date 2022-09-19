@@ -133,11 +133,10 @@ export const getQuestList = async (
   });
 
 // listActionDefByMainId
-export const filterActionList = async ({ questFk, id }: any) =>
+export const filterActionList = async ({ questKey }: any) =>
   privateAxios.get("/jeecg-boot/amquest/quest/listActionDefByMainId", {
     params: {
-      questFk,
-      id,
+      questKey
     },
   });
 

@@ -44,7 +44,7 @@ const Container = styled.div`
     }
   }
 
-  max-width: 312px;
+  /* max-width: 312px; */
   aspectRatio: 1;
   z-index: 2;
   position: relative;

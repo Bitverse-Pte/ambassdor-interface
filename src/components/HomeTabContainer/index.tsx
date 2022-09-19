@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import NavBar from "../Navbar";
 import Level from "./Level";
 import Quest from "./Quest";
@@ -150,8 +150,8 @@ export default () => {
               >
                 <circle cx="16" cy="16.0001" r="12.8333" stroke="white" />
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M16 8C17.2028 8 18.1335 9.03419 17.9843 10.2051L17.0075 17.2042C16.9496 17.6588 16.5556 18 16.0886 18H15.9114C15.4444 18 15.0504 17.6588 14.9925 17.2042L14.0157 10.2051C13.8665 9.03419 14.7972 8 16 8Z"
                   fill="white"
                 />

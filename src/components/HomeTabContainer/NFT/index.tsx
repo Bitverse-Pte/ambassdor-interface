@@ -429,7 +429,6 @@ export default ({ show }: any) => {
   const { run, data, loading } = useRequest(() => Promise.resolve(mock), {
     manual: true,
   });
-  console.log("data", data);
 
   useEffect(() => {
     if (show) {

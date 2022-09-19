@@ -1,4 +1,5 @@
 import {
+  filterActionList,
   getActionList, getQuestList,
 } from "@/server";
 import { useBoolean, useRequest } from "ahooks";
@@ -11,7 +12,7 @@ export default () => {
     const res = await getQuestList({...props})
     const quest = res?.data?.result?.records ? res?.data?.result?.records[0] : null
     if(quest){
-      const actions = await getActionList({questKey: quest?.questKey})
+      const actions = await filterActionList({questKey: quest?.questKey})
       setActions(actions?.data?.result)
     }
     return Promise.resolve(res)

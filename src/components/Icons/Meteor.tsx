@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-    max-width: 312px;
+    /* max-width: 312px; */
     aspect-ratio: 1;
     overflow: visible!important;
 
