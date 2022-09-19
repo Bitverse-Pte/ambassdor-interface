@@ -159,6 +159,7 @@ const Container = styled.div`
       border-radius: 50%;
       width: 14px;
       height: 14px;
+      cursor: pointer;
       /* box-shadow: 0px 0px 4px #00aa91; */
     }
 
@@ -198,6 +199,7 @@ const Container = styled.div`
       z-index: 1;
       background: #00ebc9;
       box-shadow: 0px 0px 4px #00aa91;
+      cursor: pointer;
       .circle {
         /* 72 48 30 14 */
         height: 72px;
@@ -251,7 +253,7 @@ const Hover = ({m}: any) => {
   );
 };
 
-export default function Timeline({ milestones, curStepsCompleted, max }: any) {
+export default function Timeline({ handleSlide, milestones, curStepsCompleted, max }: any) {
   if (!Array.isArray(milestones)) {
     return null;
   }
@@ -279,6 +281,10 @@ export default function Timeline({ milestones, curStepsCompleted, max }: any) {
       stepWidth;
     return curCompleting * stepWidth + cur;
   }, [stepWidth, curCompleting, milestones]);
+
+  const handleClick = (item: any, index: number)=>{
+    handleSlide(item, index)
+  }
 
   return (
     <Container className="timeline">
@@ -312,7 +318,7 @@ export default function Timeline({ milestones, curStepsCompleted, max }: any) {
             }}
             key={m.label + i}
           >
-            <div className="content">
+            <div className="content" onClick={()=>handleClick(m, i)}>
               <span
                 className={`status${
                   (m.max > m.stepsCompleted && m.min <= m.stepsCompleted) ||

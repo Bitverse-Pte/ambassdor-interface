@@ -127,16 +127,22 @@ const Left = styled.div<{ name: string }>`
     `}
 `;
 
-const SwiperContainer = ({ children, lastCompleted }: any) => {
-  const swiper = useSwiper();
+
+const SwiperController = ({lastCompleted, index}:any)=>{
+  const swiper = useSwiper()
 
   useEffect(() => {
     if (!swiper || !lastCompleted) return;
     swiper.slideTo(lastCompleted);
   }, [swiper, lastCompleted]);
 
-  return <>{children}</>;
-};
+  useEffect(()=>{
+    if (!swiper) return;
+    swiper.slideTo(index)
+  }, [index])
+
+  return null
+}
 
 export default ({ show }: any) => {
   const nextRef = useRef(null);
@@ -178,7 +184,7 @@ export default ({ show }: any) => {
     return t;
   }, [levelList, user]);
 
-  const [curIndex, setIndex] = useState(0);
+  const [activeIndex, setIndex] = useState(0);
 
   const lastCompleted = useMemo(() => {
     if (!steps) return 0;
@@ -187,12 +193,17 @@ export default ({ show }: any) => {
     });
   }, [steps]);
 
+  const handleSlide = (item: any, index: any)=>{
+    setIndex(index)
+  }
+
+
   return (
     <Container>
       {steps ? (
         <>
           <Swiper
-            initialSlide={lastCompleted}
+            // initialSlide={lastCompleted}
             spaceBetween={30}
             centeredSlides={true}
             autoplay={{
@@ -208,10 +219,13 @@ export default ({ show }: any) => {
             }}
             modules={[Navigation]}
             className="mySwiper"
-            onActiveIndexChange={(e) => {
-              setIndex(+e.activeIndex + 1);
-            }}
+            // onActiveIndexChange={(e) => {
+            //   setIndex(+e.activeIndex + 1);
+            // }}
           >
+
+            <SwiperController index={activeIndex} lastCompleted={lastCompleted}/>
+
             <svg
               ref={nextRef}
               className="swiper-button-next"
@@ -493,7 +507,7 @@ export default ({ show }: any) => {
                 </filter>
               </defs>
             </svg>
-            <SwiperContainer lastCompleted={lastCompleted}>
+
               {curRoleNft.map((i, index) => (
                 <SwiperSlide key={i.name}>
                   <div className="column">
@@ -531,12 +545,13 @@ export default ({ show }: any) => {
                   </div>
                 </SwiperSlide>
               ))}
-            </SwiperContainer>
+
           </Swiper>
           {/* {
         steps 
       } */}
           <Timeline
+            handleSlide={handleSlide}
             milestones={steps}
             curStepsCompleted={user?.point || 0}
             max={steps?.lastIndex ? steps[steps?.lastIndex]?.min : 0}
