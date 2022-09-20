@@ -61,6 +61,7 @@ const Container = styled.div<{ gradient?: string }>`
 
     border-radius: 0px 0px 17px 17px;
     padding: 24px 0 8px;
+    margin-bottom: 3px;
   }
 
   .insert {

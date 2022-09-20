@@ -7,14 +7,13 @@ import { useModel } from "umi";
 import ReactPaginate from "react-paginate";
 import Tippy from "@tippyjs/react";
 
-
-const removeHtmlStyle = (html: string) => html.replaceAll(/style="[^\"]*?"/g, '')
-
+const removeHtmlStyle = (html: string) =>
+  html.replaceAll(/style="[^\"]*?"/g, "");
 
 const Container = styled.div`
-    .loading{
-        padding: 168px 0 117px;
-    }
+  .loading {
+    padding: 168px 0 117px;
+  }
   .grid {
     width: 100%;
     padding: 168px 0 117px;
@@ -34,40 +33,49 @@ const Container = styled.div`
     align-items: center;
     justify-content: center;
   }
-  .pagination{
+  .pagination {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
 
-    li{
-        background: rgba(255, 255, 255, 0.3);
-        border-radius: 4px;
-        width: 28px;
-        height: 28px;
+    li {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      a {
+        color: #fff;
+        width: 100%;
+        height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
-        a{
-            color: #fff;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+      }
     }
-    .selected{
-        background: #00C6A9;
+    .selected {
+      background: #00c6a9;
     }
-    .disabled{
-        filter: opacity(0.5);
+    .disabled {
+      filter: opacity(0.5);
     }
+  }
+  .none {
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 36px;
+    text-align: center;
+    text-transform: capitalize;
+    margin-top: 265px;
+    color: #767676;
   }
 `;
 
-const Card = styled.div<{ backgroundColor?: string, active?: boolean }>`
-  filter: grayscale(${({active})=> active ? 0 : 1});
+const Card = styled.div<{ backgroundColor?: string; active?: boolean }>`
+  filter: grayscale(${({ active }) => (active ? 0 : 1)});
   background: ${({ backgroundColor }) => backgroundColor};
   aspect-ratio: 425/224;
   border-radius: 12px;
@@ -144,11 +152,11 @@ const Card = styled.div<{ backgroundColor?: string, active?: boolean }>`
       #0a0a13;
     padding: 0 24px;
     box-sizing: border-box;
-    .title{
-        width: 112px;
-        overflow: hidden; //超出的文本隐藏
-        text-overflow: ellipsis; //溢出用省略号显示
-        white-space: nowrap; //溢出不换行
+    .title {
+      width: 112px;
+      overflow: hidden; //超出的文本隐藏
+      text-overflow: ellipsis; //溢出用省略号显示
+      white-space: nowrap; //溢出不换行
     }
     .desc {
       height: 24px;
@@ -160,7 +168,7 @@ const Card = styled.div<{ backgroundColor?: string, active?: boolean }>`
       margin-top: 3px;
       font-size: 80%;
       font-size: 16px;
-      & *{
+      & * {
         line-height: 24px;
         width: 158px;
         overflow: hidden; //超出的文本隐藏
@@ -197,10 +205,11 @@ const CardTypeQuest = ({ type, show, label, color }: any) => {
 
   useEffect(() => {
     if (isAmbassador || isContributor) {
-      run({page: 1, 
+      run({
+        page: 1,
         pageSize: 9,
-        assignTo: isContributor ? 'contributor' : 'ambassador',
-        type
+        assignTo: isContributor ? "contributor" : "ambassador",
+        type,
       });
     }
   }, [isAmbassador, isContributor, type]);
@@ -210,72 +219,93 @@ const CardTypeQuest = ({ type, show, label, color }: any) => {
   const totalPage = useMemo(() => data?.data?.result?.pages, [data]);
 
   const handlePageClick = (event: any) => {
-    run({page: event?.selected})
+    run({ page: event?.selected });
   };
 
-  const handleClick = (questKey: string)=>{
-    questModalRun({questKey, page: 0})
-    questModalSetTrue()
-  }
+  const handleClick = (questKey: string) => {
+    questModalRun({ questKey, page: 0 });
+    questModalSetTrue();
+  };
+
+  console.log("quest", quests);
 
   return (
     <Container>
       {!loading && quests ? (
-        <div className="list">
-          <div className="grid">
-            {quests?.map((i) => (
-              <Card active={i?.active === 'Y'} key={i?.id} backgroundColor={color} onClick={()=>handleClick(i?.questKey)}>
-                <div className="top">
-                  <div className="left">Quest Rewards</div>
-                  <div className="vertical-divider" />
-                  <div className="col">
-                    <div>{i?.rewards || 0} Points</div>
-                    <div>cl1 NFT</div>
+        quests.length ? (
+          <div className="list">
+            <div className="grid">
+              {quests?.map((i) => (
+                <Card
+                  active={i?.active === "Y"}
+                  key={i?.id}
+                  backgroundColor={color}
+                  onClick={() => handleClick(i?.questKey)}
+                >
+                  <div className="top">
+                    <div className="left">Quest Rewards</div>
+                    <div className="vertical-divider" />
+                    <div className="col">
+                      <div>{i?.rewards || 0} Points</div>
+                      <div>cl1 NFT</div>
+                    </div>
                   </div>
-                </div>
-                <div className="divider">
-                  <div className="line" />
-                </div>
-                <div className="bottom row-between">
-                  <div className="col">
-                    <Tippy content={i?.title}>
-                      <div className="title">{i?.title}</div>
-                    </Tippy>
-                    <Tippy content={
-                         <div dangerouslySetInnerHTML={
-                          {__html: removeHtmlStyle(i?.description)}
-                        }/>
-                    }>
-                      <div className="desc">
-                        <div dangerouslySetInnerHTML={
-                          {__html: removeHtmlStyle(i?.description)}
-                        }/>
-                      </div>
-                    </Tippy>
+                  <div className="divider">
+                    <div className="line" />
                   </div>
-                  <div className="label">{i?.active === 'Y' ? label : 'EXPIRED'}</div>
-                </div>
-              </Card>
-            ))}
+                  <div className="bottom row-between">
+                    <div className="col">
+                      <Tippy content={i?.title}>
+                        <div className="title">{i?.title}</div>
+                      </Tippy>
+                      <Tippy
+                        content={
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: removeHtmlStyle(i?.description),
+                            }}
+                          />
+                        }
+                      >
+                        <div className="desc">
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: removeHtmlStyle(i?.description),
+                            }}
+                          />
+                        </div>
+                      </Tippy>
+                    </div>
+                    <div className="label">
+                      {i?.active === "Y" ? label : "EXPIRED"}
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
           </div>
-        </div>
-      ) : (
-        <div className="loading"><Loading /></div>
-      )}
-      {
-        totalPage && (
-            <ReactPaginate
-            className="pagination"
-            breakLabel="..."
-            nextLabel=">"
-            onPageChange={handlePageClick}
-            pageRangeDisplayed={3}
-            pageCount={totalPage}
-            previousLabel="<"
-          />
+        ) : (
+          <div className="none">
+            This part of the task will be released at a specific time, stay
+            tuned and look forward to it!
+          </div>
         )
-      }
-      
+      ) : (
+        <div className="loading">
+          <Loading />
+        </div>
+      )}
+      {totalPage ? (
+        <ReactPaginate
+          className="pagination"
+          breakLabel="..."
+          nextLabel=">"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={3}
+          pageCount={totalPage}
+          previousLabel="<"
+        />
+      ) : null}
     </Container>
   );
 };

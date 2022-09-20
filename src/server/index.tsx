@@ -168,6 +168,12 @@ export const getPublicQuestList = async ()=>publicAxios.get('/jeecg-boot/ambassa
   }
 })
 
+export const getAllPublicQuestList = async (props: any)=>publicAxios.get('/jeecg-boot/ambassador/quest/list', {
+  params:{
+    ...props
+  }
+})
+
 export const getPublicNFTList = async ()=>publicAxios.get('/jeecg-boot/ambassador/nft/list')
 
 export const getPublicContributorNFTList = async ()=>publicAxios.get('/jeecg-boot/contributor/nft/list')

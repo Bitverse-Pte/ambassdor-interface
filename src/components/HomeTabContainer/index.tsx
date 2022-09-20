@@ -213,7 +213,7 @@ export default () => {
             {currentSubNav === 1 && (
               <CardTypeQuest
                 type="storyline"
-                color="linear-gradient(90deg, #FFA826 -6.84%, #FF7A00 103.42%);"
+                color="linear-gradient(90deg, #AA58B7 -6.84%, #580897 103.42%);"
                 label={questSubLevel[currentSubNav]}
                 show={chartIdx === NAVLIST.Quest}
               />

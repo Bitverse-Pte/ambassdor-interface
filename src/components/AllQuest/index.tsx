@@ -1,5 +1,384 @@
-const AllQuest = ()=>{
-    return <div>Coming Soon</div>
-}
+import { getAllPublicQuestList, getPublicQuestList } from "@/server";
+import { useRequest } from "ahooks";
+import { useEffect, useMemo, useState } from "react";
+import ReactPaginate from "react-paginate";
+import styled from "styled-components";
+import Button from "../Button";
+import Loading from "../Loading";
+import bg from "@/assets/quest/bg.svg";
+import QuestCard from "../QuestCard";
 
-export default AllQuest
+import einstein from "@/assets/dragons/einstein.png";
+import explore from "@/assets/dragons/explore.png";
+import galaxy from "@/assets/dragons/galaxy.png";
+import guardians from "@/assets/dragons/guardians.png";
+import psychedelic from "@/assets/dragons/psychedelic.png";
+import { useModel } from "umi";
+
+const questCard = [
+  {
+    status: false,
+    title: "-",
+    des: "-",
+    label: "-",
+    src: einstein,
+    gradient:
+      "linear-gradient(90deg, #F95136 0%, #C54152 67.19%, #872E72 100%)",
+  },
+  {
+    status: false,
+    title: "-",
+    des: "-",
+    label: "-",
+    src: guardians,
+    gradient: "linear-gradient(92.04deg, #009EFD 0.04%, #12EFCF 126.57%)",
+  },
+  {
+    status: false,
+    title: "-",
+    des: "-",
+    label: "-",
+    src: psychedelic,
+    gradient: "linear-gradient(90deg, #4ABE91 0%, #F2D524 106.68%)",
+  },
+  {
+    status: false,
+    title: "-",
+    des: "-",
+    label: "-",
+    src: galaxy,
+    gradient: "linear-gradient(90deg, #4ABE91 0%, #F2D524 106.68%)",
+  },
+  {
+    status: false,
+    title: "-",
+    des: "-",
+    label: "-",
+    src: explore,
+    gradient: "linear-gradient(90deg, #4ABE91 0%, #F2D524 106.68%)",
+  },
+  {
+    status: false,
+    title: "-",
+    des: "-",
+    label: "-",
+    src: einstein,
+    gradient:
+      "linear-gradient(90deg, #F95136 0%, #C54152 67.19%, #872E72 100%)",
+  },
+  {
+    status: false,
+    title: "-",
+    des: "-",
+    label: "-",
+    src: guardians,
+    gradient: "linear-gradient(92.04deg, #009EFD 0.04%, #12EFCF 126.57%)",
+  },
+  {
+    status: false,
+    title: "-",
+    des: "-",
+    label: "-",
+    src: psychedelic,
+    gradient: "linear-gradient(90deg, #4ABE91 0%, #F2D524 106.68%)",
+  },
+  {
+    status: false,
+    title: "-",
+    des: "-",
+    label: "-",
+    src: galaxy,
+    gradient: "linear-gradient(90deg, #4ABE91 0%, #F2D524 106.68%)",
+  },
+];
+
+const Container = styled.div`
+  min-width: 1440px;
+  .banner {
+    display: flex;
+    align-items: center;
+    background: url(${bg}), linear-gradient(180deg, #001b5c 0%, #001f1f 100%);
+    height: 600px;
+    width: 100%;
+    padding: 126px 80px 144px;
+    box-sizing: border-box;
+    min-width: 1440px;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    .left {
+      img {
+        position: absolute;
+        transform: translate(0%, -10%);
+        right: 0;
+      }
+      /* margin: auto; */
+      width: 1440px;
+      margin: auto;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      .title {
+        font-weight: 800;
+        font-size: 68px;
+        line-height: 80px;
+        color: #ffffff;
+      }
+      .desc {
+        font-weight: 400;
+        font-size: 30px;
+        line-height: 40px;
+        letter-spacing: 0.02em;
+        color: #33eec1;
+        margin-top: 20px;
+        margin-bottom: 60px;
+      }
+      button.primary.md {
+        border-radius: 60px;
+        width: 224px;
+        height: 50px;
+      }
+    }
+  }
+  .content {
+    width: 1440px;
+    margin: 56px auto auto;
+    padding: 72px 80px;
+    box-sizing: border-box;
+  }
+  .tabs {
+    display: flex;
+    align-items: center;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    gap: 40px;
+
+    div {
+      cursor: pointer;
+      color: #b1b1b1;
+      transition: all linear 0.2s;
+      font-weight: 500;
+      font-size: 20px;
+      line-height: 30px;
+      &.active,
+      &:hover {
+        color: #fff;
+      }
+    }
+  }
+  .cards {
+    padding-top: 110px;
+  }
+  .loader {
+    padding: 0 0 110px;
+  }
+  .card-wrapper {
+    display: grid;
+    grid-gap: 110px 80px;
+    justify-content: center;
+    grid-template-columns: repeat(
+      auto-fit,
+      min(362px, calc(100% / 3 - 28px * 2))
+    );
+  }
+
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 114px;
+
+    li {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      a {
+        color: #fff;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+    .selected {
+      background: #00c6a9;
+    }
+    .disabled {
+      filter: opacity(0.5);
+    }
+  }
+  .inner {
+    display: flex;
+    flex-direction: column;
+    .label {
+      margin-top: 0;
+    }
+    .p .f-20 {
+      overflow: hidden; //超出的文本隐藏
+      text-overflow: ellipsis; //溢出用省略号显示
+      white-space: nowrap; //溢出不换行
+      margin-right: 12px;
+    }
+    .insert {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: calc(100% - 16px);
+      margin: auto auto 0;
+      max-height: 96px;
+      .card {
+        div {
+          text-align: center;
+        }
+        div:nth-of-type(1) {
+          font-weight: 500;
+          font-size: 20px;
+          line-height: 30px;
+        }
+        div:nth-of-type(2) {
+          margin-top: 2px;
+          font-weight: 500;
+          font-size: 16px;
+          line-height: 24px;
+        }
+      }
+    }
+  }
+`;
+
+const AllQuest = () => {
+  const tabs = ["All", "Popular quest", "Monthly", "Storyline"];
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const { data, loading, run } = useRequest(getAllPublicQuestList, {
+    manual: true,
+  });
+
+  useEffect(() => {
+    run({
+      pageSize: 9,
+      pageNo: 1,
+    });
+  }, []);
+
+  const records = useMemo(() => data?.data?.result?.records, [data]);
+  const totalPage = useMemo(() => data?.data?.result?.pages, [data]);
+
+  const handlePageClick = (event: any) => {
+    run({ pageNo: event?.selected + 1, pageSize: 9 });
+  };
+
+  const popularQuest = useMemo(() => {
+    if (!data?.data?.result?.records) return questCard;
+    return questCard
+      .map((i: any, index: any) => ({
+        ...i,
+        ...data?.data?.result?.records[index],
+        status: data?.data?.result?.records[index] ? true : false,
+      }))
+      .filter((i) => i?.status);
+  }, [data]);
+
+  console.log("records", popularQuest);
+
+  const {
+    questModal: { questModalSetTrue, run: questModalRun },
+  } = useModel("questModal");
+
+  const handleClick = (i: any) => {
+    questModalRun({ questKey: i?.questKey });
+    questModalSetTrue();
+  };
+
+  return (
+    <Container>
+      <div className="banner">
+        <div className="left">
+          <img src={require("@/assets/quest/dragon.png")} />
+
+          <div className="title">
+            Complete tasks <br /> Earn Token and NFT！
+          </div>
+          <div className="desc">season 奖励</div>
+          <Button>GO Apply</Button>
+        </div>
+      </div>
+      <div className="content">
+        <div className="tabs">
+          {tabs?.map((i, index) => (
+            <div
+              className={activeIndex === index ? "active" : ""}
+              onClick={() => {
+                setActiveIndex(index);
+              }}
+              key={i}
+            >
+              {i}
+            </div>
+          ))}
+        </div>
+        <div className="cards">
+          {!loading ? (
+            <div className="card-wrapper">
+              {records?.length ? (
+                popularQuest?.map((i) => (
+                  <QuestCard
+                    onClick={() => {
+                      handleClick(i);
+                    }}
+                    className="card-item"
+                    key={i?.questKey}
+                    src={i?.src}
+                    gradient={i?.gradient}
+                    label={i?.type}
+                    title={i?.title}
+                    des={i?.description}
+                    valid={i?.status}
+                  >
+                    {i?.status ? (
+                      <div className="card">
+                        <div>quest Rewards</div>
+                        <div>{i?.rewrds || 0} points</div>
+                      </div>
+                    ) : loading ? (
+                      <div className="card">
+                        <Loading />
+                      </div>
+                    ) : null}
+                  </QuestCard>
+                ))
+              ) : (
+                <div>null</div>
+              )}
+            </div>
+          ) : (
+            <Loading />
+          )}
+        </div>
+        {totalPage ? (
+          <ReactPaginate
+            className="pagination"
+            breakLabel="..."
+            nextLabel=">"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={3}
+            pageCount={totalPage}
+            previousLabel="<"
+          />
+        ) : null}
+      </div>
+    </Container>
+  );
+};
+
+export default AllQuest;

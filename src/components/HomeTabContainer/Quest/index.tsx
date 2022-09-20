@@ -528,7 +528,7 @@ export default ({ show }: any) => {
   // const { data: actionListData } = useRequest(getActionList)
   const { run, data: qustListData } = useRequest(getJoinedQuest);
   // const actions = useMemo(() => actionListData?.data?.result, [actionListData])
-  const questList = useMemo(() => qustListData?.data?.result, [qustListData]);
+  const questList = useMemo(() => qustListData?.data?.result?.records, [qustListData]);
 
   const {
     questModal: { questModalSetTrue, run: questModalRun },
@@ -669,6 +669,8 @@ export default ({ show }: any) => {
     qustListData,
   ]);
 
+  console.log('questList', questList)
+
   return (
     <Container>
       <DayPickerContainer className="daypicker-target">
@@ -748,7 +750,7 @@ export default ({ show }: any) => {
         </div>
       )}
 
-      {totalPage && (
+      {totalPage ? (
         <ReactPaginate
           className="pagination"
           breakLabel="..."
@@ -758,7 +760,7 @@ export default ({ show }: any) => {
           pageCount={totalPage}
           previousLabel="<"
         />
-      )}
+      ): null}
     </Container>
   );
 };
