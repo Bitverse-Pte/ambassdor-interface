@@ -231,7 +231,7 @@ export default () => {
 
       <StyledModal visible={showLevelDialog} onClose={setFalse}>
         <div>
-          <img onClick={tvFullScreenTrue} src={require("@/assets/level.png")} alt="" />
+          <img style={{paddingRight: '20px'}} onClick={tvFullScreenTrue} src={require("@/assets/level.png")} alt="" />
         </div>
       </StyledModal>
 

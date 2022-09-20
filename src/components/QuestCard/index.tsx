@@ -55,7 +55,7 @@ const Container = styled.div<{ gradient?: string }>`
     width: calc(100% - 8px);
     margin: 0 auto;
     background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(6px);
     box-sizing: border-box;
     /* Note: backdrop-filter has minimal browser support */
 
@@ -77,6 +77,10 @@ const Container = styled.div<{ gradient?: string }>`
     /* identical to box height */
     text-transform: capitalize;
     color: #ffffff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right: 12px;
   }
 
   .f-16 {
@@ -164,7 +168,7 @@ export default ({
         />
         <div className="insert">{children}</div>
       </div>
-      {!valid && <div style={{ height: size?.height || 210 + 'px'}} className="coming-soon">Coming Soon...</div>}
+      {!valid && <div style={{ height: ((size?.height) || 210) + 4 + 'px'}} className="coming-soon">Coming Soon...</div>}
     </Container>
   );
 };

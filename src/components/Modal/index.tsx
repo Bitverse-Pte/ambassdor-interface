@@ -58,12 +58,12 @@ const PortalWrapper = styled(motion.div)`
   z-index: 666;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(10px);
-  transition: all linear .2s;
+  transition: all linear 0.2s;
   /* background: rgba(58, 58, 58, 0.3); */
   /* 产品的意思是：用户要能看清蒙层下的字，不能太模糊 */
   /* backdrop-filter: blur(6px); */
   > .inner {
-    border: 1px solid rgba(255,255,255,0.32);
+    border: 1px solid rgba(255, 255, 255, 0.32);
     box-sizing: border-box;
     /* padding: 0 0 24px 0; */
     /* padding-bottom: 24px; */
@@ -147,6 +147,24 @@ const PortalWrapper = styled(motion.div)`
       }
     }
     .content {
+      &::-webkit-scrollbar{
+        background-color: transparent;
+        width: 9px;
+        height: 9px;
+        transition: all linear .1s;
+      }
+      &::-webkit-scrollbar-corner{
+        background-color: transparent; 
+      }
+      &::-webkit-scrollbar-track {
+        background-color: transparent;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.4);
+        border-radius: 30px;
+      }
+
       .ms-container {
         max-height: 80vh;
       }
@@ -280,7 +298,7 @@ const Portal: React.FC<ModalProps> = (props: ModalProps) => {
     >
       <div ref={ref} className={classNames("inner", size)}>
         {(onBack || title || closable) && renderHeader}
-        <div className="content">
+        <div className="content scrollbar">
           <>{children}</>
         </div>
         {cancel || ok ? renderFooter : footer}

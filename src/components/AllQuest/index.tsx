@@ -99,8 +99,9 @@ const questCard = [
 ];
 
 const Card = styled.div<{ backgroundColor?: string; active?: boolean }>`
-  filter: grayscale(${({ active }) => (active ? 0 : 1)});
-  background: ${({ backgroundColor }) => backgroundColor};
+  /* filter: grayscale(${({ active }) => (active ? 0 : 1)}); */
+  /* #71757A */
+  background: ${({ backgroundColor, active }) => active ? backgroundColor : '#71757A'};
   aspect-ratio: 425/224;
   border-radius: 12px;
   overflow: hidden;
@@ -162,7 +163,7 @@ const Card = styled.div<{ backgroundColor?: string; active?: boolean }>`
     .line {
       width: 44%;
       height: 2px;
-      background: ${({ backgroundColor }) => backgroundColor};
+      background: ${({ backgroundColor, active }) => active ? backgroundColor : '#71757A'};
     }
   }
   .bottom {
@@ -499,7 +500,7 @@ const AllQuest = () => {
                       backgroundColor={
                         activeIndex === 2
                           ? "linear-gradient(90deg, #10CEC3 3.8%, #006B69 95.11%);"
-                          : "linear-gradient(90deg, #FFA826 -6.84%, #FF7A00 103.42%);"
+                          : "linear-gradient(90deg, #AA58B7 -6.84%, #580897 103.42%);"
                       }
                       onClick={() => handleClick(i)}
                     >

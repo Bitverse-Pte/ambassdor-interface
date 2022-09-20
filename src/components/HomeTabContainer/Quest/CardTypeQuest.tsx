@@ -75,8 +75,8 @@ const Container = styled.div`
 `;
 
 const Card = styled.div<{ backgroundColor?: string; active?: boolean }>`
-  filter: grayscale(${({ active }) => (active ? 0 : 1)});
-  background: ${({ backgroundColor }) => backgroundColor};
+  /* filter: grayscale(${({ active }) => (active ? 0 : 1)}); */
+  background: ${({ backgroundColor, active }) => active ? backgroundColor : '#71757A'};
   aspect-ratio: 425/224;
   border-radius: 12px;
   overflow: hidden;
@@ -138,7 +138,7 @@ const Card = styled.div<{ backgroundColor?: string; active?: boolean }>`
     .line {
       width: 44%;
       height: 2px;
-      background: ${({ backgroundColor }) => backgroundColor};
+      background: ${({ backgroundColor, active }) => active ? backgroundColor : '#71757A'};
     }
   }
   .bottom {

@@ -157,7 +157,7 @@ const Container = styled.div`
       /* padding: 20px 46px; */
       padding: 5.7% 13.2%;
       gap: 2px;
-      background: rgba(0, 0, 0, 0.2);
+      background: rgba(0, 0, 0, 0.4);
       border-radius: 12px;
       font-weight: 500;
       /* font-size: 55%; */
