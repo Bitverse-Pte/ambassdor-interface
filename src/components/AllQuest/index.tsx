@@ -464,7 +464,7 @@ const AllQuest = () => {
             Complete tasks <br /> Earn Token and NFT！
           </div>
           <div className="desc">season 奖励</div>
-          <Button>GO Apply</Button>
+          <Button onClick={()=>window.open('https://gleam.io/competitions/HlwYN-clv1-task', "_blank")}>GO Apply</Button>
         </div>
       </div>
       <div className="content">
