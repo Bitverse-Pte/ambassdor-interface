@@ -14,6 +14,11 @@ import galaxy from "@/assets/dragons/galaxy.png";
 import guardians from "@/assets/dragons/guardians.png";
 import psychedelic from "@/assets/dragons/psychedelic.png";
 import { useModel } from "umi";
+import CardTypeQuest from "../HomeTabContainer/Quest/CardTypeQuest";
+import Tippy from "@tippyjs/react";
+
+const removeHtmlStyle = (html: string) =>
+  html.replaceAll(/style="[^\"]*?"/g, "");
 
 const questCard = [
   {
@@ -92,6 +97,122 @@ const questCard = [
   },
 ];
 
+const Card = styled.div<{ backgroundColor?: string; active?: boolean }>`
+  filter: grayscale(${({ active }) => (active ? 0 : 1)});
+  background: ${({ backgroundColor }) => backgroundColor};
+  aspect-ratio: 425/224;
+  border-radius: 12px;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+  cursor: pointer;
+
+  .col {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .row-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .vertical-divider {
+    width: 1px;
+    height: 30px;
+    background: #ffffff;
+    opacity: 0.2;
+    border-radius: 32px;
+    margin: 0 34px;
+  }
+
+  .top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex: 1;
+    padding: 0 30px;
+    box-sizing: border-box;
+    .left {
+      font-weight: 500;
+      /* font-size: 20px; */
+      line-height: 30px;
+      font-size: 110%;
+    }
+    .col {
+      font-weight: 500;
+      /* font-size: 16px; */
+      line-height: 24px;
+      font-size: 90%;
+    }
+  }
+  .divider {
+    width: 100%;
+    height: 4px;
+    background: #05050e;
+    padding: 2px 0 0 0;
+    box-sizing: border-box;
+    .line {
+      width: 44%;
+      height: 2px;
+      background: ${({ backgroundColor }) => backgroundColor};
+    }
+  }
+  .bottom {
+    width: 100%;
+    height: 38%;
+    background: linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.1),
+        rgba(255, 255, 255, 0.1)
+      ),
+      #0a0a13;
+    padding: 0 24px;
+    box-sizing: border-box;
+    .title {
+      width: 112px;
+      overflow: hidden; //超出的文本隐藏
+      text-overflow: ellipsis; //溢出用省略号显示
+      white-space: nowrap; //溢出不换行
+    }
+    .desc {
+      height: 24px;
+      width: 158px;
+      overflow: hidden; //超出的文本隐藏
+      text-overflow: ellipsis; //溢出用省略号显示
+      white-space: nowrap; //溢出不换行
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 3px;
+      font-size: 80%;
+      font-size: 16px;
+      & * {
+        line-height: 24px;
+        width: 158px;
+        overflow: hidden; //超出的文本隐藏
+        text-overflow: ellipsis; //溢出用省略号显示
+        white-space: nowrap; //溢出不换行
+      }
+    }
+    .label {
+      background: #ffffff;
+      border: 1px solid #ffffff;
+      border-radius: 6px;
+      padding: 0 12px;
+      color: #05050e;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 20px;
+      font-family: "Dela Gothic One";
+    }
+  }
+`;
+
 const Container = styled.div`
   min-width: 1440px;
   .banner {
@@ -167,7 +288,7 @@ const Container = styled.div`
     }
   }
   .cards {
-    padding-top: 110px;
+    padding: 110px 44px 0;
   }
   .loader {
     padding: 0 0 110px;
@@ -175,11 +296,14 @@ const Container = styled.div`
   .card-wrapper {
     display: grid;
     grid-gap: 110px 80px;
-    justify-content: center;
+    justify-content: flex-start;
     grid-template-columns: repeat(
       auto-fit,
-      min(362px, calc(100% / 3 - 28px * 2))
+      min(370px, calc(100% / 3 - 27px * 2))
     );
+    & > div {
+      /* height: 415px; */
+    }
   }
 
   .pagination {
@@ -259,6 +383,7 @@ const Container = styled.div`
 const AllQuest = () => {
   const tabs = ["All", "Popular quest", "Monthly", "Storyline"];
   const [activeIndex, setActiveIndex] = useState(0);
+  const [curParam, setParam] = useState({});
 
   const { data, loading, run } = useRequest(getAllPublicQuestList, {
     manual: true,
@@ -266,16 +391,15 @@ const AllQuest = () => {
 
   useEffect(() => {
     run({
-      pageSize: 9,
-      pageNo: 1,
+      ...curParam,
     });
-  }, []);
+  }, [curParam]);
 
   const records = useMemo(() => data?.data?.result?.records, [data]);
   const totalPage = useMemo(() => data?.data?.result?.pages, [data]);
 
   const handlePageClick = (event: any) => {
-    run({ pageNo: event?.selected + 1, pageSize: 9 });
+    run({ ...curParam, pageNo: event?.selected + 1, pageSize: 9 });
   };
 
   const popularQuest = useMemo(() => {
@@ -289,8 +413,6 @@ const AllQuest = () => {
       .filter((i) => i?.status);
   }, [data]);
 
-  console.log("records", popularQuest);
-
   const {
     questModal: { questModalSetTrue, run: questModalRun },
   } = useModel("questModal");
@@ -298,6 +420,38 @@ const AllQuest = () => {
   const handleClick = (i: any) => {
     questModalRun({ questKey: i?.questKey });
     questModalSetTrue();
+  };
+
+  const handleIndexClick = (index: number) => {
+    setActiveIndex(index);
+    if (index === 0) {
+      setParam({});
+      return;
+    }
+    if (index === 1) {
+      setParam({
+        pageSize: 9,
+        pageNo: 1,
+        active: "Y",
+      });
+      return;
+    }
+    if (index === 2) {
+      setParam({
+        pageSize: 9,
+        pageNo: 1,
+        type: "Monthly",
+      });
+      return;
+    }
+    if (index === 3) {
+      setParam({
+        pageSize: 9,
+        pageNo: 1,
+        type: "Storyline",
+      });
+      return;
+    }
   };
 
   return (
@@ -319,7 +473,7 @@ const AllQuest = () => {
             <div
               className={activeIndex === index ? "active" : ""}
               onClick={() => {
-                setActiveIndex(index);
+                handleIndexClick(index);
               }}
               key={i}
             >
@@ -331,32 +485,86 @@ const AllQuest = () => {
           {!loading ? (
             <div className="card-wrapper">
               {records?.length ? (
-                popularQuest?.map((i) => (
-                  <QuestCard
-                    onClick={() => {
-                      handleClick(i);
-                    }}
-                    className="card-item"
-                    key={i?.questKey}
-                    src={i?.src}
-                    gradient={i?.gradient}
-                    label={i?.type}
-                    title={i?.title}
-                    des={i?.description}
-                    valid={i?.status}
-                  >
-                    {i?.status ? (
-                      <div className="card">
-                        <div>quest Rewards</div>
-                        <div>{i?.rewrds || 0} points</div>
+                activeIndex === 2 || activeIndex === 3 ? (
+                  popularQuest?.map((i) => (
+                    <Card
+                      active={i?.active === "Y"}
+                      key={i?.id}
+                      backgroundColor={
+                        activeIndex === 2
+                          ? "linear-gradient(90deg, #10CEC3 3.8%, #006B69 95.11%);"
+                          : "linear-gradient(90deg, #FFA826 -6.84%, #FF7A00 103.42%);"
+                      }
+                      onClick={() => handleClick(i)}
+                    >
+                      <div className="top">
+                        <div className="left">Quest Rewards</div>
+                        <div className="vertical-divider" />
+                        <div className="col">
+                          <div>{i?.rewards || 0} Points</div>
+                          <div>cl1 NFT</div>
+                        </div>
                       </div>
-                    ) : loading ? (
-                      <div className="card">
-                        <Loading />
+                      <div className="divider">
+                        <div className="line" />
                       </div>
-                    ) : null}
-                  </QuestCard>
-                ))
+                      <div className="bottom row-between">
+                        <div className="col">
+                          <Tippy content={i?.title}>
+                            <div className="title">{i?.title}</div>
+                          </Tippy>
+                          <Tippy
+                            content={
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html: removeHtmlStyle(i?.description),
+                                }}
+                              />
+                            }
+                          >
+                            <div className="desc">
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html: removeHtmlStyle(i?.description),
+                                }}
+                              />
+                            </div>
+                          </Tippy>
+                        </div>
+                        <div className="label">
+                          {i?.active === "N" ? "EXPIRED" : i?.type}
+                        </div>
+                      </div>
+                    </Card>
+                  ))
+                ) : (
+                  popularQuest?.map((i) => (
+                    <QuestCard
+                      onClick={() => {
+                        handleClick(i);
+                      }}
+                      className="card-item"
+                      key={i?.questKey}
+                      src={i?.src}
+                      gradient={i?.gradient}
+                      label={i?.active === "N" ? "EXPIRED" : i?.type}
+                      title={i?.title}
+                      des={i?.description}
+                      valid={i?.status}
+                    >
+                      {i?.status ? (
+                        <div className="card">
+                          <div>quest Rewards</div>
+                          <div>{i?.rewrds || 0} points</div>
+                        </div>
+                      ) : loading ? (
+                        <div className="card">
+                          <Loading />
+                        </div>
+                      ) : null}
+                    </QuestCard>
+                  ))
+                )
               ) : (
                 <div>null</div>
               )}
@@ -365,7 +573,7 @@ const AllQuest = () => {
             <Loading />
           )}
         </div>
-        {totalPage ? (
+        {!loading && totalPage ? (
           <ReactPaginate
             className="pagination"
             breakLabel="..."

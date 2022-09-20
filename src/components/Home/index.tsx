@@ -366,7 +366,7 @@ const Home = () => {
                   key={i?.questKey}
                   src={i?.src}
                   gradient={i?.gradient}
-                  label={i?.type}
+                  label={i?.active === 'N' ? 'EXPIRED' : i?.type }
                   title={i?.title}
                   des={i?.description}
                   valid={i?.status}

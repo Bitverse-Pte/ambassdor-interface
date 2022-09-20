@@ -1,4 +1,4 @@
-import Home from "./Home";
+import Home from "./home";
 import {Toaster} from 'react-hot-toast'
 import useBindWindowAction from "@/hooks/useBindWindowAction";
 

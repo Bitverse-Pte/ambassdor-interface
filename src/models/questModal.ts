@@ -1,6 +1,6 @@
 import {
   filterActionList,
-  getActionList, getQuestList,
+  getActionList, getAllPublicQuestList, getQuestList,
 } from "@/server";
 import { useBoolean, useRequest } from "ahooks";
 import { useState } from "react";
@@ -9,7 +9,7 @@ export default () => {
   const [actions, setActions] = useState(null)
 
     const { run, data, loading, error } = useRequest(async (props)=>{
-    const res = await getQuestList({...props})
+    const res = await getAllPublicQuestList({...props})
     const quest = res?.data?.result?.records ? res?.data?.result?.records[0] : null
     if(quest){
       const actions = await filterActionList({questKey: quest?.questKey})
