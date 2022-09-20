@@ -132,6 +132,8 @@ const PortalWrapper = styled(motion.div)`
         user-select: none;
       }
       .close {
+        position: absolute;
+        right: 50px;
         cursor: pointer;
         user-select: none;
         i {
