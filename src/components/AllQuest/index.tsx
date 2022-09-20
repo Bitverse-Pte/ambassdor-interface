@@ -7,6 +7,7 @@ import Button from "../Button";
 import Loading from "../Loading";
 import bg from "@/assets/quest/bg.svg";
 import QuestCard from "../QuestCard";
+import mask from "@/assets/home-mask.svg";
 
 import einstein from "@/assets/dragons/einstein.png";
 import explore from "@/assets/dragons/explore.png";
@@ -215,6 +216,11 @@ const Card = styled.div<{ backgroundColor?: string; active?: boolean }>`
 
 const Container = styled.div`
   min-width: 1440px;
+  min-height: calc(100vh - 60px);
+  background-image: url(${mask});
+  background-size: contain;
+  background-position: bottom;
+  background-repeat: no-repeat;
   .banner {
     display: flex;
     align-items: center;
