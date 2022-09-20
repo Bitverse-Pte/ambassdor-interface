@@ -295,14 +295,14 @@ const Container = styled.div`
   }
   .card-wrapper {
     display: grid;
-    grid-gap: 110px 80px;
+    grid-gap: 100px 70px;
     justify-content: flex-start;
     grid-template-columns: repeat(
       auto-fit,
       min(370px, calc(100% / 3 - 27px * 2))
     );
-    & > div {
-      /* height: 415px; */
+    & > div.card-item {
+      height: 415px;
     }
   }
 

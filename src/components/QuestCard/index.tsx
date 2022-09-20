@@ -144,12 +144,13 @@ export default ({
   children,
   style,
   valid,
+  ...props
 }: any) => {
   const ref: any = useRef()
   const size = useSize(ref)
   
   return (
-    <Container gradient={gradient} style={style} onClick={onClick}>
+    <Container gradient={gradient} style={style} onClick={onClick} {...props}>
       <img src={src} alt={title} />
       <div className="inner" ref={ref}>
         <div className="row p">
