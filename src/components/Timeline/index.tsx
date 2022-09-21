@@ -1,8 +1,42 @@
-import { useHover } from "ahooks";
-import React, { useMemo, useRef } from "react";
+import { useHover, useSize } from "ahooks";
+import React, { useMemo, useRef, useState } from "react";
 import styled from "styled-components";
+import { useModel } from "umi";
+import IconRocket from "./IconRocket";
+
+const Row = styled.div`
+  display: flex;
+  align-items: center;
+`;
 
 const Container = styled.div`
+  @keyframes float {
+    0% {
+      transform: translate(0, calc(-50% + 5px));
+    }
+    50% {
+      transform: translate(0, calc(-50% - 5px));
+    }
+    100% {
+      transform: translate(0, calc(-50% + 5px));
+    }
+  }
+
+  @keyframes launch {
+    0% {
+      transform: rotate(0deg) translate(0px,-50%);
+    }
+    10% {
+      transform: rotate(0deg) translate(20px,-50%);
+    }
+    50% {
+      transform: rotate(205deg) translate(30px,-50%);
+    }
+    to {
+      transform: rotate(205deg) translate(450px,-50%);
+    }
+  }
+
   @keyframes ripple {
     0% {
       border-radius: 50%;
@@ -102,6 +136,40 @@ const Container = styled.div`
         line-height: 1;
       }
     }
+
+    .extra-line {
+      background: rgba(179, 180, 179, 0.5);
+      position: absolute;
+      top: 10px;
+      overflow: visible;
+      height: 6px;
+      right: 0;
+      transform: translate(100%, 0);
+      svg {
+        &.default {
+          animation-duration: 2s;
+          animation-name: float;
+          animation-timing-function: linear;
+          animation-fill-mode: forwards;
+          animation-iteration-count: infinite;
+        }
+        &.launch{
+          animation-duration: 2s;
+          animation-name: launch;
+
+          animation-timing-function: ease-in;
+          animation-fill-mode: forwards;
+        }
+        position: absolute;
+        top: 50%;
+        left: 40px;
+        transform: translate(0%, -50%);
+        cursor: pointer;
+        /* animation-timing-function: cubic-bezier(0.31, -0.58, 1, -0.21); */
+        /* animation: rocket cubic-bezier(0.31, -0.58, 1, -0.21) 2s infinite; */
+      }
+    }
+
     .line {
       background: rgba(179, 180, 179, 0.5);
       position: relative;
@@ -185,8 +253,8 @@ const Container = styled.div`
         align-items: center;
         white-space: nowrap;
         z-index: 22;
-        span{
-          transition: all linear .2s;
+        span {
+          transition: all linear 0.2s;
         }
       }
     }
@@ -236,7 +304,7 @@ const Container = styled.div`
   }
 `;
 
-const Hover = ({m}: any) => {
+const Hover = ({ m }: any) => {
   const ref = useRef(null);
   const ifHover = useHover(ref);
 
@@ -253,10 +321,19 @@ const Hover = ({m}: any) => {
   );
 };
 
-export default function Timeline({ handleSlide, milestones, curStepsCompleted, max }: any) {
+export default function Timeline({
+  handleSlide,
+  milestones,
+  curStepsCompleted,
+  max,
+}: any) {
   if (!Array.isArray(milestones)) {
     return null;
   }
+
+  const {
+    user: { isContributor, curRole },
+  } = useModel("userInfo");
 
   const [totalSteps, totalStepsCompleted, lastCompleted] = milestones.reduce(
     (prev, m, i) => [
@@ -279,68 +356,115 @@ export default function Timeline({ handleSlide, milestones, curStepsCompleted, m
         milestones[curCompleting]?.min) /
         dis) *
       stepWidth;
-    return curCompleting * stepWidth + cur;
+
+    const f = curCompleting * stepWidth + cur;
+    return f > 1 ? 1 : f;
   }, [stepWidth, curCompleting, milestones]);
 
-  const handleClick = (item: any, index: number)=>{
-    handleSlide(item, index)
+  const handleClick = (item: any, index: number) => {
+    handleSlide(item, index);
+  };
+
+  const ifInExtra = useMemo(() => {
+    return isContributor === "contributor" && curStepsCompleted >= max;
+  }, [isContributor, curStepsCompleted, max]);
+
+  const ref = useRef(null);
+  const size = useSize(ref);
+
+  console.log(
+    "curStepsCompleted, curStepsCompleted",
+    isContributor,
+    curStepsCompleted,
+    max
+  );
+
+  const [currentClass, setCurClass] = useState('default')
+
+  const showQuestModral = () => {
+    setCurClass('launch')
+    
+  };
+
+  const handleAnimationEnd = e=>{
+    if(e.animationName === 'launch') {
+      setCurClass('default')
+      window.open("https://forms.gle/mYfPqwPyFbuhaZxXA", "_blank");
+      // questModalRun({ questKey: i?.questKey });
+      // questModalSetTrue()
+    }
   }
 
+
   return (
-    <Container className="timeline">
-      <div className="line">
-        <div
-          className="line-progression"
-          // style={{ width: `${(totalStepsCompleted / totalSteps) * 100}%` }}
-          style={{
-            width: `calc(${dis * 100}% - 7px)`,
-          }}
-        ></div>
-      </div>
-      <div className="tooltip">
-        <div
-          // style={{ left: `${(totalStepsCompleted / totalSteps) * 100}%` }}
-          style={{
-            left: `calc(${dis * 100}% - 7px)`,
-          }}
-        >
-          <div className="triangle" />
-          <span>{curStepsCompleted}</span>
-        </div>
-      </div>
-      <ol>
-        {milestones.map((m, i) => (
-          <li
-            className="milestone"
-            // style={{ width: `${(m.steps / totalSteps) * 100}%` }}
+    <Row>
+      <Container className="timeline">
+        <div className="line" ref={ref}>
+          <div
+            className="line-progression"
+            // style={{ width: `${(totalStepsCompleted / totalSteps) * 100}%` }}
             style={{
-              width: i === 0 ? 0 : `${stepWidth * 100}%`,
+              width: `calc(${dis * 100}% - 7px)`,
             }}
-            key={m.label + i}
+          ></div>
+        </div>
+
+        {ifInExtra ? (
+          <div
+            style={{
+              width: `calc((max(100vw, 1440px) - ${size?.width}px) / 2)`,
+            }}
+            className={`extra-line`}
           >
-            <div className="content" onClick={()=>handleClick(m, i)}>
-              <span
-                className={`status${
-                  (m.max > m.stepsCompleted && m.min <= m.stepsCompleted) ||
-                  m.stepsCompleted === m.steps
-                    ? " status--checked"
-                    : ""
-                }`}
-              />
-              {m.max > m.stepsCompleted && m.min <= m.stepsCompleted && (
-                <div className="pulse">
-                  <div className="circle middle" />
-                  <div className="circle delay1" />
-                  <div className="circle delay2" />
-                  <div className="circle delay3" />
-                </div>
-              )}
-              <Hover m={m}/>
-              <span className="milestone-label">{m.value}</span>
-            </div>
-          </li>
-        ))}
-      </ol>
-    </Container>
+            <IconRocket onAnimationEnd={handleAnimationEnd} className={currentClass} onClick={showQuestModral} />
+          </div>
+        ) : null}
+
+        <div className="tooltip">
+          <div
+            // style={{ left: `${(totalStepsCompleted / totalSteps) * 100}%` }}
+            style={{
+              left: `calc(${dis * 100}% - 7px)`,
+            }}
+          >
+            <div className="triangle" />
+            <span>{curStepsCompleted}</span>
+          </div>
+        </div>
+        <ol>
+          {milestones.map((m, i) => (
+            <li
+              className="milestone"
+              // style={{ width: `${(m.steps / totalSteps) * 100}%` }}
+              style={{
+                width: i === 0 ? 0 : `${stepWidth * 100}%`,
+              }}
+              key={m.label + i}
+            >
+              <div className="content" onClick={() => handleClick(m, i)}>
+                <span
+                  className={`status${
+                    (m.max > m.stepsCompleted && m.min <= m.stepsCompleted) ||
+                    m.stepsCompleted === m.steps
+                      ? " status--checked"
+                      : ""
+                  }`}
+                />
+                {m.max > m.stepsCompleted && m.min <= m.stepsCompleted && (
+                  <div className="pulse">
+                    <div className="circle middle" />
+                    <div className="circle delay1" />
+                    <div className="circle delay2" />
+                    <div className="circle delay3" />
+                  </div>
+                )}
+                <Hover m={m} />
+                <span className="milestone-label">{m.value}</span>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </Container>
+    </Row>
   );
 }

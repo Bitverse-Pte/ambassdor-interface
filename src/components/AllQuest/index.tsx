@@ -101,7 +101,8 @@ const questCard = [
 const Card = styled.div<{ backgroundColor?: string; active?: boolean }>`
   /* filter: grayscale(${({ active }) => (active ? 0 : 1)}); */
   /* #71757A */
-  background: ${({ backgroundColor, active }) => active ? backgroundColor : '#71757A'};
+  background: ${({ backgroundColor, active }) =>
+    active ? backgroundColor : "#71757A"};
   aspect-ratio: 425/224;
   border-radius: 12px;
   overflow: hidden;
@@ -163,7 +164,8 @@ const Card = styled.div<{ backgroundColor?: string; active?: boolean }>`
     .line {
       width: 44%;
       height: 2px;
-      background: ${({ backgroundColor, active }) => active ? backgroundColor : '#71757A'};
+      background: ${({ backgroundColor, active }) =>
+        active ? backgroundColor : "#71757A"};
     }
   }
   .bottom {
@@ -178,7 +180,7 @@ const Card = styled.div<{ backgroundColor?: string; active?: boolean }>`
     padding: 0 24px;
     box-sizing: border-box;
     .title {
-      width: 112px;
+      /* width: 112px; */
       overflow: hidden; //超出的文本隐藏
       text-overflow: ellipsis; //溢出用省略号显示
       white-space: nowrap; //溢出不换行
@@ -467,11 +469,20 @@ const AllQuest = () => {
         <div className="left">
           <img src={require("@/assets/quest/dragon.png")} />
 
-          <div className="title">
-            Complete tasks <br /> Earn Token and NFT！
+          <div className="title" style={{marginBottom: '16px', width: '60%'}}>
+            Complete quests and earn Tokens & NFT rewards
           </div>
-          <div className="desc">season 奖励</div>
-          <Button onClick={()=>window.open('https://gleam.io/competitions/HlwYN-clv1-task', "_blank")}>GO Apply</Button>
+          {/* <div className="desc">Complete tasks and earn Tokens & NFT rewards</div> */}
+          <Button
+            onClick={() =>
+              window.open(
+                "https://gleam.io/competitions/HlwYN-clv1-task",
+                "_blank"
+              )
+            }
+          >
+            Apply
+          </Button>
         </div>
       </div>
       <div className="content">
