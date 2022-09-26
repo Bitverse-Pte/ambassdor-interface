@@ -564,7 +564,7 @@ export default ({ show }: any) => {
                           <div
                             onClick={() => window.open("/allquest")}
                             className={`column ${
-                              isContributor
+                              isContributor || !user
                                 ? "contributor-lock-container"
                                 : isAmbassador
                                 ? "ambassdor-lock-container"
