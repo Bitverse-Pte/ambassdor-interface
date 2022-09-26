@@ -624,7 +624,7 @@ export default ({ show, displayRole }: any) => {
                                   <span className="active">
                                     Go Do Quests
                                   </span> 
-                                  to level up！
+                                  &nbsp;to level up！
                                 </div>
                               ) : (
                                 <div className="contributor-lock">
