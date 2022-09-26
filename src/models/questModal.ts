@@ -6,7 +6,7 @@ import { useBoolean, useRequest } from "ahooks";
 import { useState } from "react";
 
 export default () => {
-  const [actions, setActions] = useState(null)
+  const [actions, setActions]: any = useState(null)
 
     const { run, data, loading, error } = useRequest(async (props)=>{
     const res = await getAllPublicQuestList({...props})

@@ -16,6 +16,7 @@ import { useModel } from "umi";
 import { useEffect, useMemo, useRef, useState } from "react";
 import useLevelList from "@/hooks/useLevelList";
 import Loading from "@/components/Loading";
+import { ROLE } from "@/interface";
 
 const Container = styled.div`
   max-width: 1400px;
@@ -77,7 +78,7 @@ const Container = styled.div`
       }
     }
 
-    .ambassdor-lock{
+    .ambassador-lock{
       margin-top: 3px;
       font-weight: 500;
       font-size: 16px;
@@ -160,44 +161,75 @@ const Left = styled.div<{ name: string }>`
     `}
 `;
 
-const SwiperController = ({ lastCompleted, index }: any) => {
+const SwiperController = ({ ifIsCurrentRole, lastCompleted, index }: any) => {
   const swiper = useSwiper();
 
   useEffect(() => {
-    if (!swiper || !lastCompleted) return;
-    setTimeout(() => {
-      swiper.slideTo(lastCompleted);
-    }, 0);
-  }, [swiper, lastCompleted]);
+    if (lastCompleted <= 0 && !ifIsCurrentRole && swiper) {
+      setTimeout(() => {
+        swiper.slideTo(0, 500);
+      }, 0);
+    }
+  }, [ifIsCurrentRole, lastCompleted, swiper]);
 
   useEffect(() => {
-    if (!swiper) return;
-    swiper.slideTo(index);
-  }, [index]);
+    if (!swiper || !lastCompleted || !ifIsCurrentRole) return;
+    setTimeout(() => {
+      swiper.slideTo(lastCompleted || 0, 1000);
+    }, 0);
+  }, [swiper, lastCompleted]);
 
   return null;
 };
 
-export default ({ show }: any) => {
+export default ({ show, displayRole }: any) => {
   const nextRef = useRef(null);
   const prevRef = useRef(null);
-  const levelList = useLevelList();
+  const levelList = useLevelList({
+    forceRole: displayRole === ROLE.ambassador,
+  });
 
   const {
-    user: { user, curRoleNft, isAmbassador, isContributor, curRole, loading },
+    user: {
+      user,
+      curRoleNft,
+      isAmbassador,
+      isContributor,
+      curRole,
+      loading,
+      contributorNFT,
+      ambassadorNFT,
+      currentRole,
+    },
   } = useModel("userInfo");
 
-
-
-  // @ts-ignore
   const {
-    config: { contributor },
-  }: any = useModel("config");
+    config: { contributor, ambassador },
+  } = useModel("config");
+
+  const ifIsCurrentRole = useMemo(() => displayRole === currentRole, [
+    displayRole,
+    currentRole,
+  ]);
+
+  const displayRoleNft = useMemo(
+    () => (displayRole === ROLE.ambassador ? ambassadorNFT : contributorNFT),
+    [displayRole, contributorNFT, ambassadorNFT]
+  );
 
   const steps = useMemo(() => {
-    // if (contributor === "contributor") return null;
-    if(!levelList) return null;
-    const t = levelList.map(
+    if (!levelList) return null;
+
+    const c =
+      displayRole === ROLE.ambassador && isAmbassador
+        ? curRoleNft
+        : displayRole === ROLE.contributor && isContributor
+        ? curRoleNft
+        : displayRole === ROLE.ambassador
+        ? ambassador
+        : contributor;
+
+    const t = levelList?.map(
       (
         i: {
           [x: string]: any;
@@ -207,21 +239,26 @@ export default ({ show }: any) => {
         index: any
       ) => ({
         ...i,
-        ...curRoleNft[index],
-        label: i?.name,
+        ...c[index],
+        label: i?.name||displayRole[index]?.name,
         value: i?.min || 0,
         steps: i?.max || 0,
-        stepsCompleted:
-          user?.point < i.min ? 0 : user?.point >= i.max ? i.max : user?.point,
+        stepsCompleted: !ifIsCurrentRole
+          ? 0
+          : user?.point < i.min
+          ? 0
+          : user?.point >= i.max
+          ? i.max
+          : user?.point,
         date: null,
         hasIncident: false,
+        // ...displayRole[index]
+        // points: ifIsCurrentRole ? i?.points : 0,
       })
     );
 
     return t;
-  }, [levelList, user]);
-
-  console.log('steps', steps)
+  }, [ifIsCurrentRole, displayRole, ambassador, contributor, levelList, user]);
 
   const [activeIndex, setIndex] = useState(0);
 
@@ -235,6 +272,8 @@ export default ({ show }: any) => {
   const handleSlide = (item: any, index: any) => {
     setIndex(index);
   };
+
+  console.log("steps", steps, displayRoleNft);
 
   return (
     <Container>
@@ -264,6 +303,7 @@ export default ({ show }: any) => {
             <SwiperController
               index={activeIndex}
               lastCompleted={lastCompleted}
+              ifIsCurrentRole={ifIsCurrentRole}
             />
 
             <svg
@@ -548,68 +588,74 @@ export default ({ show }: any) => {
               </defs>
             </svg>
 
-            {curRoleNft.map((i, index) => (
-              <SwiperSlide key={i.name}>
-                <div className="column">
-                  <div className="row-between desc" style={{ width: "100%" }}>
-                    <Left name={i?.name.replaceAll(" ", "-")} className="left">
-                      <div className="shadow" />
-                      <div className="effect" />
-                      <Meteor>
-                        {/* <img src={imageUrl} /> */}
-                        {index <= lastCompleted && user ? (
-                          <img
-                            src={require(`@/assets/level/nft/${i.name}.png`)}
-                          />
-                        ) : (
-                          <div
-                            onClick={() => window.open("/allquest")}
-                            className={`column ${
-                              isContributor || !user
-                                ? "contributor-lock-container"
-                                : isAmbassador
-                                ? "ambassdor-lock-container"
-                                : ""
-                            }`}
-                          >
-                            <Lock allowAnimation={false}>
-                              <img
-                                src={require(`@/assets/level/nft/${i.name}.png`)}
-                              />
-                            </Lock>
-                            {isAmbassador ? (
-                              <div className="ambassdor-lock">
-                                Wanna unlcok ambassador？
-                                <span className="active">Go Do Quests</span> to
-                                level up！
-                              </div>
-                            ) : null}
-                            {isContributor ? (
-                              <div className="contributor-lock">
-                                earn more points to <br /> unlock exclusive NFT
-                              </div>
-                            ) : null}
-                            {user ? null : (
-                              <div className="contributor-lock">
-                                earn more points to <br /> unlock exclusive NFT
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </Meteor>
-                    </Left>
+            {displayRoleNft &&
+              displayRoleNft?.map((i, index) => (
+                <SwiperSlide key={i.name}>
+                  <div className="column">
+                    <div className="row-between desc" style={{ width: "100%" }}>
+                      <Left
+                        name={i?.name.replaceAll(" ", "-")}
+                        className="left"
+                      >
+                        <div className="shadow" />
+                        <div className="effect" />
+                        <Meteor>
+                          {/* <img src={imageUrl} /> */}
+                          {index <= lastCompleted && user ? (
+                            <img
+                              src={require(`@/assets/level/nft/${i.name}.png`)}
+                            />
+                          ) : (
+                            <div
+                              onClick={() => window.open("/allquest")}
+                              className={`column ${
+                                displayRole === ROLE.ambassador
+                                  ? "ambassador-lock-container"
+                                  : "contributor-lock-container"
+                              }`}
+                            >
+                              <Lock allowAnimation={false}>
+                                <img
+                                  src={require(`@/assets/level/nft/${i.name}.png`)}
+                                />
+                              </Lock>
+                              {!user ? (
+                                <div className="contributor-lock">
+                                  earn more points to <br /> unlock exclusive
+                                  NFT
+                                </div>
+                              ) : displayRole === ROLE.ambassador ? (
+                                <div className="ambassador-lock">
+                                  Wanna unlcok ambassador？
+                                  <span className="active">
+                                    Go Do Quests
+                                  </span>{" "}
+                                  to level up！
+                                </div>
+                              ) : (
+                                <div className="contributor-lock">
+                                  earn more points to <br /> unlock exclusive
+                                  NFT
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </Meteor>
+                      </Left>
 
-                    <div className="right">
-                      <StoryLine
-                        title={i?.name}
-                        storyLine={i?.description}
-                        rewards={i?.rewards || "-"}
-                      />
+                      <div className="right">
+                        <StoryLine
+                          title={i?.name}
+                          storyLine={i?.description}
+                          rewards={
+                            steps && steps[index] ? steps[index]?.rewards : "-"
+                          }
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </SwiperSlide>
-            ))}
+                </SwiperSlide>
+              ))}
           </Swiper>
           {/* {
         steps 
@@ -618,7 +664,7 @@ export default ({ show }: any) => {
             <Timeline
               handleSlide={handleSlide}
               milestones={steps}
-              curStepsCompleted={user?.point || 0}
+              curStepsCompleted={!ifIsCurrentRole ? 0 : user?.point || 0}
               max={steps?.lastIndex ? steps[steps?.lastIndex]?.min : 0}
             />
           ) : null}

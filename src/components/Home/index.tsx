@@ -22,7 +22,7 @@ import "swiper/css/pagination";
 import "swiper/css/effect-coverflow";
 import { useModel } from "umi";
 import { useRequest } from "ahooks";
-import { getPublicQuestList, getPublicNFTList } from "@/server";
+import { getPublicQuestList } from "@/server";
 import Loading from "../Loading";
 import Link from "../Link";
 

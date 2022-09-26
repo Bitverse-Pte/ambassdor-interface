@@ -2,10 +2,11 @@ export const basic_nfts = 'ipfs://Qmesy4sbj9NPHpJzpRpoEtyY6LLYLQEGWPNQbS66u617c6
 export const image_nfts = 'ipfs://QmYQPHYUD98ahy7pbDnL9eM35ehiE2WZfqdCjKx6ZaATjD'
 export const background_url_nfts = 'ipfs://QmaJbu1mefHrQ2uvtpXNvQgeU4ZhvjcYSFUzKoMYLyjFnD'
 
-export const ambassdor_from_index = 7
+export const ambassador_from_index = 7
 
 export const contributor_basic_info_nfts = [
     {
+        "level": "CLV1",
         "name": "Dawn of Teley",
         "attributes": [
             {
@@ -34,6 +35,7 @@ export const contributor_basic_info_nfts = [
         "background_url": "ipfs://QmaJbu1mefHrQ2uvtpXNvQgeU4ZhvjcYSFUzKoMYLyjFnD/1.png"
     },
     {
+        "level": "CLV2",
         "name": "Era Starter",
         "attributes": [
             {
@@ -62,6 +64,7 @@ export const contributor_basic_info_nfts = [
         "background_url": "ipfs://QmaJbu1mefHrQ2uvtpXNvQgeU4ZhvjcYSFUzKoMYLyjFnD/2.png"
     },
     {
+        "level": "CLV3",
         "name": "Order Organizer",
         "attributes": [
             {
@@ -90,6 +93,7 @@ export const contributor_basic_info_nfts = [
         "background_url": "ipfs://QmaJbu1mefHrQ2uvtpXNvQgeU4ZhvjcYSFUzKoMYLyjFnD/3.png"
     },
     {
+        "level": "CLV4",
         "name": "Monetary Builder",
         "attributes": [
             {
@@ -118,6 +122,7 @@ export const contributor_basic_info_nfts = [
         "background_url": "ipfs://QmaJbu1mefHrQ2uvtpXNvQgeU4ZhvjcYSFUzKoMYLyjFnD/4.png"
     },
     {
+        "level": "CLV5",
         "name": "Einste-lly",
         "attributes": [
             {
@@ -146,6 +151,7 @@ export const contributor_basic_info_nfts = [
         "background_url": "ipfs://QmaJbu1mefHrQ2uvtpXNvQgeU4ZhvjcYSFUzKoMYLyjFnD/5.png"
     },
     {
+        "level": "CLV6",
         "name": "Pathfinder",
         "attributes": [
             {
@@ -174,6 +180,7 @@ export const contributor_basic_info_nfts = [
         "background_url": "ipfs://QmaJbu1mefHrQ2uvtpXNvQgeU4ZhvjcYSFUzKoMYLyjFnD/6.png"
     },
     {
+        "level": "CLV7",
         "name": "Universe Explorer",
         "attributes": [
             {
@@ -203,8 +210,9 @@ export const contributor_basic_info_nfts = [
     },
 ]
 
-export const ambassdor_basic_info_nfts = [
+export const ambassador_basic_info_nfts = [
     {
+        "level": "ALV1",
         "name": "Planetary Pioneer",
         "attributes": [
             {
@@ -233,6 +241,7 @@ export const ambassdor_basic_info_nfts = [
         "background_url": "ipfs://QmaJbu1mefHrQ2uvtpXNvQgeU4ZhvjcYSFUzKoMYLyjFnD/8.png"
     },
     {
+        "level": "ALV2",
         "name": "Intergalactic Guide",
         "attributes": [
             {
@@ -261,6 +270,7 @@ export const ambassdor_basic_info_nfts = [
         "background_url": "ipfs://QmaJbu1mefHrQ2uvtpXNvQgeU4ZhvjcYSFUzKoMYLyjFnD/9.png"
     },
     {
+        "level": "ALV3",
         "name": "Star Lord",
         "attributes": [
             {
@@ -289,6 +299,7 @@ export const ambassdor_basic_info_nfts = [
         "background_url": "ipfs://QmaJbu1mefHrQ2uvtpXNvQgeU4ZhvjcYSFUzKoMYLyjFnD/10.png"
     },
     {
+        "level": "ALV4",
         "name": "Interstellar Commander",
         "attributes": [
             {
@@ -317,6 +328,7 @@ export const ambassdor_basic_info_nfts = [
         "background_url": "ipfs://QmaJbu1mefHrQ2uvtpXNvQgeU4ZhvjcYSFUzKoMYLyjFnD/12.png"
     },
     {
+        "level": "ALV5",
         "name": "Galaxy General",
         "attributes": [
             {

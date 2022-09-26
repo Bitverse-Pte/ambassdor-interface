@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { useModel } from "umi";
 import ReactPaginate from "react-paginate";
 import Tippy from "@tippyjs/react";
+import { ROLE } from "@/interface";
 
 const removeHtmlStyle = (html: string) =>
   html.replaceAll(/style="[^\"]*?"/g, "");
@@ -208,7 +209,7 @@ const CardTypeQuest = ({ type, show, label, color }: any) => {
       run({
         page: 1,
         pageSize: 9,
-        assignTo: isContributor ? "contributor" : "ambassador",
+        assignTo: isContributor ? ROLE.contributor : ROLE.ambassador,
         type,
       });
     }
@@ -226,8 +227,6 @@ const CardTypeQuest = ({ type, show, label, color }: any) => {
     questModalRun({ questKey, page: 0 });
     questModalSetTrue();
   };
-
-  console.log("quest", quests);
 
   return (
     <Container>

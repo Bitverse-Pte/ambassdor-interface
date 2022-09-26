@@ -19,7 +19,6 @@ const publicAxios = axios.create({
 privateAxios.interceptors.request.use(
   (config: AxiosRequestConfig) => {
     const token = getToken();
-    console.log('token', token, window.localStorage.getItem("auth"))
     if (token && config.headers) {
       config.headers["X-Access-Token"] = token;
       return config;
@@ -140,13 +139,13 @@ export const filterActionList = async ({ questKey }: any) =>
     },
   });
 
-// ambassador level
-export const getAmbassadorLevel = async () =>
-  privateAxios.get("/jeecg-boot/amlevel/ambassadorLevel/list");
+// // ambassador level
+// export const getAmbassadorLevel = async () =>
+//   privateAxios.get("/jeecg-boot/amlevel/ambassadorLevel/list");
 
-// contributor level
-export const getContributorLevel = async () =>
-  privateAxios.get("/jeecg-boot/amlevel/contributorLevel/list");
+// // contributor level
+// export const getContributorLevel = async () =>
+//   privateAxios.get("/jeecg-boot/amlevel/contributorLevel/list");
 
 // get profile
 export const getProfile = async () =>
@@ -174,12 +173,21 @@ export const getAllPublicQuestList = async (props: any)=>publicAxios.get('/jeecg
   }
 })
 
+// 
 export const getPublicNFTList = async ()=>publicAxios.get('/jeecg-boot/ambassador/nft/list')
+
+// 获取contributor等级
+export const getContributorLevelList = async ()=>publicAxios.get('/jeecg-boot/amlevel/contributorLevel/list')
+
+// 获取ambassador等级
+export const getAmbassadorLevelList = async ()=>publicAxios.get('/jeecg-boot/amlevel/ambassadorLevel/list')
+
 
 export const getPublicContributorNFTList = async ()=>publicAxios.get('/jeecg-boot/contributor/nft/list')
 
 
-export const getUserNFT = async (props: any)=>privateAxios.get('/jeecg-boot/am/profile/user-nft', {
+// 用户获取的nft
+export const getUserNFT = async (props?: any)=>privateAxios.get('/jeecg-boot/am/profile/user-nft', {
   params: {
     ...props
   }

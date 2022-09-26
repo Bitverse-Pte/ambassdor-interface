@@ -43,7 +43,6 @@ export class Teleport extends Connector {
 
   constructor({ actions, options, onError }: MetaMaskConstructorArgs) {
     super(actions, onError)
-    console.log('options', options)
     this.options = options
   }
 
@@ -123,8 +122,6 @@ export class Teleport extends Connector {
   public async activate(desiredChainIdOrChainParameters?: number | AddEthereumChainParameter): Promise<void> {
     let cancelActivation: () => void
     if (!this.provider?.isConnected?.()) cancelActivation = this.actions.startActivation()
-
-    console.log('this', this)
 
     return this.isomorphicInitialize()
       .then(async () => {

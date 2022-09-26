@@ -8,8 +8,10 @@ import CardTypeQuest from "./Quest/CardTypeQuest";
 import Modal from "../Modal";
 import { useBoolean } from "ahooks";
 
-import Zmage from 'react-zmage'
+import Zmage from "react-zmage";
 import Portal from "../Portal";
+import { ROLE } from "@/interface";
+import { useModel } from "@/.umi/plugin-model";
 
 const FullScreen = styled.div`
   position: fixed;
@@ -25,7 +27,7 @@ const FullScreen = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  img{
+  img {
     /* width: ; */
     height: 90vh;
   }
@@ -100,6 +102,14 @@ const Container = styled.div`
         color: #05050e;
       }
     }
+    &.sub-level-nav {
+      & > div:not(.block) {
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 20px;
+        padding: 12px 0;
+      }
+    }
   }
 
   // 导航内容区样式
@@ -128,11 +138,18 @@ export enum NAVLIST {
 
 export const navs = ["Level", "Quest", "NFT"];
 export const questSubLevel = ["Monthly", "Storyline", "History"];
+export const levelSubLevel = ["Contributor", "Ambassador"];
 
 export default () => {
   const [chartIdx, setChartIdx] = useState(NAVLIST.Level);
   const [showLevelDialog, { setTrue, setFalse }] = useBoolean(false);
-  const [tvFullScreenStatus, { setTrue: tvFullScreenTrue, setFalse: tvFullScreenFalse }] = useBoolean(false);
+  const {
+    user: { isAmbassador, isContributor },
+  } = useModel("userInfo");
+  const [
+    tvFullScreenStatus,
+    { setTrue: tvFullScreenTrue, setFalse: tvFullScreenFalse },
+  ] = useBoolean(false);
 
   const navList = useMemo(
     () =>
@@ -168,11 +185,27 @@ export default () => {
 
   const [currentSubNav, setCurrentSubNav] = useState(0);
 
+  const handleChartIdxChange = (e: any) => {
+    setCurrentSubNav(0);
+    setChartIdx(e);
+  };
+
+  useEffect(()=>{
+    if(isAmbassador){
+      handleChartIdxChange(1)
+    }
+  }, [isAmbassador])
+
   return (
     <Container>
       <div className="view-port-chart">
         <div className="draggable-module-ctr row-between">
-          <NavBar list={navList} currentIdx={chartIdx} onChange={setChartIdx} />
+          <NavBar
+            list={navList}
+            currentIdx={chartIdx}
+            onChange={handleChartIdxChange}
+          />
+
           {chartIdx === NAVLIST.Quest && (
             <div className="sub-nav row">
               <div
@@ -192,11 +225,31 @@ export default () => {
               ))}
             </div>
           )}
+
+          {chartIdx === NAVLIST.Level && (
+            <div className="sub-nav sub-level-nav row">
+              <div
+                className="block"
+                style={{ transform: `translate(${currentSubNav * 100}%, 0)` }}
+              />
+              {levelSubLevel?.map((i, index) => (
+                <div
+                  key={index}
+                  className={index === currentSubNav ? "active" : ""}
+                  onClick={() => {
+                    setCurrentSubNav(index);
+                  }}
+                >
+                  {i}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {chartIdx === NAVLIST.Level && (
           <div className={`nav-detail-ctr nav-detail-ctr-left`}>
-            <Level show={chartIdx === NAVLIST.Level} />
+            <Level show={chartIdx === NAVLIST.Level} displayRole={currentSubNav ? ROLE.ambassador : ROLE.contributor}/>
           </div>
         )}
 
@@ -231,19 +284,22 @@ export default () => {
 
       <StyledModal visible={showLevelDialog} onClose={setFalse}>
         <div>
-          <img style={{paddingRight: '20px'}} onClick={tvFullScreenTrue} src={require("@/assets/level.png")} alt="" />
+          <img
+            style={{ paddingRight: "20px" }}
+            onClick={tvFullScreenTrue}
+            src={require("@/assets/level.png")}
+            alt=""
+          />
         </div>
       </StyledModal>
 
-
       {tvFullScreenStatus && (
         <Portal>
-          <FullScreen onClick={tvFullScreenFalse} >
+          <FullScreen onClick={tvFullScreenFalse}>
             <img src={require("@/assets/level.png")} alt="" />
           </FullScreen>
         </Portal>
       )}
-          
     </Container>
   );
 };

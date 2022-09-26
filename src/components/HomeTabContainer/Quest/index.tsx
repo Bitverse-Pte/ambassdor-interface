@@ -669,8 +669,6 @@ export default ({ show }: any) => {
     qustListData,
   ]);
 
-  console.log('questList', questList)
-
   return (
     <Container>
       <DayPickerContainer className="daypicker-target">

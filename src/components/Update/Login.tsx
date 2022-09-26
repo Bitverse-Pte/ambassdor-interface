@@ -20,7 +20,7 @@ const Login = () => {
 
   // @ts-ignore
   const {
-    user: { auth, updateAuth, fetchUser, user, updateCurRole },
+    user: { auth, updateAuth, fetchUser, user, updateCurRole, isAmbassador, isContributor },
   } = useModel("userInfo");
   
   const {
@@ -28,10 +28,15 @@ const Login = () => {
   } = useModel("config");
 
   useEffect(() => {
-    if (user && (contributor || ambassador)) {
-      updateCurRole(contributor || ambassador)
+    if (user) {
+      if(isAmbassador && ambassador){
+        updateCurRole(ambassador)
+      }
+      if(isContributor && contributor){
+        updateCurRole(contributor)
+      }
     }
-  }, [user, contributor, ambassador]);
+  }, [user, contributor, ambassador, isAmbassador, isContributor]);
 
   useEffect(() => {
     if (auth) {

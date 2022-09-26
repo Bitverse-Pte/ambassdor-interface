@@ -69,7 +69,6 @@ function detectEthereumProvider<T = MetaMaskEthereumProvider>({
       window.removeEventListener("ethereum#initialized", handleEthereum);
 
       const { teleport } = window as Window;
-      console.log('teleport', teleport, teleport?.isTeleportWallet)
 
       if (teleport && (!mustBeMetaMask || teleport.isTeleportWallet)) {
         resolve((teleport as unknown) as T);

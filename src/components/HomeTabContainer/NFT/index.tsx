@@ -1,4 +1,4 @@
-import { useRequest } from "ahooks";
+import { useLocalStorageState, useRequest } from "ahooks";
 import styled, { css } from "styled-components";
 import axios from "axios";
 import {
@@ -424,58 +424,103 @@ const Container = styled.div`
 `;
 
 export enum NFT_NAV_LIST {
-  "All",
   "Contributor",
   "Ambassador",
-  "Special",
 }
 
-export const navs = ["All", "Contributor", "Ambassador", "Special"];
+export const navs = ["Contributor", "Ambassador"];
 
 export default ({ show }: any) => {
-  // getUserNFT
-
-  const { run, data, loading } = useRequest((props)=>getUserNFT(props), {
-    manual: true,
-  });
+  const { run, data, loading } = useRequest(
+    (props?: any) => getUserNFT(props),
+    {
+      manual: true,
+    }
+  );
 
   useEffect(() => {
     if (show) {
-      run({pageSize: 6, pageNo: 1});
+      run();
     }
   }, [show]);
 
-  console.log('/jeecg-boot/am/profile/user-nft', data)
-  const userNFT = useMemo(()=> data? data?.data?.result : [], [data])
+  const userNFT = useMemo(() => (data ? data?.data?.result?.records : []), [
+    data,
+  ]);
+
+  console.log('userNFT', userNFT)
+
+  // useEffect(()=>{
+  //   if(data){
+  //     setActivedNfts(data?.data?.result?.records)
+  //   }
+  // }, [data])
 
   const {
-    user: { user, curRoleNft, isAmbassador, isContributor },
+    user: { contributorNFT, ambassadorNFT, isAmbassador, isContributor },
   } = useModel("userInfo");
 
-  console.log("curRoleNft", curRoleNft);
+  const [chartIdx, setChartIdx] = useState(NFT_NAV_LIST.Contributor);
+  const navList = useMemo(() => navs.map((item) => ({ item })), []);
+  const [active, setActive] = useState(0);
+
 
   const nfts = useMemo(() => {
-    if (!curRoleNft) return [];
-    return curRoleNft;
-  }, [curRoleNft]);
+    if (chartIdx === NFT_NAV_LIST.Contributor) {
+      if (!userNFT || !userNFT?.length || isAmbassador) return contributorNFT;
+      if (isContributor) {
+        return contributorNFT?.map((i, index) => ({
+          ...i,
+          ...userNFT[index],
+          unlocked: userNFT[index] ? true : false,
+        }));
+      }
+      return contributorNFT
+      // if (isAmbassador) {
+      //   return contributorNFT?.map((i, index) => ({
+      //     ...i,
+      //     ...userNFT[index],
+      //     unlocked: true,
+      //   }));
+      // }
+    }
 
-  const [chartIdx, setChartIdx] = useState(NFT_NAV_LIST.All);
-  const navList = useMemo(() => navs.map((item) => item), []);
-  const [active, setActive] = useState(0);
+    if (chartIdx === NFT_NAV_LIST.Ambassador) {
+      if (!userNFT || !userNFT?.length || isContributor) return ambassadorNFT;
+      return ambassadorNFT?.map((i, index) => ({
+        ...i,
+        ...userNFT[index],
+        unlocked: userNFT[index] ? true : false,
+      }));
+    }
+  }, [contributorNFT, ambassadorNFT, userNFT, chartIdx]);
+
+  console.log('userNFT', userNFT, nfts)
+
 
   const activeNft = useMemo(() => {
     if (!nfts?.length) return null;
     return nfts[active];
   }, [active, nfts]);
 
+  const handleClickChartIndex = (e: any) => {
+    setActive(0);
+    setChartIdx(e);
+  };
+  console.log(nfts) 
+
   return (
     <Container>
       <div className="view-port-chart">
         <div className="draggable-module-ctr">
-          <NavBar list={navList} currentIdx={chartIdx} onChange={setChartIdx} />
+          <NavBar
+            list={navList}
+            currentIdx={chartIdx}
+            onChange={handleClickChartIndex}
+          />
         </div>
 
-        {chartIdx === NFT_NAV_LIST.All && (
+        {chartIdx === NFT_NAV_LIST.Contributor && (
           <div className="grid">
             <div className={`nav-detail-ctr nav-detail-ctr-left nft-container`}>
               {nfts?.length
@@ -487,28 +532,36 @@ export default ({ show }: any) => {
                       unlocked={i?.unlocked || false}
                       key={i?.name}
                     >
-                      {i?.unlocked ? (
+                      <Lock
+                        allowAnimation={false}
+                        delay={index * 100}
+                        autoPlay={i?.unlocked}
+                      >
                         <img
                           src={require(`@/assets/level/nft/${i?.name}.png`)}
                         />
-                      ) : (
-                        <Lock allowAnimation={true}>
-                          <img
-                            src={require(`@/assets/level/nft/${i?.name}.png`)}
-                          />
-                        </Lock>
-                      )}
+                      </Lock>
 
-                      <div className="name">{i?.name}</div>
+                      <div className="name">
+                        {i?.name} <br />{" "}
+                        <span
+                          style={{ display: "inline-block", marginTop: "8px" }}
+                        >
+                          {i?.level}
+                        </span>
+                      </div>
                     </NftCard>
                   ))
                 : "This part of the task will be released at a specific time, stay tuned and look forward to it!"}
             </div>
             {activeNft ? (
               <div className="column">
-                <NFTDetail disabled={!activeNft.unlocked}>
+                <NFTDetail disabled={!activeNft?.unlocked}>
                   <div className="avatar">
-                    <img src={require(`@/assets/level/nft/${nfts[active]?.name}.png`)} alt="" />
+                    <img
+                      src={require(`@/assets/level/nft/${nfts[active]?.name}.png`)}
+                      alt=""
+                    />
                   </div>
                   <div className="label">
                     <div className="left">{activeNft.name}</div>
@@ -538,18 +591,75 @@ export default ({ show }: any) => {
           </div>
         )}
 
-        {chartIdx === NFT_NAV_LIST.Contributor && (
-          <div className={`nav-detail-ctr nav-detail-ctr-left`}>
-            Contributor
-          </div>
-        )}
-
         {chartIdx === NFT_NAV_LIST.Ambassador && (
-          <div className={`nav-detail-ctr nav-detail-ctr-left`}>Ambassador</div>
-        )}
+          <div className="grid">
+            <div className={`nav-detail-ctr nav-detail-ctr-left nft-container`}>
+              {nfts?.length
+                ? nfts?.map((i, index) => (
+                    <NftCard
+                      onClick={() => {
+                        setActive(index);
+                      }}
+                      unlocked={i?.unlocked || false}
+                      key={i?.name}
+                    >
+                      <Lock
+                        allowAnimation={false}
+                        delay={index * 100}
+                        autoPlay={i?.unlocked}
+                      >
+                        <img
+                          src={require(`@/assets/level/nft/${i?.name}.png`)}
+                        />
+                      </Lock>
 
-        {chartIdx === NFT_NAV_LIST.Special && (
-          <div className={`nav-detail-ctr nav-detail-ctr-left`}>Special</div>
+                      <div className="name">
+                        {i?.name} <br />{" "}
+                        <span
+                          style={{ display: "inline-block", marginTop: "8px" }}
+                        >
+                          {i?.level}
+                        </span>
+                      </div>
+                    </NftCard>
+                  ))
+                : "This part of the task will be released at a specific time, stay tuned and look forward to it!"}
+            </div>
+            {activeNft ? (
+              <div className="column">
+                <NFTDetail disabled={!activeNft?.unlocked}>
+                  <div className="avatar">
+                    <img
+                      src={require(`@/assets/level/nft/${nfts[active]?.name}.png`)}
+                      alt=""
+                    />
+                  </div>
+                  <div className="label">
+                    <div className="left">{activeNft.name}</div>
+                    <div className="right" />
+                  </div>
+                  {/* <div className="desc-container">
+                    {activeNft?.power?.length &&
+                      activeNft?.power.map((i) => (
+                        <div className="row" key={i.key}>
+                          <div className="power-name">{i.key}</div>
+                          <div className="power-bar">
+                            <Progress
+                              duration="1s"
+                              precent={(Number(i.value) / Number(i.max)) * 100}
+                            />
+                          </div>
+                          <div className="power-value">{i.value}</div>
+                        </div>
+                      ))}
+                  </div> */}
+                </NFTDetail>
+                {/* <Button disabled={!activeNft.unlocked} className="claim-button">
+                  Claim
+                </Button> */}
+              </div>
+            ) : null}
+          </div>
         )}
       </div>
     </Container>

@@ -1,5 +1,5 @@
 import { useHover } from "ahooks";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -154,14 +154,14 @@ const Wrapper = styled.div`
     background-color: #fff;
     opacity: 0;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 50px 100px #fff;
+    box-shadow: 0 0 35px 80px #fff;
   }
   &.active .shining-shadow {
     animation: shining 3s .4s linear forwards;
   }
 `;
 
-export default ({ children, allowAnimation = true }: any) => {
+export default ({ delay = 0, autoPlay = false, children, allowAnimation = true }: any) => {
   const [ifActive, setIfActive] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
   const handleClick = () => {
@@ -171,6 +171,17 @@ export default ({ children, allowAnimation = true }: any) => {
       setUnlocked(true);
     }, 2000);
   };
+
+  useEffect(()=>{
+    if(autoPlay){
+      setTimeout(() => {
+        setIfActive(true);
+        setTimeout(() => {
+          setUnlocked(true);
+        }, 2000);
+      }, 500+ +delay);
+    }
+  }, [autoPlay, delay])
 
   const ref = useRef(null);
   const isHovering = useHover(ref);

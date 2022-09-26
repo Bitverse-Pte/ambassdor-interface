@@ -1,6 +1,7 @@
-import { getPublicNFTList } from "@/server";
+import { ROLE } from "@/interface";
+import { getContributorLevelList } from "@/server";
 import { useRequest } from "ahooks";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useModel } from "umi";
 
 const calReducer = (tar: any, length: any, key: string | number) => {
@@ -13,22 +14,20 @@ const calReducer = (tar: any, length: any, key: string | number) => {
   );
 };
 
-const useLevelList = () => {
+const useLevelList = ({forceRole}: any) => {
   const {
-    config: { contributor },
+    config: { contributor, ambassador },
   }: any = useModel("config");
 
-  const { run, data: publicNft, loading: publicNftLoading } = useRequest(getPublicNFTList);
+  const {
+    user: { isAmbassador },
+  } = useModel("userInfo");
+
 
   const levelList = useMemo(() => {
-    let _contributor = contributor;
-    if (contributor === "contributor" || !contributor.length) {
-      if (!publicNft) return null
+    if(!ambassador || !contributor) return null;
 
-      const clvIndex = publicNft?.data?.result?.records?.findIndex(i=>i.name === 'ALV1')
-      const finalArr = publicNft?.data?.result?.records?.slice(0, clvIndex)
-      _contributor = finalArr
-    };
+    let _contributor = (forceRole || isAmbassador) ? ambassador : contributor;
     const _copied = JSON.parse(JSON.stringify(_contributor));
 
     return _contributor.map((i: { points: any }, index: number) => {
@@ -49,7 +48,7 @@ const useLevelList = () => {
         min,
       };
     });
-  }, [contributor, publicNft]);
+  }, [contributor, ambassador, forceRole, isAmbassador]);
 
   return levelList;
 };

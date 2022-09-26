@@ -5,6 +5,7 @@ import Button from "../Button";
 import Connect from "../Connect";
 import defaultAvatar from "@/assets/default-avatar.png";
 import LevelC from "@/assets/level-C.svg";
+import LevelA from "@/assets/level-A.svg";
 import teleportDragon from "@/assets/teleport-dragon-1.png";
 import Progress from "../Progress";
 import { useBoolean } from "ahooks";
@@ -117,7 +118,7 @@ const Avatar = styled.div`
     height: 100%;
     border-radius: 50%;
     overflow: hidden;
-    background: url(${defaultAvatar}), #4a4a4a no-repeat;
+    background: url(${defaultAvatar}), #02483E no-repeat;
     background-size: cover;
     background-position: center;
     img {
@@ -248,7 +249,7 @@ export default () => {
   const { account } = useWeb3React();
   // @ts-ignore
   const {
-    user: { auth, user, loading },
+    user: { auth, user, loading, isAmbassador },
   } = useModel("userInfo");
 
   const [
@@ -268,7 +269,7 @@ export default () => {
           <UserAvatar src={user?.avatar} />
           <div className="column">
             <div className="row level">
-              <img src={LevelC} />
+              <img src={ user ? isAmbassador ? LevelA : LevelC : undefined } />
               <Tippy content={user?.address}>
                 <span className="username">{user?.username}</span>
               </Tippy>

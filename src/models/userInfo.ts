@@ -1,7 +1,8 @@
 import {
-  ambassdor_basic_info_nfts,
+  ambassador_basic_info_nfts,
   contributor_basic_info_nfts,
 } from "@/config/ipfs";
+import { ROLE } from "@/interface";
 import { getProfile } from "@/server";
 import { useLocalStorageState, useRequest } from "ahooks";
 import { useMemo, useState } from "react";
@@ -17,18 +18,23 @@ export default () => {
     manual: true,
   });
   const profile = useMemo(() => data?.data?.result?.user, [data]);
-  const isContributor = useMemo(
-    () => (profile?.role === "contributor" ? profile?.role : ""),
-    [profile?.role]
-  );
-  const isAmbassador = useMemo(
-    () => (profile?.role === "ambassador" ? profile?.role : ""),
+
+  const isContributor = useMemo(() => profile?.role !== ROLE.ambassador, [
+    profile?.role,
+  ]);
+  const isAmbassador = useMemo(() => profile?.role === ROLE.ambassador, [
+    profile?.role,
+  ]);
+
+  const currentRole = useMemo(
+    () =>
+      profile?.role === ROLE.ambassador ? ROLE.ambassador : ROLE.contributor,
     [profile?.role]
   );
 
   const curRoleNft = useMemo(() => {
     if (isAmbassador) {
-      return ambassdor_basic_info_nfts;
+      return ambassador_basic_info_nfts;
     }
     return contributor_basic_info_nfts;
   }, [isContributor, isAmbassador]);
@@ -40,11 +46,14 @@ export default () => {
     fetchUser: run,
     updateAuth,
     updateCurRole,
+    currentRole,
     loading,
     error,
     isContributor,
     isAmbassador,
     curRoleNft,
+    contributorNFT: contributor_basic_info_nfts,
+    ambassadorNFT: ambassador_basic_info_nfts,
   };
 
   return { user };

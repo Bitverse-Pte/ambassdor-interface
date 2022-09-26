@@ -1,3 +1,4 @@
+import { ROLE } from "@/interface";
 import { useHover, useSize } from "ahooks";
 import React, { useMemo, useRef, useState } from "react";
 import styled from "styled-components";
@@ -366,18 +367,11 @@ export default function Timeline({
   };
 
   const ifInExtra = useMemo(() => {
-    return isContributor === "contributor" && curStepsCompleted >= max;
+    return isContributor && curStepsCompleted >= max;
   }, [isContributor, curStepsCompleted, max]);
 
   const ref = useRef(null);
   const size = useSize(ref);
-
-  console.log(
-    "curStepsCompleted, curStepsCompleted",
-    isContributor,
-    curStepsCompleted,
-    max
-  );
 
   const [currentClass, setCurClass] = useState('default')
 
