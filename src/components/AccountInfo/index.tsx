@@ -298,14 +298,16 @@ export default () => {
             <UserPoints
               title={"Point"}
               amount={user?.point || 0}
-              action={showCollectPointsDialog}
+              action={()=>{if(user?.point && user?.point > 0 ){
+                showCollectPointsDialog()
+              }}}
               actionName={"Collect"}
             >
               {user?.pointCache ? (
                 <div className="point-cache">
                   <div className="star">★</div>&nbsp; You got&nbsp;
                   <span style={{ color: "#00DBC9" }}>
-                    {user?.pointCache || 0} points{" "}
+                    {user?.pointCache || 0} points
                   </span>
                   &nbsp;to collect!
                 </div>

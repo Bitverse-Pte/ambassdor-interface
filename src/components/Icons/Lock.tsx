@@ -68,7 +68,7 @@ const Container = styled.div`
 
   div,
   img {
-    filter: grayscale(1);
+    filter: grayscale(1) brightness(0.5);
     transition: all linear 1.2s 1.2s;
   }
   .lock-svg {

@@ -223,7 +223,7 @@ const Button: React.FC<ButtonProps> = React.forwardRef(
       <Wrapper
         {...rest}
         ref={buttonRef}
-        className={classes}
+        className={`${classes} ${disabled ? 'disabled' : ''}`}
         onClick={handleClick}
         radius={radius}
       >

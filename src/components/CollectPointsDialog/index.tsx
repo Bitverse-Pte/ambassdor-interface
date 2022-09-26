@@ -179,7 +179,7 @@ const CollectPointsDialog = (props: any) => {
           </div>
         )}
 
-        <Button loading={loading} radius="16px" onClick={handleCollect}>
+        <Button disabled={!user?.pointCache || user?.pointCache <= 0} loading={loading} radius="16px" onClick={handleCollect}>
           {loading ? (
             <Loading />
           ) : claimSuccess ? (

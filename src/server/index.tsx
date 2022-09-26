@@ -178,3 +178,9 @@ export const getPublicNFTList = async ()=>publicAxios.get('/jeecg-boot/ambassado
 
 export const getPublicContributorNFTList = async ()=>publicAxios.get('/jeecg-boot/contributor/nft/list')
 
+
+export const getUserNFT = async (props: any)=>privateAxios.get('/jeecg-boot/am/profile/user-nft', {
+  params: {
+    ...props
+  }
+})

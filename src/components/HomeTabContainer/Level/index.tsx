@@ -70,6 +70,39 @@ const Container = styled.div`
         }
       }
     }
+
+    .contributor-lock-container{
+      .lock-svg{
+        top: 40%;
+      }
+    }
+
+    .ambassdor-lock{
+      margin-top: 3px;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 24px;
+      .active{
+        color: #00EBC9;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+    }
+
+    .contributor-lock{
+      position: absolute;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 27px;
+      z-index: 3;
+      text-align: center;
+      left: 50%;
+      top: 65%;
+      transform: translate(-50%,-50%);
+      text-transform: capitalize;
+      width: max-content;
+
+    }
   }
   .right {
     flex: 2;
@@ -127,22 +160,23 @@ const Left = styled.div<{ name: string }>`
     `}
 `;
 
-
-const SwiperController = ({lastCompleted, index}:any)=>{
-  const swiper = useSwiper()
+const SwiperController = ({ lastCompleted, index }: any) => {
+  const swiper = useSwiper();
 
   useEffect(() => {
     if (!swiper || !lastCompleted) return;
-    swiper.slideTo(lastCompleted);
+    setTimeout(() => {
+      swiper.slideTo(lastCompleted);
+    }, 0);
   }, [swiper, lastCompleted]);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (!swiper) return;
-    swiper.slideTo(index)
-  }, [index])
+    swiper.slideTo(index);
+  }, [index]);
 
-  return null
-}
+  return null;
+};
 
 export default ({ show }: any) => {
   const nextRef = useRef(null);
@@ -150,8 +184,12 @@ export default ({ show }: any) => {
   const levelList = useLevelList();
 
   const {
-    user: { user, curRoleNft },
+    user: { user, curRoleNft, isAmbassador, isContributor, curRole, loading },
   } = useModel("userInfo");
+
+  console.log("123", user, curRoleNft, isAmbassador, isContributor, curRole);
+
+  console.log("curRole", curRole);
 
   // @ts-ignore
   const {
@@ -193,14 +231,13 @@ export default ({ show }: any) => {
     });
   }, [steps]);
 
-  const handleSlide = (item: any, index: any)=>{
-    setIndex(index)
-  }
-
+  const handleSlide = (item: any, index: any) => {
+    setIndex(index);
+  };
 
   return (
     <Container>
-      {steps ? (
+      {!loading ? (
         <>
           <Swiper
             // initialSlide={lastCompleted}
@@ -223,8 +260,10 @@ export default ({ show }: any) => {
             //   setIndex(+e.activeIndex + 1);
             // }}
           >
-
-            <SwiperController index={activeIndex} lastCompleted={lastCompleted}/>
+            <SwiperController
+              index={activeIndex}
+              lastCompleted={lastCompleted}
+            />
 
             <svg
               ref={nextRef}
@@ -508,54 +547,75 @@ export default ({ show }: any) => {
               </defs>
             </svg>
 
-              {curRoleNft.map((i, index) => (
-                <SwiperSlide key={i.name}>
-                  <div className="column">
-                    <div className="row-between desc" style={{ width: "100%" }}>
-                      <Left
-                        name={i?.name.replaceAll(" ", "-")}
-                        className="left"
-                      >
-                        <div className="shadow" />
-                        <div className="effect" />
-                        <Meteor>
-                          {/* <img src={imageUrl} /> */}
-                          {index <= lastCompleted ? (
-                            <img
-                              src={require(`@/assets/level/nft/${i.name}.png`)}
-                            />
-                          ) : (
+            {curRoleNft.map((i, index) => (
+              <SwiperSlide key={i.name}>
+                <div className="column">
+                  <div className="row-between desc" style={{ width: "100%" }}>
+                    <Left name={i?.name.replaceAll(" ", "-")} className="left">
+                      <div className="shadow" />
+                      <div className="effect" />
+                      <Meteor>
+                        {/* <img src={imageUrl} /> */}
+                        {(index <= lastCompleted && user) ? (
+                          <img
+                            src={require(`@/assets/level/nft/${i.name}.png`)}
+                          />
+                        ) : (
+                          <div
+                            onClick={() => window.open("/allquest")}
+                            className={`column ${
+                              isContributor
+                                ? "contributor-lock-container"
+                                : isAmbassador
+                                ? "ambassdor-lock-container"
+                                : ""
+                            }`}
+                          >
                             <Lock allowAnimation={false}>
                               <img
                                 src={require(`@/assets/level/nft/${i.name}.png`)}
                               />
                             </Lock>
-                          )}
-                        </Meteor>
-                      </Left>
+                            {isAmbassador ? (
+                              <div className="ambassdor-lock">
+                                Wanna unlcok ambassador？
+                                <span className="active">Go Do Quests</span> to
+                                level up！
+                              </div>
+                            ) : null}
+                            {isContributor ? (
+                              <div className="contributor-lock">
+                                earn more points to <br /> unlock exclusive NFT
+                              </div>
+                            ) : null}
+                          </div>
+                        )}
+                      </Meteor>
+                    </Left>
 
-                      <div className="right">
-                        <StoryLine
-                          title={i?.name}
-                          storyLine={i?.description}
-                          rewards={i?.rewards || "-"}
-                        />
-                      </div>
+                    <div className="right">
+                      <StoryLine
+                        title={i?.name}
+                        storyLine={i?.description}
+                        rewards={i?.rewards || "-"}
+                      />
                     </div>
                   </div>
-                </SwiperSlide>
-              ))}
-
+                </div>
+              </SwiperSlide>
+            ))}
           </Swiper>
           {/* {
         steps 
       } */}
-          <Timeline
-            handleSlide={handleSlide}
-            milestones={steps}
-            curStepsCompleted={user?.point || 0}
-            max={steps?.lastIndex ? steps[steps?.lastIndex]?.min : 0}
-          />
+          {user ? (
+            <Timeline
+              handleSlide={handleSlide}
+              milestones={steps}
+              curStepsCompleted={user?.point || 0}
+              max={steps?.lastIndex ? steps[steps?.lastIndex]?.min : 0}
+            />
+          ) : null}
         </>
       ) : (
         <Loading />

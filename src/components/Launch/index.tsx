@@ -8,7 +8,7 @@ import { useEffect, useRef } from "react";
 
 const Container = styled.div`
   position: relative;
-  .logout {
+  .home, .logout {
     cursor: pointer;
     z-index: 12;
     backdrop-filter: blur(2px);
@@ -34,6 +34,11 @@ const Container = styled.div`
       ),
       rgba(255, 255, 255, 0.1);
     padding: 4px 20px;
+  }
+
+  .logout{
+    transform: translate(0, 200%);
+    margin-top: 15px;
   }
 `;
 
@@ -125,6 +130,15 @@ const LaunchApp = () => {
           <div className="divider" />
           <span>PROFILE&nbsp;{fuzzAddress(account)}</span>
         </ButtonContainer>
+
+        <div
+          style={{ display: showTab ? "flex" : "none" }}
+          id="go-home"
+          className="home"
+          onClick={()=>window.open('/')}
+        >
+          HOME
+        </div>
 
         <div
           style={{ display: showTab ? "flex" : "none" }}

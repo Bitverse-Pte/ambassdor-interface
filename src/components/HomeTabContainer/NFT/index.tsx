@@ -18,8 +18,11 @@ import Progress from "@/components/Progress";
 import labelLeft from "@/assets/label-left.svg";
 import labelRight from "@/assets/label-right.svg";
 import Button from "@/components/Button";
+import { useModel } from "umi";
+import { getUserNFT } from "@/server";
+import { uriToHttp } from "@/utils";
 
-const mock =  {
+const mock = {
   data: [
     {
       id: 1,
@@ -91,7 +94,7 @@ const mock =  {
       id: 3,
       name: "CL3 Order organizer",
       src: "@/assets/nfts/default.png",
-  
+
       unlocked: false,
       power: [
         {
@@ -125,7 +128,7 @@ const mock =  {
       id: 4,
       name: "CL3 Order organizer",
       src: "@/assets/nfts/default.png",
-  
+
       unlocked: false,
       power: [
         {
@@ -159,7 +162,7 @@ const mock =  {
       id: 5,
       name: "CL3 Order organizer",
       src: "@/assets/nfts/default.png",
-  
+
       unlocked: false,
       power: [
         {
@@ -193,7 +196,7 @@ const mock =  {
       id: 6,
       name: "CL3 Order organizer",
       src: "@/assets/nfts/default.png",
-  
+
       unlocked: false,
       power: [
         {
@@ -223,8 +226,8 @@ const mock =  {
         },
       ],
     },
-  ]  
-}
+  ],
+};
 
 const NFTDetail = styled.div<{ disabled?: boolean }>`
   background: linear-gradient(
@@ -243,7 +246,7 @@ const NFTDetail = styled.div<{ disabled?: boolean }>`
   align-items: center;
 
   .avatar {
-    transition: filter linear .2s;
+    transition: filter linear 0.2s;
     ${({ disabled }) =>
       disabled &&
       css`
@@ -251,7 +254,9 @@ const NFTDetail = styled.div<{ disabled?: boolean }>`
       `}
     width: 301px;
     height: 327px;
-    margin-top: -141px;
+    /* margin-top: -141px; */
+    margin-top: 44px;
+
     img {
       width: 100%;
       height: 100%;
@@ -259,7 +264,8 @@ const NFTDetail = styled.div<{ disabled?: boolean }>`
   }
   .label {
     width: 100%;
-    margin-bottom: 42px;
+    /* margin-bottom: 42px; */
+    margin-bottom: 80px;
     .left {
       width: 396px;
       height: 34px;
@@ -324,6 +330,7 @@ const NftCard = styled.div<{ unlocked?: boolean }>`
     /* border: 2px solid #000000; */
     border-radius: 12px;
     transition: all linear 0.2s;
+    width: 176px;
   }
   .name {
     margin-top: 14px;
@@ -373,7 +380,7 @@ const Container = styled.div`
     display: grid;
     justify-content: flex-start;
     align-items: flex-start;
-    gap: 111px;
+    gap: 100px;
     grid-template-columns: 1fr 1fr;
   }
 
@@ -411,7 +418,7 @@ const Container = styled.div`
     display: grid;
     justify-content: flex-start;
     align-items: center;
-    gap: 56px;
+    gap: 25px;
     grid-template-columns: repeat(3, minmax(176px, max-content));
   }
 `;
@@ -426,20 +433,31 @@ export enum NFT_NAV_LIST {
 export const navs = ["All", "Contributor", "Ambassador", "Special"];
 
 export default ({ show }: any) => {
-  const { run, data, loading } = useRequest(() => Promise.resolve(mock), {
+  // getUserNFT
+
+  const { run, data, loading } = useRequest((props)=>getUserNFT(props), {
     manual: true,
   });
 
   useEffect(() => {
     if (show) {
-      run();
+      run({pageSize: 6, pageNo: 1});
     }
   }, [show]);
 
+  console.log('/jeecg-boot/am/profile/user-nft', data)
+  const userNFT = useMemo(()=> data? data?.data?.result : [], [data])
+
+  const {
+    user: { user, curRoleNft, isAmbassador, isContributor },
+  } = useModel("userInfo");
+
+  console.log("curRoleNft", curRoleNft);
+
   const nfts = useMemo(() => {
-    if (!data) return [];
-    return data?.data;
-  }, [data]);
+    if (!curRoleNft) return [];
+    return curRoleNft;
+  }, [curRoleNft]);
 
   const [chartIdx, setChartIdx] = useState(NFT_NAV_LIST.All);
   const navList = useMemo(() => navs.map((item) => item), []);
@@ -461,80 +479,60 @@ export default ({ show }: any) => {
           <div className="grid">
             <div className={`nav-detail-ctr nav-detail-ctr-left nft-container`}>
               {nfts?.length
-                ? nfts?.map(
-                    (
-                      i: {
-                        unlocked: boolean | undefined;
-                        id: Key | null | undefined;
-                        src: string | undefined;
-                        name:
-                          | string
-                          | number
-                          | boolean
-                          | ReactElement<
-                              any,
-                              string | JSXElementConstructor<any>
-                            >
-                          | ReactFragment
-                          | ReactPortal
-                          | null
-                          | undefined;
-                      },
-                      index: SetStateAction<number>
-                    ) => (
-                      <NftCard
-                        onClick={() => {
-                          setActive(index);
-                        }}
-                        unlocked={i?.unlocked}
-                        key={i?.id}
-                      >
-                        {i?.unlocked ? (
+                ? nfts?.map((i, index) => (
+                    <NftCard
+                      onClick={() => {
+                        setActive(index);
+                      }}
+                      unlocked={i?.unlocked || false}
+                      key={i?.name}
+                    >
+                      {i?.unlocked ? (
+                        <img
+                          src={require(`@/assets/level/nft/${i?.name}.png`)}
+                        />
+                      ) : (
+                        <Lock allowAnimation={false}>
                           <img
-                            src={require("@/assets/nfts/egg-dragon-card.png")}
+                            src={require(`@/assets/level/nft/${i?.name}.png`)}
                           />
-                        ) : (
-                          <Lock allowAnimation={false}>
-                            <img
-                              src={require("@/assets/nfts/egg-dragon-card.png")}
-                            />
-                          </Lock>
-                        )}
+                        </Lock>
+                      )}
 
-                        <div className="name">{i?.name}</div>
-                      </NftCard>
-                    )
-                  )
+                      <div className="name">{i?.name}</div>
+                    </NftCard>
+                  ))
                 : "This part of the task will be released at a specific time, stay tuned and look forward to it!"}
             </div>
             {activeNft ? (
               <div className="column">
                 <NFTDetail disabled={!activeNft.unlocked}>
                   <div className="avatar">
-                    <img src={require("@/assets/nfts/egg-dragon.png")} alt="" />
+                    <img src={require(`@/assets/level/nft/${nfts[active]?.name}.png`)} alt="" />
                   </div>
                   <div className="label">
                     <div className="left">{activeNft.name}</div>
                     <div className="right" />
                   </div>
-                  <div className="desc-container">
-                    {activeNft?.power?.length && activeNft?.power.map((i) => (
-                      <div className="row" key={i.key}>
-                        <div className="power-name">{i.key}</div>
-                        <div className="power-bar">
-                          <Progress
-                            duration="1s"
-                            precent={(Number(i.value) / Number(i.max)) * 100}
-                          />
+                  {/* <div className="desc-container">
+                    {activeNft?.power?.length &&
+                      activeNft?.power.map((i) => (
+                        <div className="row" key={i.key}>
+                          <div className="power-name">{i.key}</div>
+                          <div className="power-bar">
+                            <Progress
+                              duration="1s"
+                              precent={(Number(i.value) / Number(i.max)) * 100}
+                            />
+                          </div>
+                          <div className="power-value">{i.value}</div>
                         </div>
-                        <div className="power-value">{i.value}</div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                  </div> */}
                 </NFTDetail>
-                <Button disabled={!activeNft.unlocked} className="claim-button">
+                {/* <Button disabled={!activeNft.unlocked} className="claim-button">
                   Claim
-                </Button>
+                </Button> */}
               </div>
             ) : null}
           </div>
