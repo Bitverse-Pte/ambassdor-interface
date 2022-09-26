@@ -448,8 +448,6 @@ export default ({ show }: any) => {
     data,
   ]);
 
-  console.log('userNFT', userNFT)
-
   // useEffect(()=>{
   //   if(data){
   //     setActivedNfts(data?.data?.result?.records)
@@ -495,9 +493,6 @@ export default ({ show }: any) => {
     }
   }, [contributorNFT, ambassadorNFT, userNFT, chartIdx]);
 
-  console.log('userNFT', userNFT, nfts)
-
-
   const activeNft = useMemo(() => {
     if (!nfts?.length) return null;
     return nfts[active];
@@ -507,7 +502,6 @@ export default ({ show }: any) => {
     setActive(0);
     setChartIdx(e);
   };
-  console.log(nfts) 
 
   return (
     <Container>

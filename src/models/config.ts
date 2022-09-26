@@ -11,7 +11,6 @@ export default () => {
   const { data, loading, error } = useRequest(() =>
     Promise.all([getContributorLevelList(), getAmbassadorLevelList()])
   );
-  console.log("data", data);
 
   const [contributor, updateContributor] = useState(null);
   const [ambassador, updateAmbassador] = useState(null);

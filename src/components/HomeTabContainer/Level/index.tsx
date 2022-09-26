@@ -83,6 +83,7 @@ const Container = styled.div`
       font-weight: 500;
       font-size: 16px;
       line-height: 24px;
+      text-align: center;
       .active{
         color: #00EBC9;
         font-weight: 600;
@@ -272,8 +273,6 @@ export default ({ show, displayRole }: any) => {
   const handleSlide = (item: any, index: any) => {
     setIndex(index);
   };
-
-  console.log("steps", steps, displayRoleNft);
 
   return (
     <Container>
@@ -619,17 +618,12 @@ export default ({ show, displayRole }: any) => {
                                   src={require(`@/assets/level/nft/${i.name}.png`)}
                                 />
                               </Lock>
-                              {!user ? (
-                                <div className="contributor-lock">
-                                  earn more points to <br /> unlock exclusive
-                                  NFT
-                                </div>
-                              ) : displayRole === ROLE.ambassador ? (
+                              {displayRole === ROLE.ambassador ? (
                                 <div className="ambassador-lock">
-                                  Wanna unlcok ambassador？
+                                  Wanna unlcok ambassador？<br/>
                                   <span className="active">
                                     Go Do Quests
-                                  </span>{" "}
+                                  </span> 
                                   to level up！
                                 </div>
                               ) : (
