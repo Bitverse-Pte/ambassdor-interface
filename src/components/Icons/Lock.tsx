@@ -62,7 +62,7 @@ const Container = styled.div`
   &.active {
     div,
     img {
-      filter: grayscale(0);
+      /* filter: grayscale(0); */
     }
   }
 
@@ -154,10 +154,10 @@ const Wrapper = styled.div`
     background-color: #fff;
     opacity: 0;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 50px 150px #fff;
+    box-shadow: 0 0 50px 100px #fff;
   }
   &.active .shining-shadow {
-    animation: shining 6s 0.15s linear forwards;
+    animation: shining 3s .4s linear forwards;
   }
 `;
 

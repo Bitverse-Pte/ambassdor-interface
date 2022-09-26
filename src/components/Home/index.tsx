@@ -298,12 +298,6 @@ const Home = () => {
     questModalSetTrue();
   };
 
-  const { data: publicNft, loading: publicNftLoading } = useRequest(
-    getPublicNFTList
-  );
-
-  console.log("publicNft", publicNft);
-
   const { data, loading } = useRequest(getPublicQuestList);
   const popularQuest = useMemo(() => {
     if (!data?.data?.result?.records) return questCard;

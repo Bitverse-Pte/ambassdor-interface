@@ -492,7 +492,7 @@ export default ({ show }: any) => {
                           src={require(`@/assets/level/nft/${i?.name}.png`)}
                         />
                       ) : (
-                        <Lock allowAnimation={false}>
+                        <Lock allowAnimation={true}>
                           <img
                             src={require(`@/assets/level/nft/${i?.name}.png`)}
                           />

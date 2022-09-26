@@ -187,9 +187,7 @@ export default ({ show }: any) => {
     user: { user, curRoleNft, isAmbassador, isContributor, curRole, loading },
   } = useModel("userInfo");
 
-  console.log("123", user, curRoleNft, isAmbassador, isContributor, curRole);
 
-  console.log("curRole", curRole);
 
   // @ts-ignore
   const {
@@ -197,7 +195,8 @@ export default ({ show }: any) => {
   }: any = useModel("config");
 
   const steps = useMemo(() => {
-    if (contributor === "contributor") return null;
+    // if (contributor === "contributor") return null;
+    if(!levelList) return null;
     const t = levelList.map(
       (
         i: {
@@ -209,9 +208,9 @@ export default ({ show }: any) => {
       ) => ({
         ...i,
         ...curRoleNft[index],
-        label: i.name,
-        value: i.min,
-        steps: i.max,
+        label: i?.name,
+        value: i?.min || 0,
+        steps: i?.max || 0,
         stepsCompleted:
           user?.point < i.min ? 0 : user?.point >= i.max ? i.max : user?.point,
         date: null,
@@ -221,6 +220,8 @@ export default ({ show }: any) => {
 
     return t;
   }, [levelList, user]);
+
+  console.log('steps', steps)
 
   const [activeIndex, setIndex] = useState(0);
 
