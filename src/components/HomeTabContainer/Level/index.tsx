@@ -556,7 +556,7 @@ export default ({ show }: any) => {
                       <div className="effect" />
                       <Meteor>
                         {/* <img src={imageUrl} /> */}
-                        {(index <= lastCompleted && user) ? (
+                        {index <= lastCompleted && user ? (
                           <img
                             src={require(`@/assets/level/nft/${i.name}.png`)}
                           />
@@ -588,6 +588,11 @@ export default ({ show }: any) => {
                                 earn more points to <br /> unlock exclusive NFT
                               </div>
                             ) : null}
+                            {user ? null : (
+                              <div className="contributor-lock">
+                                earn more points to <br /> unlock exclusive NFT
+                              </div>
+                            )}
                           </div>
                         )}
                       </Meteor>
