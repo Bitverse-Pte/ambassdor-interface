@@ -17,6 +17,7 @@ const StyledModal = styled(Modal)`
   .content {
     margin-top: 40px;
   }
+
   .row {
     display: flex;
     align-items: center;
@@ -42,8 +43,68 @@ const StyledModal = styled(Modal)`
       flex: 1;
     }
   }
+  .labels{
+    max-width: 390px;
+    flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+  }
+  .actions-label-item {
+    margin-bottom: 8px;
+    margin-right: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 37px;
+    padding: 4px 12px 3px 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    color: #fff;
+    &.CONTENT .circle,
+    &.COMMUNITY .circle,
+    &.MARKETING .circle,
+    &.DEVELOP .circle,
+    &.DESIGN .circle {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 8px;
+    }
+
+    &.CONTENT .circle {
+      background: #ef5f3f;
+    }
+    &.COMMUNITY .circle {
+      background: #2749f3;
+    }
+    &.MARKETING .circle {
+      background: #17d0ba;
+    }
+    &.DEVELOP .circle {
+      background: #ac418a;
+    }
+    &.DESIGN .circle {
+      background: #ca0000;
+    }
+    .actions-content{
+      text-transform: capitalize;
+    }
+  }
+  .actions-label-container {
+    display: flex;
+    align-items: center;
+    width: 280px;
+    flex-wrap: wrap;
+  }
 
   .label {
+    margin-bottom: 8px;
+    margin-right: 8px;
     background: #ffffff;
     border: 1px solid #ffffff;
     border-radius: 6px;
@@ -53,6 +114,7 @@ const StyledModal = styled(Modal)`
     font-size: 14px;
     line-height: 20px;
     font-family: "Dela Gothic One";
+    min-height: 24px;
   }
 
   .period {
@@ -114,13 +176,7 @@ const StyledModal = styled(Modal)`
 
 const QuestTitleModal = () => {
   const {
-    questModal: {
-      data,
-      loading,
-      actions,
-      questModalState,
-      questModalSetFalse,
-    },
+    questModal: { data, loading, actions, questModalState, questModalSetFalse },
   } = useModel("questModal");
 
   const quest = useMemo(
@@ -128,12 +184,17 @@ const QuestTitleModal = () => {
     [data]
   );
 
-  const curActions = useMemo(()=>{
-    if(actions?.records){
-      return actions?.records?.filter((i: any)=>i?.categories)
+  const curActions = useMemo(() => {
+    // return ["CONTENT", "COMMUNITY", "MARKETING", "DEVELOP", "DESIGN"];
+    if (actions?.records) {
+      return actions?.records
+        ?.filter((i: any) => i?.categories)
+        .map((i: any) => i?.categories?.toUpperCase());
     }
-    return null
-  }, [actions])
+    return null;
+  }, [actions]);
+
+  console.log("curActions", curActions);
 
   return (
     <StyledModal
@@ -145,8 +206,23 @@ const QuestTitleModal = () => {
       {!loading && quest ? (
         <div className="container row-between">
           <div className="column left">
-            <div className="row">
-              <div className="label">{quest?.active === 'Y' ? quest?.type : 'EXPIRED'}</div>
+            <div className="row labels" style={{ alignItems: "flex-start" }}>
+              <div className="label">
+                {quest?.active === "Y" ? quest?.type : "EXPIRED"}
+              </div>
+              {curActions?.length
+                ? curActions?.map((i) => (
+                    <div className={`${i} actions-label-item`}>
+                      <div className="circle">
+                        <img
+                          src={require(`@/assets/category/${i}.svg`)}
+                          alt=""
+                        />
+                      </div>
+                      <div className="actions-content">{i?.toLowerCase()}</div>
+                    </div>
+                  ))
+                : null}
             </div>
             <div className="period">
               Valid period:&nbsp;
