@@ -11,7 +11,7 @@ const StyledModal = styled(Modal)`
   .inner {
     max-width: inherit;
     /* width: min(70vw, 1087px); */
-    width: 1087px;
+    width: 890px;
     height: max-content;
     padding: 48px 50px;
   }
@@ -40,10 +40,28 @@ const StyledModal = styled(Modal)`
 
   .container {
     align-items: stretch !important;
+    .top{
+
+    }
     .left {
       flex: 1;
     }
   }
+
+  .img-container {
+      overflow: hidden;
+      width: 366px;
+      height: 206px;
+      border-radius: 16px;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        background: url(${defaultImg}) no-repeat;
+        background-size: contain;
+      }
+    }
+
   .labels {
     /* max-width: 390px; */
     /* flex-wrap: wrap;  */
@@ -51,11 +69,11 @@ const StyledModal = styled(Modal)`
     display: flex;
     align-items: center;
     /* margin-bottom: 44px; */
-    height: 112px;
+    /* height: 112px; */
+    margin-bottom: 14px;
   }
   .actions-label-item {
-    margin-bottom: 8px;
-    margin-right: 8px;
+    margin-right: 16px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 37px;
     padding: 4px 12px 3px 4px;
@@ -108,8 +126,7 @@ const StyledModal = styled(Modal)`
 
   .label {
     margin-top: 2px;
-    margin-bottom: 8px;
-    margin-right: 8px;
+    margin-right: 16px;
     background: #ffffff;
     border: 1px solid #ffffff;
     border-radius: 6px;
@@ -124,7 +141,6 @@ const StyledModal = styled(Modal)`
 
   .period {
     color: rgba(255, 255, 255, 0.6);
-    margin: 0px 0 24px;
     font-weight: 400;
     font-size: 16px;
     line-height: 24px;
@@ -141,9 +157,11 @@ const StyledModal = styled(Modal)`
     background: rgba(255, 255, 255, 0.1);
     border-radius: 14px;
     padding: 24px;
-    max-height: 408px;
+    /* max-height: 408px; */
     overflow-x: hidden;
     overflow-y: auto;
+    margin-right: 48px;
+    height: 322px;
 
     & * {
       color: #fff !important;
@@ -153,19 +171,7 @@ const StyledModal = styled(Modal)`
   }
   .right {
     margin-left: 32px;
-    .img-container {
-      overflow: hidden;
-      width: 366px;
-      height: 206px;
-      border-radius: 16px;
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        background: url(${defaultImg}) no-repeat;
-        background-size: contain;
-      }
-    }
+
     .link-desc {
       display: block;
       margin-top: 26px;
@@ -181,6 +187,19 @@ const StyledModal = styled(Modal)`
       margin-bottom: 8px 0 48px !important;
     } */
   }
+  .divider{
+    background: rgba(255, 255, 255, 0.1);
+    height: 1px;
+    margin: 24px 0;
+  }
+  .link-hint{
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    text-transform: capitalize;
+    color: #FFFFFF;
+    margin-bottom: 16px;
+  }
 `;
 
 const QuestTitleModal = () => {
@@ -194,7 +213,7 @@ const QuestTitleModal = () => {
   );
 
   const curActions = useMemo(() => {
-    // return ["CONTENT"];
+    // return ["CONTENT", "COMMUNITY", "MARKETING", "DEVELOP", "DESIGN"];
     if (actions?.records) {
       return actions?.records
         ?.filter((i: any) => i?.categories)
@@ -203,16 +222,18 @@ const QuestTitleModal = () => {
     return null;
   }, [actions]);
 
+  const questTitle = useMemo(() => quest?.title || "Quest Title", [quest]);
+
   return (
     <StyledModal
       visible={questModalState}
       onClose={questModalSetFalse}
       onCancel={questModalSetFalse}
-      title="Quest Title"
+      title={questTitle}
     >
       {!loading && quest ? (
-        <div className="container row-between">
-          <div className="column left">
+        <div className="container column">
+          <div className="column top">
             <div className="row labels" style={{ alignItems: "flex-start" }}>
               <div className="label">
                 {quest?.active === "Y" ? quest?.type : "EXPIRED"}
@@ -235,29 +256,56 @@ const QuestTitleModal = () => {
                   : null}
               </div>
             </div>
+            <div className="row-between">
+              <div className="period rewards">
+                Rewards:&nbsp;<span>{quest?.rewards || "-"}</span>
+              </div>
+              <div className="period rewards">
+                Date:&nbsp;
+                <span>{format(new Date(quest?.issueDate), "dd/MM/yyyy")}</span>
+              </div>
 
-            <div className="desc">
-              <div dangerouslySetInnerHTML={{ __html: quest?.description }} />
+              <div className="period">
+                Valid period:&nbsp;
+                <span>
+                  {format(new Date(quest?.issueDate), "dd/MM/yyyy")}-
+                  {format(new Date(quest?.deadline), "dd/MM/yyyy")}
+                </span>
+              </div>
             </div>
           </div>
 
-          <div className="right column">
-            <div className="period rewards">
-              Rewards:&nbsp;<span>{quest?.rewards || "-"}</span>
-            </div>
-            <div className="period rewards">
-              Date:&nbsp;
-              <span>{format(new Date(quest?.issueDate), "dd/MM/yyyy")}</span>
-            </div>
+          <div className="divider"/>
 
-            <div className="period">
-              Valid period:&nbsp;
-              <span>
-                {format(new Date(quest?.issueDate), "dd/MM/yyyy")}-
-                {format(new Date(quest?.deadline), "dd/MM/yyyy")}
-              </span>
+          <div className="bottom row" style={{alignItems: 'flex-start'}}>
+            <div className="desc">
+              <div dangerouslySetInnerHTML={{ __html: quest?.description }} />
             </div>
+            <div className="column">
+              <div className="img-container column">
+                <img src={quest?.image} alt="" />
+              </div>
+              <div className="column">
+                <span className="link-desc">Please enter the link below</span>
+                <div className="period column link">
+                  <div className="link-hint">Please enter the link below</div>
+                  <div>Quest url link:</div>
+                  <div style={{color: '#fff', marginBottom: "16px" }}>{quest?.url}</div>
+                  <a target={"_blank"} href={quest?.url}>
+                    <Button>Enter</Button>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
 
+          {/* <div className="column left">
+            <div className="desc">
+              <div dangerouslySetInnerHTML={{ __html: quest?.description }} />
+            </div>
+          </div> */}
+
+          {/* <div className="right column">
             <div className="img-container column">
               <img src={quest?.image} alt="" />
             </div>
@@ -271,7 +319,7 @@ const QuestTitleModal = () => {
                 </a>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       ) : (
         <div className="loading">
