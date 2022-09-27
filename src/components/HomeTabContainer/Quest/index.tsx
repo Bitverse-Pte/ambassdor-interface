@@ -428,7 +428,7 @@ const ExpandContainer = ({ row, children }: any) => {
       key: "type",
       id: "Type",
       formatter({ row }: any) {
-        return row?.active === 'N' ? 'EXPIRED' : row?.type || "/" ;
+        return row?.active === "N" ? "EXPIRED" : row?.type || "/";
       },
     },
     {
@@ -528,7 +528,9 @@ export default ({ show }: any) => {
   // const { data: actionListData } = useRequest(getActionList)
   const { run, data: qustListData } = useRequest(getJoinedQuest);
   // const actions = useMemo(() => actionListData?.data?.result, [actionListData])
-  const questList = useMemo(() => qustListData?.data?.result?.records, [qustListData]);
+  const questList = useMemo(() => qustListData?.data?.result?.records, [
+    qustListData,
+  ]);
 
   const {
     questModal: { questModalSetTrue, run: questModalRun },
@@ -595,7 +597,7 @@ export default ({ show }: any) => {
         key: "type",
         id: "Type",
         formatter({ row }: any) {
-          return row?.active === 'N' ? 'EXPIRED' : row?.type || "/" 
+          return row?.active === "N" ? "EXPIRED" : row?.type || "/";
           // return row?.type || "/";
         },
       },
@@ -691,10 +693,25 @@ export default ({ show }: any) => {
                 gap: "16px",
               }}
             >
-              <Button className="" type="cancel" onClick={setFalse}>
+              <Button
+                style={{
+                  fontWeight: 600,
+                  fontSize: "14px",
+                  lineHeight: "24px",
+                }}
+                className=""
+                type="cancel"
+                onClick={setFalse}
+              >
                 Cancel
               </Button>
-              <Button className="" onClick={setFalse}>
+              <Button 
+              style={{
+                fontWeight: 600,
+                fontSize: "14px",
+                lineHeight: "24px",
+              }}
+              className="" onClick={setFalse}>
                 Set Data
               </Button>
             </div>
@@ -758,7 +775,7 @@ export default ({ show }: any) => {
           pageCount={totalPage}
           previousLabel="<"
         />
-      ): null}
+      ) : null}
     </Container>
   );
 };
