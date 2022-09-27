@@ -1,5 +1,5 @@
 import Loading from "@/components/Loading";
-import { getQuestList } from "@/server";
+import { getAllPublicQuestList, getQuestList } from "@/server";
 import { useRequest } from "ahooks";
 import { useEffect, useMemo } from "react";
 import styled from "styled-components";
@@ -154,7 +154,7 @@ const Card = styled.div<{ backgroundColor?: string; active?: boolean }>`
     padding: 0 24px;
     box-sizing: border-box;
     .title {
-      width: 112px;
+      /* width: 112px; */
       overflow: hidden; //超出的文本隐藏
       text-overflow: ellipsis; //溢出用省略号显示
       white-space: nowrap; //溢出不换行
@@ -192,7 +192,7 @@ const Card = styled.div<{ backgroundColor?: string; active?: boolean }>`
 `;
 
 const CardTypeQuest = ({ type, show, label, color }: any) => {
-  const { loading, data, run, error } = useRequest(getQuestList, {
+  const { loading, data, run, error } = useRequest(getAllPublicQuestList, {
     manual: true,
   });
 
@@ -209,7 +209,7 @@ const CardTypeQuest = ({ type, show, label, color }: any) => {
       run({
         page: 1,
         pageSize: 9,
-        assignTo: isContributor ? ROLE.contributor : ROLE.ambassador,
+        assignTo: isAmbassador ? ROLE.ambassador : ROLE.contributor,
         type,
       });
     }
@@ -253,7 +253,7 @@ const CardTypeQuest = ({ type, show, label, color }: any) => {
                     <div className="line" />
                   </div>
                   <div className="bottom row-between">
-                    <div className="col">
+                    <div className="col title" style={{flex: 1}}>
                       <Tippy content={i?.title}>
                         <div className="title">{i?.title}</div>
                       </Tippy>

@@ -527,7 +527,7 @@ const AllQuest = () => {
                         <div className="line" />
                       </div>
                       <div className="bottom row-between">
-                        <div className="col">
+                        <div className="col title" style={{flex: 1}}>
                           <Tippy content={i?.title}>
                             <div className="title">{i?.title}</div>
                           </Tippy>

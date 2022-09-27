@@ -325,10 +325,27 @@ const NftCard = styled.div<{ unlocked?: boolean }>`
   /* filter: grayscale(${({ unlocked }) => (!unlocked ? 1 : 0)}); */
   transition: all linear 0.2s;
 
+  & > div:first-of-type{
+    background: #FFFFFF;
+    border: 2px solid #000000;
+    border-radius: 12px;
+    padding: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 178px;
+    height: 178px;
+    transition: all linear .1s;
+    &:hover{
+      box-shadow: 0px 0px 30px rgba(0, 235, 200, 0.5);
+    }
+  }
+
+
   img {
     background: #ffffff;
     /* border: 2px solid #000000; */
-    border-radius: 12px;
+    border-radius: 10px;
     transition: all linear 0.2s;
     width: 176px;
   }
@@ -419,7 +436,7 @@ const Container = styled.div`
     justify-content: flex-start;
     align-items: center;
     gap: 25px;
-    grid-template-columns: repeat(3, minmax(176px, max-content));
+    grid-template-columns: repeat(3, minmax(182px, max-content));
   }
 `;
 
@@ -462,7 +479,6 @@ export default ({ show }: any) => {
   const navList = useMemo(() => navs.map((item) => ({ item })), []);
   const [active, setActive] = useState(0);
 
-
   const nfts = useMemo(() => {
     if (chartIdx === NFT_NAV_LIST.Contributor) {
       if (!userNFT || !userNFT?.length || isAmbassador) return contributorNFT;
@@ -473,7 +489,7 @@ export default ({ show }: any) => {
           unlocked: userNFT[index] ? true : false,
         }));
       }
-      return contributorNFT
+      return contributorNFT;
       // if (isAmbassador) {
       //   return contributorNFT?.map((i, index) => ({
       //     ...i,
