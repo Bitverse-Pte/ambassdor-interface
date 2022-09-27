@@ -591,7 +591,7 @@ const AllQuest = () => {
             <Loading />
           )}
         </div>
-        {!loading && totalPage ? (
+        {totalPage ? (
           <ReactPaginate
             className="pagination"
             breakLabel="..."
