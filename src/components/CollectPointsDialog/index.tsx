@@ -292,15 +292,6 @@ const CollectPointsDialog = (props: any) => {
     return false;
   }, [previousLevel, data]);
 
-  useEffect(() => {
-    if (props?.visible) {
-      hideConfirmButton();
-      hideHint();
-      setFalse();
-      setLevel(user?.level);
-    }
-  }, [props?.visible]);
-
   const [
     levelupHintModal,
     { setFalse: hideHint, setTrue: showHint },
@@ -326,6 +317,19 @@ const CollectPointsDialog = (props: any) => {
     confirmButton,
     { setTrue: showConfirmButton, setFalse: hideConfirmButton },
   ] = useBoolean(false);
+
+  const [ifNftImageOnload, {setTrue: nftImageOnloaded, setFalse: nftImageUnload}] = useBoolean(false);
+
+  useEffect(() => {
+    if (props?.visible) {
+      hideConfirmButton();
+      hideHint();
+      setFalse();
+      nftImageUnload();
+      setLevel(user?.level);
+    }
+  }, [props?.visible]);
+
 
   return (
     <>
@@ -427,12 +431,13 @@ const CollectPointsDialog = (props: any) => {
           <div className="img-container">
             {currentLevel?.name ? (
               <Lock
-                allowAnimation={true}
-                autoPlay
+                allowAnimation={ifNftImageOnload}
+                autoPlay={ifNftImageOnload}
                 delay={1000}
                 onAnimationEnd={showConfirmButton}
               >
                 <img
+                onLoad={()=>{nftImageOnloaded()}}
                   src={require(`@/assets/level/nft/${currentLevel?.name}.png`)}
                   alt=""
                 />
