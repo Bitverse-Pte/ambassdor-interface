@@ -10,7 +10,8 @@ import Button from "../Button";
 const StyledModal = styled(Modal)`
   .inner {
     max-width: inherit;
-    width: 890px;
+    /* width: min(70vw, 1087px); */
+    width: 1087px;
     height: max-content;
     padding: 48px 50px;
   }
@@ -43,11 +44,14 @@ const StyledModal = styled(Modal)`
       flex: 1;
     }
   }
-  .labels{
-    max-width: 390px;
-    flex-wrap: wrap;
+  .labels {
+    /* max-width: 390px; */
+    /* flex-wrap: wrap;  */
+    width: 100%;
     display: flex;
     align-items: center;
+    /* margin-bottom: 44px; */
+    height: 112px;
   }
   .actions-label-item {
     margin-bottom: 8px;
@@ -91,18 +95,19 @@ const StyledModal = styled(Modal)`
     &.DESIGN .circle {
       background: #ca0000;
     }
-    .actions-content{
+    .actions-content {
       text-transform: capitalize;
     }
   }
   .actions-label-container {
     display: flex;
     align-items: center;
-    width: 280px;
+    flex: 1;
     flex-wrap: wrap;
   }
 
   .label {
+    margin-top: 2px;
     margin-bottom: 8px;
     margin-right: 8px;
     background: #ffffff;
@@ -119,7 +124,10 @@ const StyledModal = styled(Modal)`
 
   .period {
     color: rgba(255, 255, 255, 0.6);
-    margin: 8px 0 36px;
+    margin: 0px 0 24px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
     span {
       color: #fff;
     }
@@ -166,11 +174,12 @@ const StyledModal = styled(Modal)`
     }
     .period.rewards,
     .period.link {
-      margin-bottom: 0 !important;
+      margin-top: 0px;
+      margin-bottom: 8px;
     }
-    .period.rewards {
+    /* .period.rewards {
       margin-bottom: 8px 0 48px !important;
-    }
+    } */
   }
 `;
 
@@ -185,7 +194,7 @@ const QuestTitleModal = () => {
   );
 
   const curActions = useMemo(() => {
-    // return ["CONTENT", "COMMUNITY", "MARKETING", "DEVELOP", "DESIGN"];
+    return ["CONTENT", "COMMUNITY", "MARKETING", "DEVELOP", "DESIGN"];
     if (actions?.records) {
       return actions?.records
         ?.filter((i: any) => i?.categories)
@@ -210,27 +219,25 @@ const QuestTitleModal = () => {
               <div className="label">
                 {quest?.active === "Y" ? quest?.type : "EXPIRED"}
               </div>
-              {curActions?.length
-                ? curActions?.map((i) => (
-                    <div className={`${i} actions-label-item`}>
-                      <div className="circle">
-                        <img
-                          src={require(`@/assets/category/${i}.svg`)}
-                          alt=""
-                        />
+              <div className="row actions-label-container">
+                {curActions?.length
+                  ? curActions?.map((i) => (
+                      <div key={i} className={`${i} actions-label-item`}>
+                        <div className="circle">
+                          <img
+                            src={require(`@/assets/category/${i}.svg`)}
+                            alt=""
+                          />
+                        </div>
+                        <div className="actions-content">
+                          {i?.toLowerCase()}
+                        </div>
                       </div>
-                      <div className="actions-content">{i?.toLowerCase()}</div>
-                    </div>
-                  ))
-                : null}
+                    ))
+                  : null}
+              </div>
             </div>
-            <div className="period">
-              Valid period:&nbsp;
-              <span>
-                {format(new Date(quest?.issueDate), "dd/MM/yyyy")}-
-                {format(new Date(quest?.deadline), "dd/MM/yyyy")}
-              </span>
-            </div>
+
             <div className="desc">
               <div dangerouslySetInnerHTML={{ __html: quest?.description }} />
             </div>
@@ -238,11 +245,19 @@ const QuestTitleModal = () => {
 
           <div className="right column">
             <div className="period rewards">
-              rewards:&nbsp;<span>{quest?.rewards || "-"}</span>
+              Rewards:&nbsp;<span>{quest?.rewards || "-"}</span>
             </div>
-            <div className="period date">
+            <div className="period rewards">
               Date:&nbsp;
               <span>{format(new Date(quest?.issueDate), "dd/MM/yyyy")}</span>
+            </div>
+
+            <div className="period">
+              Valid period:&nbsp;
+              <span>
+                {format(new Date(quest?.issueDate), "dd/MM/yyyy")}-
+                {format(new Date(quest?.deadline), "dd/MM/yyyy")}
+              </span>
             </div>
 
             <div className="img-container column">
