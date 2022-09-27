@@ -197,7 +197,7 @@ const CardTypeQuest = ({ type, show, label, color }: any) => {
   });
 
   const {
-    user: { auth, isAmbassador, isContributor },
+    user: { isAmbassador, isContributor },
   } = useModel("userInfo");
 
   const {

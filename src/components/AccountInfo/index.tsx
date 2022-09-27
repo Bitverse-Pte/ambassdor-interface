@@ -14,7 +14,6 @@ import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import CollectTokenDialog from "../CollectTokenDialog";
 import CollectPointsDialog from "../CollectPointsDialog";
-import { useMemo } from "react";
 import useNextLevel from "@/hooks/useNextLevel";
 
 const move = keyframes`

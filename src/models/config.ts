@@ -5,7 +5,6 @@ import {
 } from "@/server";
 import { useLocalStorageState, useRequest } from "ahooks";
 import { useEffect, useMemo, useState } from "react";
-import { useModel } from "umi";
 
 export default () => {
   const { data, loading, error } = useRequest(() =>

@@ -1,7 +1,4 @@
-import { ROLE } from "@/interface";
-import { getContributorLevelList } from "@/server";
-import { useRequest } from "ahooks";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useModel } from "umi";
 
 const calReducer = (tar: any, length: any, key: string | number) => {

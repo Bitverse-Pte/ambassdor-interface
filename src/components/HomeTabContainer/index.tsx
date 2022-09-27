@@ -8,10 +8,9 @@ import CardTypeQuest from "./Quest/CardTypeQuest";
 import Modal from "../Modal";
 import { useBoolean } from "ahooks";
 
-import Zmage from "react-zmage";
 import Portal from "../Portal";
 import { ROLE } from "@/interface";
-import { useModel } from "@/.umi/plugin-model";
+import { useModel } from "umi";
 
 const FullScreen = styled.div`
   position: fixed;
@@ -143,8 +142,10 @@ export const levelSubLevel = ["Contributor", "Ambassador"];
 export default () => {
   const [chartIdx, setChartIdx] = useState(NAVLIST.Level);
   const [showLevelDialog, { setTrue, setFalse }] = useBoolean(false);
+  const [currentSubNav, setCurrentSubNav] = useState(0);
+
   const {
-    user: { isAmbassador, isContributor },
+    user: { isAmbassador },
   } = useModel("userInfo");
   const [
     tvFullScreenStatus,
@@ -180,10 +181,8 @@ export default () => {
             </div>
           ) : null,
       })),
-    []
+    [setTrue]
   );
-
-  const [currentSubNav, setCurrentSubNav] = useState(0);
 
   const handleChartIdxChange = (e: any) => {
     setCurrentSubNav(0);

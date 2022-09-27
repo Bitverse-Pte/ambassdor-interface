@@ -196,7 +196,6 @@ export default ({ show, displayRole }: any) => {
       curRoleNft,
       isAmbassador,
       isContributor,
-      curRole,
       loading,
       contributorNFT,
       ambassadorNFT,
