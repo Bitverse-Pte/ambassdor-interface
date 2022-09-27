@@ -194,7 +194,7 @@ const QuestTitleModal = () => {
   );
 
   const curActions = useMemo(() => {
-    // return ["CONTENT", "COMMUNITY", "MARKETING", "DEVELOP", "DESIGN"];
+    // return ["CONTENT"];
     if (actions?.records) {
       return actions?.records
         ?.filter((i: any) => i?.categories)
@@ -202,8 +202,6 @@ const QuestTitleModal = () => {
     }
     return null;
   }, [actions]);
-
-  console.log("curActions", curActions);
 
   return (
     <StyledModal

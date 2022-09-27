@@ -6,11 +6,16 @@ import { ROLE } from "@/interface";
 import { getProfile } from "@/server";
 import { useLocalStorageState, useRequest } from "ahooks";
 import { useMemo, useState } from "react";
+import { useModel } from "umi";
 
 export default () => {
   const [auth, updateAuth] = useLocalStorageState("auth", {
     defaultValue: "",
   });
+
+  const {
+    config: { ambassador, contributor },
+  } = useModel("config");
 
   const [curRole, updateCurRole] = useState("");
 
@@ -30,6 +35,11 @@ export default () => {
     () =>
       profile?.role === ROLE.ambassador ? ROLE.ambassador : ROLE.contributor,
     [profile?.role]
+  );
+
+  const currentRoleConfig = useMemo(
+    () => (profile?.role === ROLE.ambassador ? ambassador : contributor || []),
+    [profile?.role, ambassador, contributor]
   );
 
   const curRoleNft = useMemo(() => {
@@ -54,6 +64,7 @@ export default () => {
     curRoleNft,
     contributorNFT: contributor_basic_info_nfts,
     ambassadorNFT: ambassador_basic_info_nfts,
+    currentRoleConfig,
   };
 
   return { user };

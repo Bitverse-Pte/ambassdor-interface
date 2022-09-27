@@ -28,7 +28,7 @@ const Connect = ({ children }: { children: any }) => {
         }}
         onClick={handleConnect}
       >
-        {account && !auth ? "Sign" : "Connect Wallet"}
+        {account && !auth ? "Sign in" : "Connect Wallet"}
       </div>
       <WalletModal />
     </>

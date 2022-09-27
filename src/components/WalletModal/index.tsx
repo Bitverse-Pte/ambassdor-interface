@@ -227,7 +227,7 @@ export default () => {
     <Modal
       visible={walletModalStatus}
       onClose={hiddenModal}
-      title={account ? "Sign" : "Connect your wallet"}
+      title={account ? "Sign in" : "Connect your wallet"}
     >
       <ModalContainer style={{ minWidth: "526px" }}>
         {account ? (
@@ -236,7 +236,7 @@ export default () => {
             <TeleportSignIcon width={98} height={98} />
             <div className="recommend">Please sign in your wallet</div>
             <Button loading={loading} onClick={handleSign}>
-              Sign
+              Sign in
             </Button>
           </>
         ) : step ? (

@@ -1,5 +1,6 @@
 import { collectPoint } from "@/server";
 import { useBoolean, useRequest } from "ahooks";
+import { Collapse } from "react-collapse";
 import { useEffect, useMemo, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { useModel } from "umi";
@@ -8,11 +9,46 @@ import Loading from "../Loading";
 import Modal from "../Modal";
 import warning from "@/assets/dialog/warning.svg";
 
+const Icon = () => (
+  <svg
+    width="32"
+    height="32"
+    viewBox="0 0 32 32"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M16 28C22.6274 28 28 22.6274 28 16C28 9.37258 22.6274 4 16 4C9.37258 4 4 9.37258 4 16C4 22.6274 9.37258 28 16 28Z"
+      stroke="#00DBC9"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M20 11L16 15L12 11"
+      stroke="#00DBC9"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M20 18L16 22L12 18"
+      stroke="#00DBC9"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 const StyledModal = styled(Modal)`
   .inner {
     min-width: 624px;
     max-width: max-content;
     position: relative;
+    .header {
+      margin-bottom: 50px;
+    }
   }
 
   .row {
@@ -100,6 +136,26 @@ const StyledModal = styled(Modal)`
         line-height: 24px;
       }
     }
+    .curent-level {
+      padding: 7px 14px 7px 4px;
+      background: linear-gradient(
+          0deg,
+          rgba(30, 45, 59, 0.96),
+          rgba(30, 45, 59, 0.96)
+        ),
+        #00dbc9;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 20px;
+      /* identical to box height, or 125% */
+
+      text-transform: capitalize;
+
+      color: #00dbc9;
+      .days {
+        margin-right: 20px;
+      }
+    }
   }
 `;
 
@@ -156,6 +212,35 @@ const CollectTokenDialog = (props: any) => {
     }
   };
 
+  const [tableOpen, { setTrue, setFalse, toggle }] = useBoolean(false);
+console.log('user', user)
+  const {
+    user: { currentRoleConfig },
+  } = useModel("userInfo");
+
+  console.log("currentRoleConfig", currentRoleConfig);
+
+  const configCombindProfile = useMemo(()=>{
+    if(!currentRoleConfig || !user) return []
+    const curLevel = user?.level
+    const lessLevelIndex = currentRoleConfig?.findIndex(i=>i?.name === curLevel)
+
+    return currentRoleConfig?.map((i: any, index: number)=>{
+      if(index < lessLevelIndex) {
+        return ({
+          ...i, 
+          levelStatus: i?.token ? 'TGE+365 Days' : '/',
+        })
+      }
+      return ({
+        ...i,
+        levelStatus: i?.token ? 'After level up' : '/',
+      })
+    }).reverse()
+  }, [user, currentRoleConfig])
+
+  console.log('configCombindProfile', configCombindProfile)
+
   return (
     <StyledModal {...props} title={currentTitle}>
       <div className="container row-between">
@@ -165,7 +250,7 @@ const CollectTokenDialog = (props: any) => {
           <div className="token-info row-between">
             <div className="col">
               <div className="row-end">
-                <strong>3000</strong>&nbsp;<span>TELE</span>
+                <strong>{user?.token || 0}</strong>&nbsp;<span>TELE</span>
               </div>
               <div className="hint">Total</div>
             </div>
@@ -181,7 +266,32 @@ const CollectTokenDialog = (props: any) => {
             </div>
           </div>
 
-          <div className="token-detail-table"></div>
+          {configCombindProfile?.length ? (
+            <div className="token-detail-table">
+              <div
+                className="curent-level row"
+                style={{ justifyContent: "space-between" }}
+                onClick={toggle}
+              >
+                <div className="tokens">cl 3 - 3,000 TELE</div>
+                <div className="row">
+                  <div className="days">365 Days</div>
+                  <Icon />
+                </div>
+              </div>
+              <Collapse isOpened={tableOpen}>
+                {configCombindProfile?.map(i=>(
+                  <div key={i?.name} className="row">
+                    <div>{i?.name}</div>
+                    <div>{i?.token}TELE</div>
+                    <div>{i?.levelStatus || '/'}</div>
+                    <div>processing</div>
+                    <Icon />
+                  </div>
+                ))}
+              </Collapse>
+            </div>
+          ) : null}
 
           <div
             className="tge"

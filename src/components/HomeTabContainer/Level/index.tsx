@@ -88,6 +88,7 @@ const Container = styled.div`
         color: #00EBC9;
         font-weight: 600;
         text-transform: uppercase;
+        text-decoration: underline;
       }
     }
 
@@ -179,6 +180,10 @@ const SwiperController = ({ ifIsCurrentRole, lastCompleted, index }: any) => {
       swiper.slideTo(lastCompleted || 0, 1000);
     }, 0);
   }, [swiper, lastCompleted]);
+
+  useEffect(()=>{
+    swiper.slideTo(index, 1000);
+  }, [index])
 
   return null;
 };
@@ -619,8 +624,8 @@ export default ({ show, displayRole }: any) => {
                               </Lock>
                               {displayRole === ROLE.ambassador ? (
                                 <div className="ambassador-lock">
-                                  Wanna unlcok ambassador？<br/>
-                                  <span className="active">
+                                  Wanna become Ambassador？<br/>
+                                  <span className="active" onClick={()=>window.open('/allquest', '_blank')}>
                                     Go Do Quests
                                   </span> 
                                   &nbsp;to level up！

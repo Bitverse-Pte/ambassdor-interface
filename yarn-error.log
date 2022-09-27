@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn add react-zmage
+  /usr/local/bin/node /usr/local/bin/yarn add react-collapse
 
 PATH: 
   /Users/roderick/.cargo/bin:/Users/roderick/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
@@ -14,7 +14,7 @@ Platform:
   darwin arm64
 
 Trace: 
-  Error: https://registry.npmjs.org/react-zmage: tunneling socket could not be established, cause=connect ECONNREFUSED 127.0.0.1:1087
+  Error: https://registry.npmjs.org/react-collapse: tunneling socket could not be established, cause=connect ECONNREFUSED 127.0.0.1:1087
       at ClientRequest.onError (/usr/local/lib/node_modules/yarn/lib/cli.js:152369:17)
       at Object.onceWrapper (node:events:640:26)
       at ClientRequest.emit (node:events:520:28)
@@ -64,6 +64,7 @@ npm manifest:
       "react-table": "^7.8.0",
       "react-toastify": "^9.0.8",
       "react-tooltip": "^4.2.21",
+      "react-zmage": "^0.8.5-beta.37",
       "styled-components": "^5.3.5",
       "swiper": "^8.3.2",
       "umi": "^4.0.8"
@@ -7255,6 +7256,13 @@ Lockfile:
     dependencies:
       prop-types "^15.7.2"
       uuid "^7.0.3"
+  
+  react-zmage@^0.8.5-beta.37:
+    version "0.8.5-beta.37"
+    resolved "https://registry.yarnpkg.com/react-zmage/-/react-zmage-0.8.5-beta.37.tgz#a310a2ea273685021e098edd10505011b3f3b778"
+    integrity sha512-6US4DVozc2IdqxHCrMAejDy3H08B95Rc/LeFMnHBblE0wagKbqbQlHfwgLRUcdPBBKCtm1KuWNKiN3MXurrcOg==
+    dependencies:
+      classnames "^2.3.1"
   
   react@18.1.0:
     version "18.1.0"

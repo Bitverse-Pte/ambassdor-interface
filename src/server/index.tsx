@@ -139,14 +139,6 @@ export const filterActionList = async ({ questKey }: any) =>
     },
   });
 
-// // ambassador level
-// export const getAmbassadorLevel = async () =>
-//   privateAxios.get("/jeecg-boot/amlevel/ambassadorLevel/list");
-
-// // contributor level
-// export const getContributorLevel = async () =>
-//   privateAxios.get("/jeecg-boot/amlevel/contributorLevel/list");
-
 // get profile
 export const getProfile = async () =>
   privateAxios.get("/jeecg-boot/am/profile");
@@ -188,6 +180,13 @@ export const getPublicContributorNFTList = async ()=>publicAxios.get('/jeecg-boo
 
 // 用户获取的nft
 export const getUserNFT = async (props?: any)=>privateAxios.get('/jeecg-boot/am/profile/user-nft', {
+  params: {
+    ...props
+  }
+})
+
+// 用户获取的token
+export const getUserToken = async (props?: any)=>privateAxios.get('/jeecg-boot/am/profile/user-token', {
   params: {
     ...props
   }
