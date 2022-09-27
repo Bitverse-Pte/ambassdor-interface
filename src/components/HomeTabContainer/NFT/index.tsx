@@ -1,233 +1,20 @@
-import { useLocalStorageState, useRequest } from "ahooks";
-import styled, { css } from "styled-components";
-import axios from "axios";
 import {
-  JSXElementConstructor,
-  Key,
-  ReactElement,
-  ReactFragment,
-  ReactPortal,
-  SetStateAction,
+  useRequest,
+  useSessionStorageState,
+} from "ahooks";
+import styled, { css } from "styled-components";
+import {
   useEffect,
   useMemo,
   useState,
 } from "react";
 import NavBar from "@/components/Navbar";
 import Lock from "@/components/Icons/Lock";
-import Progress from "@/components/Progress";
 import labelLeft from "@/assets/label-left.svg";
 import labelRight from "@/assets/label-right.svg";
-import Button from "@/components/Button";
 import { useModel } from "umi";
 import { getUserNFT } from "@/server";
-import { uriToHttp } from "@/utils";
 
-const mock = {
-  data: [
-    {
-      id: 1,
-      name: "CL1 xxxx",
-      src: "@/assets/nfts/egg-dragon.png",
-      unlocked: true,
-      power: [
-        {
-          key: "STR",
-          value: "1",
-          max: "10",
-        },
-        {
-          key: "CON",
-          value: "8",
-          max: "10",
-        },
-        {
-          key: "DEX",
-          value: "5",
-          max: "10",
-        },
-        {
-          key: "INT",
-          value: "3",
-          max: "10",
-        },
-        {
-          key: "LUCK",
-          value: "7",
-          max: "10",
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "CL2 Era Starter",
-      src: "@/assets/nfts/baby-dragon.png",
-      unlocked: true,
-      power: [
-        {
-          key: "STR",
-          value: "3",
-          max: "10",
-        },
-        {
-          key: "CON",
-          value: "1",
-          max: "10",
-        },
-        {
-          key: "DEX",
-          value: "2",
-          max: "10",
-        },
-        {
-          key: "INT",
-          value: "3",
-          max: "10",
-        },
-        {
-          key: "LUCK",
-          value: "10",
-          max: "10",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "CL3 Order organizer",
-      src: "@/assets/nfts/default.png",
-
-      unlocked: false,
-      power: [
-        {
-          key: "STR",
-          value: "1",
-          max: "10",
-        },
-        {
-          key: "CON",
-          value: "8",
-          max: "10",
-        },
-        {
-          key: "DEX",
-          value: "5",
-          max: "10",
-        },
-        {
-          key: "INT",
-          value: "3",
-          max: "10",
-        },
-        {
-          key: "LUCK",
-          value: "7",
-          max: "10",
-        },
-      ],
-    },
-    {
-      id: 4,
-      name: "CL3 Order organizer",
-      src: "@/assets/nfts/default.png",
-
-      unlocked: false,
-      power: [
-        {
-          key: "STR",
-          value: "1",
-          max: "10",
-        },
-        {
-          key: "CON",
-          value: "8",
-          max: "10",
-        },
-        {
-          key: "DEX",
-          value: "5",
-          max: "10",
-        },
-        {
-          key: "INT",
-          value: "3",
-          max: "10",
-        },
-        {
-          key: "LUCK",
-          value: "7",
-          max: "10",
-        },
-      ],
-    },
-    {
-      id: 5,
-      name: "CL3 Order organizer",
-      src: "@/assets/nfts/default.png",
-
-      unlocked: false,
-      power: [
-        {
-          key: "STR",
-          value: "1",
-          max: "10",
-        },
-        {
-          key: "CON",
-          value: "8",
-          max: "10",
-        },
-        {
-          key: "DEX",
-          value: "5",
-          max: "10",
-        },
-        {
-          key: "INT",
-          value: "3",
-          max: "10",
-        },
-        {
-          key: "LUCK",
-          value: "7",
-          max: "10",
-        },
-      ],
-    },
-    {
-      id: 6,
-      name: "CL3 Order organizer",
-      src: "@/assets/nfts/default.png",
-
-      unlocked: false,
-      power: [
-        {
-          key: "STR",
-          value: "1",
-          max: "10",
-        },
-        {
-          key: "CON",
-          value: "8",
-          max: "10",
-        },
-        {
-          key: "DEX",
-          value: "5",
-          max: "10",
-        },
-        {
-          key: "INT",
-          value: "3",
-          max: "10",
-        },
-        {
-          key: "LUCK",
-          value: "7",
-          max: "10",
-        },
-      ],
-    },
-  ],
-};
 
 const NFTDetail = styled.div<{ disabled?: boolean }>`
   background: linear-gradient(
@@ -494,6 +281,9 @@ export default ({ show }: any) => {
   const [chartIdx, setChartIdx] = useState(NFT_NAV_LIST.Contributor);
   const navList = useMemo(() => navs.map((item) => ({ item })), []);
   const [active, setActive] = useState(0);
+  const [animated, setFalse] = useSessionStorageState("animated", {
+    defaultValue: 0,
+  });
 
   const nfts = useMemo(() => {
     if (chartIdx === NFT_NAV_LIST.Contributor) {
@@ -535,6 +325,7 @@ export default ({ show }: any) => {
     setChartIdx(e);
   };
 
+  console.log('nfts', nfts)
   return (
     <Container>
       <div className="view-port-chart">
@@ -555,18 +346,33 @@ export default ({ show }: any) => {
                       onClick={() => {
                         setActive(index);
                       }}
-                      unlocked={i?.unlocked || false}
+                      unlocked={i?.unlocked}
                       key={i?.name}
                     >
-                      <Lock
-                        allowAnimation={false}
-                        delay={index * 100}
-                        autoPlay={i?.unlocked}
-                      >
-                        <img
-                          src={require(`@/assets/level/nft/${i?.name}.png`)}
-                        />
-                      </Lock>
+                      {animated ? (
+                        <Lock
+                          allowAnimation={false}
+                          autoPlay={false}
+                          skipAnimationForceUnlocked={i?.unlocked}
+                        >
+                          <img
+                            src={require(`@/assets/level/nft/${i?.name}.png`)}
+                          />
+                        </Lock>
+                      ) : (
+                        <Lock
+                          allowAnimation={false}
+                          delay={index * 100}
+                          autoPlay={!animated && i?.unlocked}
+                          onAnimationEnd={() => {
+                            setFalse(1);
+                          }}
+                        >
+                          <img
+                            src={require(`@/assets/level/nft/${i?.name}.png`)}
+                          />
+                        </Lock>
+                      )}
 
                       <div className="name">
                         {i?.name} <br />{" "}

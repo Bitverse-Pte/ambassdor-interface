@@ -136,6 +136,9 @@ const StyledModal = styled(Modal)`
         line-height: 24px;
       }
     }
+    .ReactCollapse--collapse{
+      transition: all linear .1s;
+    }
     .curent-level {
       padding: 7px 14px 7px 4px;
       background: linear-gradient(

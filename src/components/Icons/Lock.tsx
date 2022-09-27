@@ -55,7 +55,7 @@ const Container = styled.div`
       animation-iteration-count: infinite;
       animation-name: shaking;
       animation-duration: 2s;
-      filter: opacity(1) drop-shadow(2px 4px 6px rgba(0,0,0,0.5));
+      filter: opacity(1) drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.5));
     }
   }
 
@@ -72,14 +72,14 @@ const Container = styled.div`
     transition: all linear 1.2s 1.2s;
   }
   .lock-svg {
-    transition: all .2s linear;
+    transition: all 0.2s linear;
     z-index: 2;
     width: 80px;
     height: 80px;
     position: absolute;
     top: 50%;
     left: 50%;
-    filter: opacity(.7) drop-shadow(2px 4px 6px rgba(0,0,0,0.5));
+    filter: opacity(0.7) drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.5));
     transform: translate(-50%, -50%);
     animation-duration: 2s;
     animation-timing-function: linear;
@@ -87,6 +87,11 @@ const Container = styled.div`
       transform-origin: bottom;
       animation-duration: 2s;
       animation-timing-function: linear;
+    }
+    &.force-active{
+      & g:nth-of-type(1), g:nth-of-type(2){
+        opacity: 0;
+      } 
     }
     &.active {
       g:nth-of-type(1) {
@@ -131,7 +136,8 @@ const Wrapper = styled.div`
       width: 40px;
       height: 40px;
     }
-    20%, 40% {
+    20%,
+    40% {
       opacity: 1;
       z-index: 3;
       width: 40px;
@@ -155,35 +161,49 @@ const Wrapper = styled.div`
     box-shadow: 0 0 35px 80px #fff;
   }
   &.active .shining-shadow {
-    animation: shining 3s .4s linear forwards;
+    animation: shining 3s 0.4s linear forwards;
   }
 `;
-
-export default ({ delay = 0, autoPlay = false, children, allowAnimation = true }: any) => {
+// onAnimationEnd
+export default ({
+  onAnimationEnd,
+  delay = 0,
+  autoPlay = false,
+  children,
+  allowAnimation = true,
+  skipAnimationForceUnlocked = false
+}: any) => {
   const [ifActive, setIfActive] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
+
   const handleClick = () => {
-    if(!allowAnimation) return ;
+    if (!allowAnimation) return;
     setIfActive(true);
     setTimeout(() => {
       setUnlocked(true);
     }, 2000);
   };
 
-  useEffect(()=>{
-    if(autoPlay){
+  useEffect(() => {
+    if (autoPlay) {
       setTimeout(() => {
         setIfActive(true);
         setTimeout(() => {
           setUnlocked(true);
         }, 2000);
-      }, 500+ +delay);
+      }, 500 + +delay);
     }
-  }, [autoPlay, delay])
+  }, [autoPlay, delay]);
 
   const ref = useRef(null);
   const isHovering = useHover(ref);
 
+
+  useEffect(()=>{
+    if(unlocked){
+      onAnimationEnd && onAnimationEnd()
+    }
+  }, [unlocked, onAnimationEnd])
   //   useEffect(() => {
   //     if (!isHovering) {
   //       setIfActive(false);
@@ -192,16 +212,16 @@ export default ({ delay = 0, autoPlay = false, children, allowAnimation = true }
 
   return (
     <Wrapper
-      className={`${ifActive ? "active" : ""} ${unlocked ? "unlocked" : ""}`}
+      className={`${skipAnimationForceUnlocked ? 'force-active unlocked' : ifActive ? "active" : ""} ${unlocked ? "unlocked" : ""}`}
     >
       <Container
         onClick={handleClick}
         ref={ref}
-        className={`${ifActive ? "active" : ""} ${unlocked ? "unlocked" : ""}`}
+        className={`${skipAnimationForceUnlocked ? 'force-active unlocked' : ifActive ? "active" : ""} ${unlocked ? "unlocked" : ""}`}
       >
         {children}
         <svg
-          className={`lock-svg ${ifActive ? "active" : ""} ${
+          className={`lock-svg ${skipAnimationForceUnlocked ? 'force-active unlocked' : ifActive ? "active" : ""} ${
             unlocked ? "unlocked" : ""
           }`}
           width="41"

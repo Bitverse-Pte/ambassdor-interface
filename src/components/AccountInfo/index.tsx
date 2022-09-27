@@ -15,6 +15,9 @@ import "tippy.js/dist/tippy.css";
 import CollectTokenDialog from "../CollectTokenDialog";
 import CollectPointsDialog from "../CollectPointsDialog";
 import useNextLevel from "@/hooks/useNextLevel";
+import useLevelList from "@/hooks/useLevelList";
+import { ROLE } from "@/interface";
+import { useMemo } from "react";
 
 const move = keyframes`
 from,to{
@@ -83,12 +86,12 @@ const Avatar = styled.div`
   margin-right: 22px;
   /* border: 2px dashed #00DBC9; */
   position: relative;
-  svg{
-    stroke:#00ECC9;
-      stroke-width: 2;
-      stroke-dasharray: 7;
-      position: absolute;
-      fill: transparent;
+  svg {
+    stroke: #00ecc9;
+    stroke-width: 2;
+    stroke-dasharray: 7;
+    position: absolute;
+    fill: transparent;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -117,7 +120,7 @@ const Avatar = styled.div`
     height: 100%;
     border-radius: 50%;
     overflow: hidden;
-    background: url(${defaultAvatar}), #02483E no-repeat;
+    background: url(${defaultAvatar}), #02483e no-repeat;
     background-size: cover;
     background-position: center;
     img {
@@ -208,11 +211,7 @@ const UserAvatar = ({ src }: { src: string }) => {
   return (
     <Avatar>
       <svg xmlns="http://www.w3.org/2000/svg">
-        <circle
-          cx="90"
-          cy="90"
-          r="90"
-        />
+        <circle cx="90" cy="90" r="90" />
       </svg>
       <div>
         <img src={src} alt="" />
@@ -221,7 +220,14 @@ const UserAvatar = ({ src }: { src: string }) => {
   );
 };
 
-const UserPoints = ({ title, amount, actionName, action, children }: any) => {
+const UserPoints = ({
+  title,
+  amount,
+  actionName,
+  action,
+  children,
+  disabled,
+}: any) => {
   const handleClick = () => {
     action && action();
   };
@@ -232,7 +238,12 @@ const UserPoints = ({ title, amount, actionName, action, children }: any) => {
         <div className="title">{title}</div>
         <div className="amount">{abbreviateNumber(amount)}</div>
       </div>
-      <Button className="action-btn" radius="60px" onClick={handleClick}>
+      <Button
+        className="action-btn"
+        radius="60px"
+        onClick={handleClick}
+        disabled={disabled}
+      >
         {actionName}
       </Button>
       {children}
@@ -240,16 +251,25 @@ const UserPoints = ({ title, amount, actionName, action, children }: any) => {
   );
 };
 
-const precent = 20;
+// const precent = 20;
 
 export default () => {
-  const nextLevel = useNextLevel()
-
-  const { account } = useWeb3React();
-  // @ts-ignore
   const {
     user: { auth, user, loading, isAmbassador },
   } = useModel("userInfo");
+  
+
+  const nextLevel = useNextLevel();
+  const levelList: any = useLevelList({
+    forceRole: false
+  });
+  const currentLevel = useMemo(()=>levelList ? levelList.find(i=>i?.name === user?.level): null, [levelList, user])
+  const precent = useMemo(()=>{
+    if(!currentLevel) return 0;
+    return user?.point / currentLevel?.max * 100
+  }, [currentLevel, user?.point])
+
+  const { account } = useWeb3React();
 
   const [
     collectPointsDialog,
@@ -261,6 +281,8 @@ export default () => {
     { setTrue: showCollectTokensDialog, setFalse: closeCollectTokensDialog },
   ] = useBoolean(false);
 
+  console.log("user", user);
+
   return (
     <Container>
       {account && auth ? (
@@ -268,7 +290,7 @@ export default () => {
           <UserAvatar src={user?.avatar} />
           <div className="column">
             <div className="row level">
-              <img src={ user ? isAmbassador ? LevelA : LevelC : undefined } />
+              <img src={user ? (isAmbassador ? LevelA : LevelC) : undefined} />
               <Tippy content={user?.address}>
                 <span className="username">{user?.username}</span>
               </Tippy>
@@ -298,9 +320,12 @@ export default () => {
             <UserPoints
               title={"Point"}
               amount={user?.point || 0}
-              action={()=>{if(user?.point && user?.point > 0 ){
-                showCollectPointsDialog()
-              }}}
+              disabled={!user?.pointCache || user?.pointCache <= 0}
+              action={() => {
+                if (user?.pointCache && user?.pointCache > 0) {
+                  showCollectPointsDialog();
+                }
+              }}
               actionName={"Collect"}
             >
               {user?.pointCache ? (
