@@ -405,13 +405,29 @@ const Container = styled.div`
     height: auto;
     margin-bottom: 65px;
     padding: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    width: 627px;
     .x-nav-item {
       font-family: "Poppins";
       font-style: normal;
       font-weight: 500;
       font-size: 24px;
-      line-height: 36px;
+      line-height: 44px;
       flex: none;
+      &.x-nav-item-active {
+        position: relative;
+        &::after {
+          content: "";
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          transform: translate(-50%, 0);
+          width: 10px;
+          height: 3px;
+          background: #ffffff;
+          border-radius: 39px;
+        }
+      }
     }
   }
 
