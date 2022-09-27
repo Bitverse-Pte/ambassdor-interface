@@ -89,6 +89,9 @@ const Container = styled.div`
         font-weight: 600;
         text-transform: uppercase;
         text-decoration: underline;
+        position: relative;
+        z-index: 44;
+        cursor: pointer;
       }
     }
 
