@@ -7,7 +7,7 @@ const calReducer = (tar: any, length: any, key: string | number) => {
 
   return _t.reduce(
     (prev: any, next: { [x: string]: any }) => +prev + (+next[key] || 0),
-    0
+    1
   );
 };
 
@@ -31,7 +31,7 @@ const useLevelList = ({forceRole}: any) => {
       if (index === 0) {
         return {
           ...i,
-          max: i?.points,
+          max: i?.points+1,
           min: 1,
         };
       }
