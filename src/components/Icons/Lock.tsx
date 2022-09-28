@@ -74,8 +74,8 @@ const Container = styled.div`
   .lock-svg {
     transition: all 0.2s linear;
     z-index: 2;
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     position: absolute;
     top: 50%;
     left: 50%;

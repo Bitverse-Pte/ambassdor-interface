@@ -25,6 +25,7 @@ import { useRequest } from "ahooks";
 import { getPublicQuestList } from "@/server";
 import Loading from "../Loading";
 import Link from "../Link";
+import { format } from "@/utils";
 
 // active: "N"
 // assignTo: "contributor"
@@ -371,7 +372,7 @@ const Home = () => {
                   {i?.status ? (
                     <div className="card">
                       <div>quest Rewards</div>
-                      <div>{i?.rewrds || 0} points</div>
+                      <div>{format(i?.rewrds || 0)} points</div>
                     </div>
                   ) : loading ? (
                     <div className="card">

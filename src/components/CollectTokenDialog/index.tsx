@@ -8,6 +8,7 @@ import Button from "../Button";
 import Loading from "../Loading";
 import Modal from "../Modal";
 import warning from "@/assets/dialog/warning.svg";
+import { format } from "@/utils";
 
 const Icon = () => (
   <svg
@@ -253,7 +254,7 @@ console.log('user', user)
           <div className="token-info row-between">
             <div className="col">
               <div className="row-end">
-                <strong>{user?.token || 0}</strong>&nbsp;<span>TELE</span>
+                <strong>{format(user?.token || 0)}</strong>&nbsp;<span>TELE</span>
               </div>
               <div className="hint">Total</div>
             </div>
@@ -316,7 +317,7 @@ console.log('user', user)
               CLAIM NOW
             </Button>
             <div>
-              claimable now：<span className="active">0 TELE</span>
+              claimable now：<span className="active">{format(0)} TELE</span>
             </div>
           </div>
         </div>

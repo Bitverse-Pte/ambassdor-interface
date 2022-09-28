@@ -11,6 +11,7 @@ import failed from "@/assets/dialog/error.svg";
 import { useModel } from "umi";
 import Lock from "../Icons/Lock";
 import Portal from "../Portal";
+import { format } from "@/utils";
 
 const springish = keyframes`
   /* 0.00% {transform: translate3d(50.00px, 0, 0) scale(0);}
@@ -281,7 +282,7 @@ const CollectPointsDialog = (props: any) => {
   };
 
   const pendingMsg = useMemo(() => {
-    return `WELL DONE! YOU GOT ${user?.pointCache || 0} POINTS TO COLLECT!`;
+    return `WELL DONE! YOU GOT ${format(user?.pointCache || 0)} POINTS TO COLLECT!`;
   }, [user?.pointCache]);
 
   const successMsg = "has been Successflly added to your account!";
@@ -350,7 +351,7 @@ const CollectPointsDialog = (props: any) => {
             <div className="desc" style={{ marginTop: "-26px" }}>
               <div className="points">
                 <span className="active">
-                  {claimSuccess ? previousPrice : user?.pointCache || 0}
+                  {claimSuccess ? format(previousPrice) : format(user?.pointCache || 0) || 0}
                 </span>
                 &nbsp; Points
               </div>

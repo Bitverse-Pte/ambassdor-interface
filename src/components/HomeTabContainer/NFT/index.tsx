@@ -200,6 +200,8 @@ const Container = styled.div`
       font-weight: 500;
       font-size: 24px;
       line-height: 44px;
+      padding: 0px 0 10px;
+      margin-right: 50px;
       flex: none;
       &.x-nav-item-active {
         position: relative;

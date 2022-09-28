@@ -4,6 +4,8 @@ import React, { useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 import { useModel } from "umi";
 import IconRocket from "./IconRocket";
+import BigNumber from "bignumber.js";
+import { format } from "@/utils";
 
 const Row = styled.div`
   display: flex;
@@ -25,16 +27,16 @@ const Container = styled.div`
 
   @keyframes launch {
     0% {
-      transform: rotate(0deg) translate(0px,-50%);
+      transform: rotate(0deg) translate(0px, -50%);
     }
     10% {
-      transform: rotate(0deg) translate(20px,-50%);
+      transform: rotate(0deg) translate(20px, -50%);
     }
     50% {
-      transform: rotate(205deg) translate(30px,-50%);
+      transform: rotate(205deg) translate(30px, -50%);
     }
     to {
-      transform: rotate(205deg) translate(450px,-50%);
+      transform: rotate(205deg) translate(450px, -50%);
     }
   }
 
@@ -154,7 +156,7 @@ const Container = styled.div`
           animation-fill-mode: forwards;
           animation-iteration-count: infinite;
         }
-        &.launch{
+        &.launch {
           animation-duration: 2s;
           animation-name: launch;
 
@@ -327,6 +329,7 @@ export default function Timeline({
   milestones,
   curStepsCompleted,
   max,
+  curIndex,
 }: any) {
   if (!Array.isArray(milestones)) {
     return null;
@@ -373,22 +376,20 @@ export default function Timeline({
   const ref = useRef(null);
   const size = useSize(ref);
 
-  const [currentClass, setCurClass] = useState('default')
+  const [currentClass, setCurClass] = useState("default");
 
   const showQuestModral = () => {
-    setCurClass('launch')
-    
+    setCurClass("launch");
   };
 
-  const handleAnimationEnd = e=>{
-    if(e.animationName === 'launch') {
-      setCurClass('default')
+  const handleAnimationEnd = (e) => {
+    if (e.animationName === "launch") {
+      setCurClass("default");
       window.open("https://forms.gle/mYfPqwPyFbuhaZxXA", "_blank");
       // questModalRun({ questKey: i?.questKey });
       // questModalSetTrue()
     }
-  }
-
+  };
 
   return (
     <Row>
@@ -410,7 +411,11 @@ export default function Timeline({
             }}
             className={`extra-line`}
           >
-            <IconRocket onAnimationEnd={handleAnimationEnd} className={currentClass} onClick={showQuestModral} />
+            <IconRocket
+              onAnimationEnd={handleAnimationEnd}
+              className={currentClass}
+              onClick={showQuestModral}
+            />
           </div>
         ) : null}
 
@@ -440,11 +445,13 @@ export default function Timeline({
                   className={`status${
                     (m.max > m.stepsCompleted && m.min <= m.stepsCompleted) ||
                     m.stepsCompleted === m.steps
-                      ? " status--checked"
+                      ? // activeIndex === i
+                        " status--checked"
                       : ""
                   }`}
                 />
-                {m.max > m.stepsCompleted && m.min <= m.stepsCompleted && (
+                {// (curIndex ?  : m.max > m.stepsCompleted && m.min <= m.stepsCompleted)
+                curIndex === i && (
                   <div className="pulse">
                     <div className="circle middle" />
                     <div className="circle delay1" />
@@ -453,7 +460,7 @@ export default function Timeline({
                   </div>
                 )}
                 <Hover m={m} />
-                <span className="milestone-label">{m.value}</span>
+                <span className="milestone-label">{format(m.value)}</span>
               </div>
             </li>
           ))}

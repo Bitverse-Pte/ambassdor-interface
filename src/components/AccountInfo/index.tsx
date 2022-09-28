@@ -1,4 +1,4 @@
-import { abbreviateNumber } from "@/utils";
+import { abbreviateNumber, format } from "@/utils";
 import { useWeb3React } from "@web3-react/core";
 import styled, { keyframes } from "styled-components";
 import Button from "../Button";
@@ -18,6 +18,7 @@ import useNextLevel from "@/hooks/useNextLevel";
 import useLevelList from "@/hooks/useLevelList";
 import { ROLE } from "@/interface";
 import { useMemo } from "react";
+import BigNumebr from 'bignumber.js'
 
 const move = keyframes`
 from,to{
@@ -236,7 +237,7 @@ const UserPoints = ({
     <Points>
       <div className="row-between">
         <div className="title">{title}</div>
-        <div className="amount">{abbreviateNumber(amount)}</div>
+        <div className="amount">{format(amount)}</div>
       </div>
       <Button
         className="action-btn"

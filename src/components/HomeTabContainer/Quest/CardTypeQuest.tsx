@@ -7,6 +7,7 @@ import { useModel } from "umi";
 import ReactPaginate from "react-paginate";
 import Tippy from "@tippyjs/react";
 import { ROLE } from "@/interface";
+import { format } from "@/utils";
 
 const removeHtmlStyle = (html: string) =>
   html.replaceAll(/style="[^\"]*?"/g, "");
@@ -245,7 +246,7 @@ const CardTypeQuest = ({ type, show, label, color }: any) => {
                     <div className="left">Quest Rewards</div>
                     <div className="vertical-divider" />
                     <div className="col">
-                      <div>{i?.rewards || 0} Points</div>
+                      <div>{format(i?.rewards || 0)} Points</div>
                       <div>cl1 NFT</div>
                     </div>
                   </div>

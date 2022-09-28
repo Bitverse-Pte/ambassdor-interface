@@ -281,6 +281,8 @@ export default ({ show, displayRole }: any) => {
     setIndex(index);
   };
 
+  const [curIndex, setCurIndex] = useState(0)
+
   return (
     <Container>
       {!loading ? (
@@ -302,6 +304,9 @@ export default ({ show, displayRole }: any) => {
             }}
             modules={[Navigation]}
             className="mySwiper"
+            onSlideChange={(e)=>{
+              setCurIndex(e.activeIndex)
+            }}
             // onActiveIndexChange={(e) => {
             //   setIndex(+e.activeIndex + 1);
             // }}
@@ -667,6 +672,7 @@ export default ({ show, displayRole }: any) => {
               milestones={steps}
               curStepsCompleted={!ifIsCurrentRole ? 0 : user?.point || 0}
               max={steps?.lastIndex ? steps[steps?.lastIndex]?.min : 0}
+              curIndex={curIndex}
             />
           ) : null}
         </>

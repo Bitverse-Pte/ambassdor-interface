@@ -17,6 +17,7 @@ import psychedelic from "@/assets/dragons/psychedelic.png";
 import { useModel } from "umi";
 import CardTypeQuest from "../HomeTabContainer/Quest/CardTypeQuest";
 import Tippy from "@tippyjs/react";
+import { format } from "@/utils";
 
 const removeHtmlStyle = (html: string) =>
   html.replaceAll(/style="[^\"]*?"/g, "");
@@ -519,7 +520,7 @@ const AllQuest = () => {
                         <div className="left">Quest Rewards</div>
                         <div className="vertical-divider" />
                         <div className="col">
-                          <div>{i?.rewards || 0} Points</div>
+                          <div>{format(i?.rewards || 0)} Points</div>
                           <div>cl1 NFT</div>
                         </div>
                       </div>
@@ -573,7 +574,7 @@ const AllQuest = () => {
                       {i?.status ? (
                         <div className="card">
                           <div>quest Rewards</div>
-                          <div>{i?.rewrds || 0} points</div>
+                          <div>{format(i?.rewrds || 0)} points</div>
                         </div>
                       ) : loading ? (
                         <div className="card">
