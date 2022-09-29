@@ -148,6 +148,7 @@ const Container = styled.div`
     overflow: hidden;
     margin: 134px auto 0;
     .card {
+      min-height: 96px;
       width: calc(100% - 16px);
       box-sizing: border-box;
       margin: 0 auto;
@@ -371,8 +372,8 @@ const Home = () => {
                 >
                   {i?.status ? (
                     <div className="card">
-                      <div>quest Rewards</div>
-                      <div>{format(i?.rewrds || 0)} points</div>
+                      <div>Quest Rewards</div>
+                      <div>{i?.rewrds}</div>
                     </div>
                   ) : loading ? (
                     <div className="card">

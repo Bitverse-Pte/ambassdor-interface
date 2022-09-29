@@ -116,7 +116,7 @@ const Card = styled.div<{ backgroundColor?: string; active?: boolean }>`
     justify-content: center;
     width: 100%;
     flex: 1;
-    padding: 0 30px;
+    padding: 0 16px;
     box-sizing: border-box;
     .left {
       font-weight: 500;
@@ -246,8 +246,8 @@ const CardTypeQuest = ({ type, show, label, color }: any) => {
                     <div className="left">Quest Rewards</div>
                     <div className="vertical-divider" />
                     <div className="col">
-                      <div>{format(i?.rewards || 0)} Points</div>
-                      <div>cl1 NFT</div>
+                      <div>{i?.rewards}</div>
+                      {/* <div>cl1 NFT</div> */}
                     </div>
                   </div>
                   <div className="divider">

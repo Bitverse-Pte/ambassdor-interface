@@ -1,4 +1,4 @@
-import { getAllPublicQuestList, getPublicQuestList } from "@/server";
+import { getAllPublicQuestList } from "@/server";
 import { useRequest } from "ahooks";
 import { useEffect, useMemo, useState } from "react";
 import ReactPaginate from "react-paginate";
@@ -141,7 +141,7 @@ const Card = styled.div<{ backgroundColor?: string; active?: boolean }>`
     justify-content: center;
     width: 100%;
     flex: 1;
-    padding: 0 30px;
+    padding: 0 16px;
     box-sizing: border-box;
     .left {
       font-weight: 500;
@@ -368,6 +368,7 @@ const Container = styled.div`
       justify-content: center;
       align-items: center;
       width: calc(100% - 16px);
+      min-height: 96px;
       margin: auto auto 0;
       max-height: 96px;
       .card {
@@ -520,8 +521,8 @@ const AllQuest = () => {
                         <div className="left">Quest Rewards</div>
                         <div className="vertical-divider" />
                         <div className="col">
-                          <div>{format(i?.rewards || 0)} Points</div>
-                          <div>cl1 NFT</div>
+                          <div>{i?.rewards}</div>
+                          {/* <div>cl1 NFT</div> */}
                         </div>
                       </div>
                       <div className="divider">
@@ -573,8 +574,8 @@ const AllQuest = () => {
                     >
                       {i?.status ? (
                         <div className="card">
-                          <div>quest Rewards</div>
-                          <div>{format(i?.rewrds || 0)} points</div>
+                          <div>Quest Rewards</div>
+                          <div>{i?.rewards}</div>
                         </div>
                       ) : loading ? (
                         <div className="card">
