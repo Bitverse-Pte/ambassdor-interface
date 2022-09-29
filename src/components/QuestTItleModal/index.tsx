@@ -50,7 +50,7 @@ const StyledModal = styled(Modal)`
 
   .img-container {
       overflow: hidden;
-      width: 366px;
+      /* width: 366px; */
       height: 206px;
       border-radius: 16px;
       img {
@@ -58,7 +58,7 @@ const StyledModal = styled(Modal)`
         height: 100%;
         object-fit: cover;
         background: url(${defaultImg}) no-repeat;
-        background-size: contain;
+        background-size: cover;
       }
     }
 
