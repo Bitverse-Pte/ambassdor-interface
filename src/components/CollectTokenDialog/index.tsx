@@ -11,6 +11,13 @@ import warning from "@/assets/dialog/warning.svg";
 import { format } from "@/utils";
 import Rotate from "../Rotate";
 
+enum CLAIM_STATUS {
+  Claimable = "Claimable",
+  Processing = "Processing",
+  Approve = "Approved",
+  Freez = "Freeze",
+}
+
 const Icon = (props: any) => (
   <svg
     width="32"
@@ -51,10 +58,10 @@ const SucModal = styled(Modal)`
     .header {
       margin-bottom: 50px;
     }
-    .suc-img{
+    .suc-img {
       width: 484px;
     }
-    .content{
+    .content {
       font-weight: 400;
       font-size: 16px;
       line-height: 150%;
@@ -62,21 +69,21 @@ const SucModal = styled(Modal)`
       margin-bottom: 36px;
       text-align: center;
     }
-    button.md{
+    button.md {
       border-radius: 12px;
       font-weight: 600;
       font-size: 20px;
       line-height: 30px;
       text-align: center;
       text-transform: capitalize;
-      color: #05050E;
+      color: #05050e;
     }
-    .claimed-amount{
+    .claimed-amount {
       font-weight: 600;
       font-size: 26px;
       /* line-height: 150%; */
-      .active{
-        color: #00EBC8;
+      .active {
+        color: #00ebc8;
         font-weight: 600;
         font-size: 40px;
         /* line-height: 150%; */
@@ -92,8 +99,7 @@ const SucModal = styled(Modal)`
     display: flex;
     flex-direction: column;
   }
-
-`
+`;
 
 const StyledModal = styled(Modal)`
   svg {
@@ -139,7 +145,7 @@ const StyledModal = styled(Modal)`
       z-index: -1;
     }
     .token-detail-table {
-      margin: 40px 0;
+      margin: 40px 0 20px;
     }
 
     .divider {
@@ -216,6 +222,15 @@ const StyledModal = styled(Modal)`
 
       .days {
         margin-right: 20px;
+      }
+      .loader {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        & svg {
+          width: 32px;
+          height: 32px;
+        }
       }
     }
   }
@@ -305,12 +320,13 @@ const CollectTokenDialog = (props: any) => {
     manual: true,
   });
 
-  const { run: getUserTokenRun, data: getUserTokenData } = useRequest(
-    getUserToken,
-    {
-      manual: true,
-    }
-  );
+  const {
+    loading: getUserTokenLoading,
+    run: getUserTokenRun,
+    data: getUserTokenData,
+  } = useRequest(getUserToken, {
+    manual: true,
+  });
 
   useEffect(() => {
     if (user) {
@@ -340,7 +356,7 @@ const CollectTokenDialog = (props: any) => {
     return getUserTokenData?.data?.result?.records;
   }, [getUserTokenData]);
 
-  const [currentTitle, setCurrentTtile] = useState("token details");
+  const [currentTitle, setCurrentTtile] = useState("Token Details");
   const [
     claimSuccessModalStatus,
     { setTrue: showClaimSuccessModal, setFalse: hideClaimSuccessModal },
@@ -424,10 +440,12 @@ const CollectTokenDialog = (props: any) => {
       return null;
     return tableOpen
       ? {
+          ...configCombindProfile[activeIndex],
           level: configCombindProfile[activeIndex]?.name,
           token: configCombindProfile[activeIndex]?.token,
         }
       : {
+          ...configCombindProfile[activeIndex],
           level: currentLevelConfig?.name,
           token: currentLevelConfig?.token,
         };
@@ -459,7 +477,6 @@ const CollectTokenDialog = (props: any) => {
                 <div className="hint">To Collect</div>
               </div>
             </div>
-
             {configCombindProfile?.length ? (
               <div className="token-detail-table">
                 <div
@@ -476,12 +493,16 @@ const CollectTokenDialog = (props: any) => {
                     {currentLevelConfig?.name} -{" "}
                     {format(currentLevelConfig?.token)} TELE
                   </div>
-                  <div className="row">
-                    <div className="days">
-                      {currentLevelConfig?.status_dictText}
+                  {!getUserTokenLoading ? (
+                    <div className="row">
+                      <div className="days">
+                        {currentLevelConfig?.status_dictText}
+                      </div>
+                      <Icon />
                     </div>
-                    <Icon />
-                  </div>
+                  ) : (
+                    <Loading />
+                  )}
                 </div>
 
                 <Collapse isOpened={tableOpen}>
@@ -495,7 +516,7 @@ const CollectTokenDialog = (props: any) => {
                     >
                       <div>{i?.name}</div>
                       <div style={{ textAlign: "center" }}>
-                        {format(i?.token)}TELE
+                        {i?.token ? <>{format(i?.token)}TELE</> : "/"}
                       </div>
                       <div style={{ textAlign: "center" }}>
                         {i?.levelStatus || "/"}
@@ -523,11 +544,10 @@ const CollectTokenDialog = (props: any) => {
                 </Collapse>
               </div>
             ) : null}
-
             <div
               className="tge"
               style={{
-                margin: "-20px 0 40px",
+                margin: "20px 0 40px",
                 display: "flex",
                 alignItems: "center",
                 gap: "8px",
@@ -543,11 +563,15 @@ const CollectTokenDialog = (props: any) => {
                 $TELE token rewards will be able to release after Teleport’s TGE
               </span>
             </div>
-
             <div className="claim-container row">
               <Button
                 loading={loading}
-                disabled={!currentChosenLevel || !currentChosenLevel?.token}
+                disabled={
+                  !getUserTokenData ||
+                  !currentChosenLevel ||
+                  !currentChosenLevel?.token ||
+                  currentChosenLevel?.status !== CLAIM_STATUS.Claimable
+                }
                 radius={"12px"}
                 onClick={() =>
                   currentChosenLevel && run({ name: currentChosenLevel?.level })
@@ -556,12 +580,15 @@ const CollectTokenDialog = (props: any) => {
                 CLAIM NOW
               </Button>
               <div>
-                claimable now：
+                Claimable Now：
                 <span
                   style={{ display: "inline-block", width: "130px" }}
                   className="active"
                 >
-                  {format(currentChosenLevel?.token)} TELE
+                  {currentChosenLevel?.status !== CLAIM_STATUS.Claimable
+                    ? 0
+                    : format(currentChosenLevel?.token)}
+                  TELE
                 </span>
               </div>
             </div>
@@ -572,12 +599,23 @@ const CollectTokenDialog = (props: any) => {
         </div>
       </StyledModal>
 
-      <SucModal visible={claimSuccessModalStatus} onClose={hideClaimSuccessModal} title="Thank You">
+      <SucModal
+        visible={claimSuccessModalStatus}
+        onClose={hideClaimSuccessModal}
+        title="Thank You"
+      >
         <div className="container">
-          <img className="suc-img" src={require("@/assets/claim-token-suc.png")} alt="" />
+          <img
+            className="suc-img"
+            src={require("@/assets/claim-token-suc.png")}
+            alt=""
+          />
           <div className="col content">
             <div className="claimed-amount">
-              <span className="active">{format(data?.data?.result?.amount)}</span> TELE
+              <span className="active">
+                {format(data?.data?.result?.amount)}
+              </span>{" "}
+              TELE
             </div>
             We will process your request！
           </div>
