@@ -137,4 +137,4 @@ Your journey to becoming a seasoned Teleporter begins now...`;
   }
 };
 
-export const format = (_: any) => BigNumber(_).toFormat();
+export const format = (_: any) => BigNumber(_ || 0).toFormat();

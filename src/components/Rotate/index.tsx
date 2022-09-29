@@ -1,6 +1,13 @@
-const Rotate = ({children}: any)=>{
+import styled from "styled-components"
+
+const Container = styled.div`
+transform: rotate(180deg);
+
+`
+
+const Rotate = ({children, ...props}: any)=>{
     return (
-        <div>{children}</div>
+        <Container {...props}>{children}</Container>
     )
 }
 

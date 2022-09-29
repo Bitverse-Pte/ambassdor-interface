@@ -327,7 +327,6 @@ export default ({ show }: any) => {
     setChartIdx(e);
   };
 
-  console.log('nfts', nfts)
   return (
     <Container>
       <div className="view-port-chart">

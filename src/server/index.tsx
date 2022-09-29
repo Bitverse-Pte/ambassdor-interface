@@ -191,3 +191,7 @@ export const getUserToken = async (props?: any)=>privateAxios.get('/jeecg-boot/a
     ...props
   }
 })
+
+// {{host}}/jeecg-boot/am/profile/claim-token?name=CLV1
+// claim token post接口特殊处理
+export const claimToken = async ({name}: any)=>privateAxios.post(`/jeecg-boot/am/profile/claim-token?name=${name}`)

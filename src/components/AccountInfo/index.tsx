@@ -282,8 +282,6 @@ export default () => {
     { setTrue: showCollectTokensDialog, setFalse: closeCollectTokensDialog },
   ] = useBoolean(false);
 
-  console.log("user", user);
-
   return (
     <Container>
       {account && auth ? (
