@@ -286,7 +286,6 @@ const QuestTitleModal = () => {
                 <img src={quest?.image} alt="" />
               </div>
               <div className="column">
-                <span className="link-desc">Please enter the link below</span>
                 <div className="period column link">
                   <div className="link-hint">Please enter the link below</div>
                   <div>Quest url link:</div>
