@@ -198,7 +198,7 @@ const StyledModal = styled(Modal)`
     }
     .curent-level {
       transition: all linear 0.2s;
-      padding: 7px 14px 7px 4px;
+      padding: 7px 14px 7px 14px;
       background: linear-gradient(
           0deg,
           rgba(30, 45, 59, 0.96),
