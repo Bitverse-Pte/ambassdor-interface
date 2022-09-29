@@ -582,7 +582,7 @@ const CollectTokenDialog = (props: any) => {
               <div>
                 Claimable Now：
                 <span
-                  style={{ display: "inline-block", width: "130px" }}
+                  style={{ display: "inline-block", minWidth: "130px" }}
                   className="active"
                 >
                   {currentChosenLevel?.status !== CLAIM_STATUS.Claimable
