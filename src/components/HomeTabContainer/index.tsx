@@ -256,7 +256,7 @@ export default () => {
           <div className={`nav-detail-ctr nav-detail-ctr-left`}>
             {currentSubNav === 0 && (
               <CardTypeQuest
-                type="monthly"
+                type="Monthly"
                 color="linear-gradient(90deg, #10CEC3 3.8%, #006B69 95.11%);"
                 label={questSubLevel[currentSubNav]}
                 show={chartIdx === NAVLIST.Quest}
@@ -264,7 +264,7 @@ export default () => {
             )}
             {currentSubNav === 1 && (
               <CardTypeQuest
-                type="storyline"
+                type="Storyline"
                 color="linear-gradient(90deg, #AA58B7 -6.84%, #580897 103.42%);"
                 label={questSubLevel[currentSubNav]}
                 show={chartIdx === NAVLIST.Quest}

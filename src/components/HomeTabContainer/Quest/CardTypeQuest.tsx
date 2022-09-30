@@ -66,19 +66,27 @@ const Container = styled.div`
     }
   }
   .none {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
     font-weight: 500;
     font-size: 24px;
     line-height: 36px;
     text-align: center;
     text-transform: capitalize;
-    margin-top: 265px;
+    margin-top: 185px;
     color: #767676;
+    img {
+      margin-bottom: 32px;
+    }
   }
 `;
 
 const Card = styled.div<{ backgroundColor?: string; active?: boolean }>`
   /* filter: grayscale(${({ active }) => (active ? 0 : 1)}); */
-  background: ${({ backgroundColor, active }) => active ? backgroundColor : '#71757A'};
+  background: ${({ backgroundColor, active }) =>
+    active ? backgroundColor : "#71757A"};
   aspect-ratio: 425/224;
   border-radius: 12px;
   overflow: hidden;
@@ -140,7 +148,8 @@ const Card = styled.div<{ backgroundColor?: string; active?: boolean }>`
     .line {
       width: 44%;
       height: 2px;
-      background: ${({ backgroundColor, active }) => active ? backgroundColor : '#71757A'};
+      background: ${({ backgroundColor, active }) =>
+        active ? backgroundColor : "#71757A"};
     }
   }
   .bottom {
@@ -228,6 +237,7 @@ const CardTypeQuest = ({ type, show, label, color }: any) => {
     questModalRun({ questKey, page: 1 });
     questModalSetTrue();
   };
+  // const length = 0;
 
   return (
     <Container>
@@ -254,7 +264,7 @@ const CardTypeQuest = ({ type, show, label, color }: any) => {
                     <div className="line" />
                   </div>
                   <div className="bottom row-between">
-                    <div className="col title" style={{flex: 1}}>
+                    <div className="col title" style={{ flex: 1 }}>
                       <Tippy content={i?.title}>
                         <div className="title">{i?.title}</div>
                       </Tippy>
@@ -286,8 +296,15 @@ const CardTypeQuest = ({ type, show, label, color }: any) => {
           </div>
         ) : (
           <div className="none">
-            This part of the task will be released at a specific time, stay
-            tuned and look forward to it!
+            <img
+              style={{ width: "180px" }}
+              src={require("@/assets/nodata.png")}
+              alt=""
+            />
+            <span>
+              This part of the task will be released at a specific time,
+              <br /> stay tuned and look forward to it!
+            </span>
           </div>
         )
       ) : (
@@ -295,7 +312,7 @@ const CardTypeQuest = ({ type, show, label, color }: any) => {
           <Loading />
         </div>
       )}
-      {totalPage ? (
+      {totalPage && quests.length ? (
         <ReactPaginate
           className="pagination"
           breakLabel="..."
