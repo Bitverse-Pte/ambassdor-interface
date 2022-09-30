@@ -190,7 +190,9 @@ const HoverContainer = ({ id, children }: any) => {
 const Header = () => {
   return (
     <Container>
+      <a href="/">
       <Logo />
+      </a>
       <div className="nav">
         {navList.map((i) => (
           <HoverContainer key={i.key} id={i?.key}>
