@@ -101,6 +101,13 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all linear .2s;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    &:hover{
+      color: #0acbe4;
+    }
     a {
       text-decoration: none;
       color: #ffffff;
