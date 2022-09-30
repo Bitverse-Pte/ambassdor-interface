@@ -97,6 +97,7 @@ const Container = styled.div`
     grid-template-columns: repeat(${navList.length + 1}, auto);
   }
   .link-container {
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
