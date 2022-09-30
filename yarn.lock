@@ -7154,6 +7154,11 @@ react-router@6.3.0:
   dependencies:
     history "^5.2.0"
 
+react-select-search@^4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/react-select-search/-/react-select-search-4.1.2.tgz#83ce54646f450c8256ea8414e7419d0f6e4b8151"
+  integrity sha512-r8mvyZzGFb1ps9Rte6F+iNewNgCamjUkpgcjEdTdbRR6gy8RcHCmB9O7Iocnk39ND/ag7UUO9WMHKpgOHg/rrg==
+
 react-sortable-hoc@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/react-sortable-hoc/-/react-sortable-hoc-2.0.0.tgz"

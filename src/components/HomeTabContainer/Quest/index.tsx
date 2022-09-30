@@ -537,7 +537,7 @@ export default ({ show }: any) => {
   } = useModel("questModal");
 
   const handleClick = (questKey: string) => {
-    questModalRun({ questKey, page: 0 });
+    questModalRun({ questKey, page: 1 });
     questModalSetTrue();
   };
 

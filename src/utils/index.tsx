@@ -138,3 +138,10 @@ Your journey to becoming a seasoned Teleporter begins now...`;
 };
 
 export const format = (_: any) => BigNumber(_ || 0).toFormat();
+
+export const uuidv4 = () => {
+  const UINT36 = '10000000-1000-4000-8000-100000000000';
+  // eslint-disable-next-line no-bitwise
+  const random = (x: string) => ((Number(x) ^ crypto.getRandomValues(new Uint8Array(1))[0]) & 15) >> (Number(x) / 4);
+  return UINT36.replace(/[018]/g, (x) => random(x)!.toString(16));
+};

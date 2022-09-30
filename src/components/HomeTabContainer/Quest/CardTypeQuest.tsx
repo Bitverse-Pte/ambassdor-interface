@@ -225,7 +225,7 @@ const CardTypeQuest = ({ type, show, label, color }: any) => {
   };
 
   const handleClick = (questKey: string) => {
-    questModalRun({ questKey, page: 0 });
+    questModalRun({ questKey, page: 1 });
     questModalSetTrue();
   };
 

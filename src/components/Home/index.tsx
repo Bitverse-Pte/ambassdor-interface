@@ -296,7 +296,7 @@ const Home = () => {
     },
     index: number
   ) => {
-    questModalRun({ questKey: i?.questKey, page: 0 });
+    questModalRun({ questKey: i?.questKey, page: 1 });
     questModalSetTrue();
   };
 
