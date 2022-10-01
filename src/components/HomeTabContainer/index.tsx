@@ -286,7 +286,7 @@ export default () => {
           <img
             style={{ paddingRight: "20px" }}
             onClick={tvFullScreenTrue}
-            src={require("@/assets/level.png")}
+            src={require("@/assets/level-progressive.jpeg")}
             alt=""
           />
         </div>
@@ -295,7 +295,7 @@ export default () => {
       {tvFullScreenStatus && (
         <Portal>
           <FullScreen onClick={tvFullScreenFalse}>
-            <img src={require("@/assets/level.png")} alt="" />
+            <img src={require("@/assets/level-progressive.jpeg")} alt="" />
           </FullScreen>
         </Portal>
       )}
