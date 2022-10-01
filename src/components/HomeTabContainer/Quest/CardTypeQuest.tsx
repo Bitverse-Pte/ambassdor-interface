@@ -221,6 +221,8 @@ const CardTypeQuest = ({ type, show, label, color }: any) => {
         pageSize: 9,
         assignTo: isAmbassador ? ROLE.ambassador : ROLE.contributor,
         type,
+        column: "active",
+        order: "desc",
       });
     }
   }, [isAmbassador, isContributor, type]);
@@ -230,7 +232,14 @@ const CardTypeQuest = ({ type, show, label, color }: any) => {
   const totalPage = useMemo(() => data?.data?.result?.pages, [data]);
 
   const handlePageClick = (event: any) => {
-    run({ page: event?.selected });
+    run({
+      page: event?.selected,
+      pageSize: 9,
+      assignTo: isAmbassador ? ROLE.ambassador : ROLE.contributor,
+      type,
+      column: "active",
+      order: "desc",
+    });
   };
 
   const handleClick = (questKey: string) => {
