@@ -256,7 +256,7 @@ const Container = styled.div`
     max-height: 60px;
     overflow: hidden;
     transition: all linear 0.2s;
-    &.active{
+    &.active {
       max-height: 152px;
     }
     .detail-btn {
@@ -275,22 +275,22 @@ const Container = styled.div`
         transform: rotate(180deg);
       }
     }
-    .col{
+    .col {
       opacity: 0;
-      transition: all linear .2s;
-      &.active{
+      transition: all linear 0.2s;
+      &.active {
         opacity: 1;
       }
       font-weight: 400;
       font-size: 16px;
       line-height: 24px;
-     .row{
-      margin-bottom: 4px;
-      a{
-        color: #fff;
-        /* text-decoration: none; */
+      .row {
+        margin-bottom: 4px;
+        a {
+          color: #fff;
+          /* text-decoration: none; */
+        }
       }
-     }
     }
   }
 `;
@@ -481,22 +481,25 @@ export default ({ show }: any) => {
                       <IconExpandArrow onClick={toggleShowDetail} />
                     </div>
                     <div className={`col ${showDetail ? "active" : ""}`}>
-                      <div className="row">
-                        <span>Token ID:</span>
-                        <a
-                          href={`https://polygonscan.com/tx/${userNFT[active]?.txHash}`}
-                          target="_blank"
-                        >
-                          <span>
-                            {fuzzAddress(userNFT[active]?.address)}{" "}
-                            <IconTopRightArrow />{" "}
-                          </span>
-                        </a>
-                      </div>
+                      {userNFT[active]?.tokenId ? (
+                        <div className="row">
+                          <span>Token ID:</span>
+                          <a href={userNFT[active]?.url} target="_blank">
+                            <span>
+                              {userNFT[active]?.tokenId} <IconTopRightArrow />{" "}
+                            </span>
+                          </a>
+                        </div>
+                      ) : null}
+
                       <div className="row">
                         <span>Contract Address:</span>
                         <a
-                          href={`https://polygonscan.com/address/${userNFT[active]?.address}`}
+                          href={
+                            userNFT[active]?.url?.split("/tx")[0] +
+                            "/address/" +
+                            userNFT[active]?.address
+                          }
                           target="_blank"
                         >
                           <span>
@@ -594,22 +597,25 @@ export default ({ show }: any) => {
                       <IconExpandArrow onClick={toggleShowDetail} />
                     </div>
                     <div className={`col ${showDetail ? "active" : ""}`}>
-                      <div className="row">
-                        <span>Token ID:</span>
-                        <a
-                          href={`https://polygonscan.com/tx/${userNFT[active]?.txHash}`}
-                          target="_blank"
-                        >
-                          <span>
-                            {fuzzAddress(userNFT[active]?.address)}{" "}
-                            <IconTopRightArrow />{" "}
-                          </span>
-                        </a>
-                      </div>
+                      {userNFT[active]?.tokenId ? (
+                        <div className="row">
+                          <span>Token ID:</span>
+                          <a href={userNFT[active]?.url} target="_blank">
+                            <span>
+                              {userNFT[active]?.tokenId} <IconTopRightArrow />{" "}
+                            </span>
+                          </a>
+                        </div>
+                      ) : null}
+
                       <div className="row">
                         <span>Contract Address:</span>
                         <a
-                          href={`https://polygonscan.com/address/${userNFT[active]?.address}`}
+                          href={
+                            userNFT[active]?.url?.split("/tx")[0] +
+                            "/address/" +
+                            userNFT[active]?.address
+                          }
                           target="_blank"
                         >
                           <span>
