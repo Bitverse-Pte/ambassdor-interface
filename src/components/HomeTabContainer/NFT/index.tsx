@@ -1,20 +1,16 @@
-import {
-  useRequest,
-  useSessionStorageState,
-} from "ahooks";
+import { useBoolean, useRequest, useSessionStorageState } from "ahooks";
 import styled, { css } from "styled-components";
-import {
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useEffect, useMemo, useState } from "react";
 import NavBar from "@/components/Navbar";
 import Lock from "@/components/Icons/Lock";
 import labelLeft from "@/assets/label-left.svg";
 import labelRight from "@/assets/label-right.svg";
 import { useModel } from "umi";
 import { getUserNFT } from "@/server";
-
+import { IconDropdown } from "react-day-picker";
+import IconTopRightArrow from "@/components/Icons/IconTopRightArrow";
+import IconExpandArrow from "@/components/Icons/IconExpandArrow";
+import { fuzzAddress } from "@/utils";
 
 const NFTDetail = styled.div<{ disabled?: boolean }>`
   background: linear-gradient(
@@ -243,6 +239,60 @@ const Container = styled.div`
     gap: 25px;
     grid-template-columns: repeat(3, minmax(182px, max-content));
   }
+
+  .nft-detail {
+    padding: 16px 24px;
+    width: 388px;
+    margin: auto;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.075) 0%,
+      rgba(255, 255, 255, 0.0225) 100%
+    );
+    box-sizing: border-box;
+    border-radius: 0px 0px 12px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-top: none;
+    max-height: 60px;
+    overflow: hidden;
+    transition: all linear 0.2s;
+    &.active{
+      max-height: 152px;
+    }
+    .detail-btn {
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      margin-bottom: 8px;
+      span {
+        color: rgba(255, 255, 255, 0.5);
+      }
+      svg {
+        cursor: pointer;
+        transition: all linear 0.2s;
+      }
+      &.active svg {
+        transform: rotate(180deg);
+      }
+    }
+    .col{
+      opacity: 0;
+      transition: all linear .2s;
+      &.active{
+        opacity: 1;
+      }
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+     .row{
+      margin-bottom: 4px;
+      a{
+        color: #fff;
+        /* text-decoration: none; */
+      }
+     }
+    }
+  }
 `;
 
 export enum NFT_NAV_LIST {
@@ -286,6 +336,7 @@ export default ({ show }: any) => {
   const [animated, setFalse] = useSessionStorageState("animated", {
     defaultValue: 0,
   });
+  const [showDetail, { toggle: toggleShowDetail }] = useBoolean(false);
 
   const nfts = useMemo(() => {
     if (chartIdx === NFT_NAV_LIST.Contributor) {
@@ -419,6 +470,48 @@ export default ({ show }: any) => {
                 {/* <Button disabled={!activeNft.unlocked} className="claim-button">
                   Claim
                 </Button> */}
+                {userNFT &&
+                userNFT[active] &&
+                userNFT[active]?.nftType.startsWith("CLV") ? (
+                  <div className={`nft-detail ${showDetail ? "active" : ""}`}>
+                    <div
+                      className={`row detail-btn ${showDetail ? "active" : ""}`}
+                    >
+                      <span>Detail</span>
+                      <IconExpandArrow onClick={toggleShowDetail} />
+                    </div>
+                    <div className={`col ${showDetail ? "active" : ""}`}>
+                      <div className="row">
+                        <span>Token ID:</span>
+                        <a
+                          href={`https://polygonscan.com/tx/${userNFT[active]?.txHash}`}
+                          target="_blank"
+                        >
+                          <span>
+                            {fuzzAddress(userNFT[active]?.address)}{" "}
+                            <IconTopRightArrow />{" "}
+                          </span>
+                        </a>
+                      </div>
+                      <div className="row">
+                        <span>Contract Address:</span>
+                        <a
+                          href={`https://polygonscan.com/address/${userNFT[active]?.address}`}
+                          target="_blank"
+                        >
+                          <span>
+                            {fuzzAddress(userNFT[active]?.address)}{" "}
+                            <IconTopRightArrow />{" "}
+                          </span>
+                        </a>
+                      </div>
+                      <div className="row">
+                        <span>Token Standard:</span>
+                        <span>ERC-721</span>
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
               </div>
             ) : null}
           </div>
@@ -490,6 +583,48 @@ export default ({ show }: any) => {
                 {/* <Button disabled={!activeNft.unlocked} className="claim-button">
                   Claim
                 </Button> */}
+                {userNFT &&
+                userNFT[active] &&
+                userNFT[active]?.nftType.startsWith("ALV") ? (
+                  <div className={`nft-detail ${showDetail ? "active" : ""}`}>
+                    <div
+                      className={`row detail-btn ${showDetail ? "active" : ""}`}
+                    >
+                      <span>Detail</span>
+                      <IconExpandArrow onClick={toggleShowDetail} />
+                    </div>
+                    <div className={`col ${showDetail ? "active" : ""}`}>
+                      <div className="row">
+                        <span>Token ID:</span>
+                        <a
+                          href={`https://polygonscan.com/tx/${userNFT[active]?.txHash}`}
+                          target="_blank"
+                        >
+                          <span>
+                            {fuzzAddress(userNFT[active]?.address)}{" "}
+                            <IconTopRightArrow />{" "}
+                          </span>
+                        </a>
+                      </div>
+                      <div className="row">
+                        <span>Contract Address:</span>
+                        <a
+                          href={`https://polygonscan.com/address/${userNFT[active]?.address}`}
+                          target="_blank"
+                        >
+                          <span>
+                            {fuzzAddress(userNFT[active]?.address)}{" "}
+                            <IconTopRightArrow />{" "}
+                          </span>
+                        </a>
+                      </div>
+                      <div className="row">
+                        <span>Token Standard:</span>
+                        <span>ERC-721</span>
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
               </div>
             ) : null}
           </div>

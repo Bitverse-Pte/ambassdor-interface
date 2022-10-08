@@ -367,7 +367,7 @@ const ExpandContainer = ({ row, children }: any) => {
     }
   }, [status]);
 
-  const actionData = useMemo(() => data?.data?.result, [data]);
+  const actionData = useMemo(() => data?.data?.result?.records, [data]);
 
   const columns = [
     {
