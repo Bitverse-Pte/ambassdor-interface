@@ -6,11 +6,46 @@ import Lock from "@/components/Icons/Lock";
 import labelLeft from "@/assets/label-left.svg";
 import labelRight from "@/assets/label-right.svg";
 import { useModel } from "umi";
-import { getUserNFT } from "@/server";
+import { getUserNFT, getUserNftProgress } from "@/server";
 import { IconDropdown } from "react-day-picker";
 import IconTopRightArrow from "@/components/Icons/IconTopRightArrow";
 import IconExpandArrow from "@/components/Icons/IconExpandArrow";
 import { fuzzAddress } from "@/utils";
+import Progress from "@/components/Icons/Progress";
+
+const IconLock = () => (
+  <svg
+    width="60"
+    height="70"
+    viewBox="0 0 60 70"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M21 21C21 16.0294 25.0294 12 30 12C34.9706 12 39 16.0294 39 21V29H21V21Z"
+      stroke="white"
+      strokeWidth="6"
+    />
+    <mask id="path-2-inside-1_2304_23301" fill="white">
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M15 26C12.2386 26 10 28.2386 10 31V50C10 52.7614 12.2386 55 15 55H45C47.7614 55 50 52.7614 50 50V31C50 28.2386 47.7614 26 45 26H15ZM33 39C33 39.8836 32.5543 40.678 31.8451 41.227C31.9449 41.4648 32 41.726 32 42V45C32 46.1046 31.1046 47 30 47C28.8954 47 28 46.1046 28 45V42C28 41.9047 28.0067 41.811 28.0196 41.7192C26.8266 41.2412 26 40.2033 26 39C26 37.3431 27.567 36 29.5 36C31.433 36 33 37.3431 33 39Z"
+      />
+    </mask>
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M15 26C12.2386 26 10 28.2386 10 31V50C10 52.7614 12.2386 55 15 55H45C47.7614 55 50 52.7614 50 50V31C50 28.2386 47.7614 26 45 26H15ZM33 39C33 39.8836 32.5543 40.678 31.8451 41.227C31.9449 41.4648 32 41.726 32 42V45C32 46.1046 31.1046 47 30 47C28.8954 47 28 46.1046 28 45V42C28 41.9047 28.0067 41.811 28.0196 41.7192C26.8266 41.2412 26 40.2033 26 39C26 37.3431 27.567 36 29.5 36C31.433 36 33 37.3431 33 39Z"
+      fill="white"
+    />
+    <path
+      d="M31.8451 41.227L26.9479 34.9011L22.093 38.6595L24.4678 44.3213L31.8451 41.227ZM28.0196 41.7192L35.9418 42.8322L36.8139 36.6246L30.9951 34.2931L28.0196 41.7192ZM18 31C18 32.6569 16.6569 34 15 34V18C7.8203 18 2 23.8203 2 31H18ZM18 50V31H2V50H18ZM15 47C16.6569 47 18 48.3431 18 50H2C2 57.1797 7.8203 63 15 63V47ZM45 47H15V63H45V47ZM42 50C42 48.3431 43.3431 47 45 47V63C52.1797 63 58 57.1797 58 50H42ZM42 31V50H58V31H42ZM45 34C43.3431 34 42 32.6569 42 31H58C58 23.8203 52.1797 18 45 18V34ZM15 34H45V18H15V34ZM36.7424 47.5529C39.1069 45.7224 41 42.7169 41 39H25C25 37.0503 26.0018 35.6336 26.9479 34.9011L36.7424 47.5529ZM40 42C40 40.6446 39.7259 39.3329 39.2225 38.1327L24.4678 44.3213C24.1639 43.5968 24 42.8073 24 42H40ZM40 45V42H24V45H40ZM30 55C35.5228 55 40 50.5228 40 45H24C24 41.6863 26.6863 39 30 39V55ZM20 45C20 50.5228 24.4772 55 30 55V39C33.3137 39 36 41.6863 36 45H20ZM20 42V45H36V42H20ZM20.0974 40.6062C20.0328 41.0654 20 41.5311 20 42H36C36 42.2783 35.9805 42.5565 35.9418 42.8322L20.0974 40.6062ZM18 39C18 44.1338 21.4801 47.7172 25.0441 49.1453L30.9951 34.2931C32.173 34.7651 34 36.2729 34 39H18ZM29.5 28C24.3501 28 18 31.8123 18 39H34C34 40.8181 33.1206 42.1907 32.2315 42.9527C31.3592 43.7004 30.3685 44 29.5 44V28ZM41 39C41 31.8123 34.6499 28 29.5 28V44C28.6315 44 27.6408 43.7004 26.7685 42.9527C25.8794 42.1907 25 40.8181 25 39H41Z"
+      fill="white"
+      mask="url(#path-2-inside-1_2304_23301)"
+    />
+  </svg>
+);
 
 const NFTDetail = styled.div<{ disabled?: boolean }>`
   background: linear-gradient(
@@ -33,7 +68,7 @@ const NFTDetail = styled.div<{ disabled?: boolean }>`
     ${({ disabled }) =>
       disabled &&
       css`
-        filter: grayscale(1);
+        filter: grayscale(1) brightness(0.5);
       `}
     width: 301px;
     height: 327px;
@@ -43,6 +78,50 @@ const NFTDetail = styled.div<{ disabled?: boolean }>`
     img {
       width: 100%;
       height: 100%;
+    }
+    & + .lock {
+      z-index: 3;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -100%);
+      svg {
+        width: 67px;
+        height: 77px;
+      }
+    }
+    & + .processing {
+      z-index: 3;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -125%);
+      svg {
+        margin-right: -23px;
+        position: relative;
+        z-index: 3;
+      }
+
+      span {
+        margin-top: 4px;
+        width: 176px;
+        border-radius: 6px;
+        display: inline-block;
+        padding: 8px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.8);
+        font-family: "Dela Gothic One";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        text-align: center;
+        text-transform: capitalize;
+        color: #01ecca;
+        transition: all linear 0.2s;
+      }
     }
   }
   .label {
@@ -235,7 +314,7 @@ const Container = styled.div`
   .nft-container {
     display: grid;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
     gap: 25px;
     grid-template-columns: repeat(3, minmax(182px, max-content));
   }
@@ -304,10 +383,8 @@ export const navs = ["Contributor", "Ambassador"];
 
 export default ({ show }: any) => {
   const { run, data, loading } = useRequest(
-    (props?: any) => getUserNFT(props),
-    {
-      manual: true,
-    }
+    (props?: any) => Promise.all([getUserNFT(props), getUserNftProgress()]),
+    { manual: true }
   );
 
   useEffect(() => {
@@ -316,15 +393,18 @@ export default ({ show }: any) => {
     }
   }, [show]);
 
-  const userNFT = useMemo(() => (data ? data?.data?.result?.records : []), [
-    data,
-  ]);
+  const userNFT = useMemo(
+    () => (data && data[0] ? data[0]?.data?.result?.records : []),
+    [data]
+  );
 
-  // useEffect(()=>{
-  //   if(data){
-  //     setActivedNfts(data?.data?.result?.records)
-  //   }
-  // }, [data])
+  const onProgress = useMemo(
+    () =>
+      data && data[1]
+        ? data[1]?.data?.result?.records?.map((i) => i?.nftType)
+        : [],
+    [data]
+  );
 
   const {
     user: { contributorNFT, ambassadorNFT, isAmbassador, isContributor },
@@ -401,7 +481,13 @@ export default ({ show }: any) => {
                       unlocked={i?.unlocked}
                       key={i?.name}
                     >
-                      {animated ? (
+                      {onProgress?.includes(i?.level) ? (
+                        <Progress>
+                          <img
+                            src={require(`@/assets/level/nft/${i?.name}.png`)}
+                          />
+                        </Progress>
+                      ) : animated ? (
                         <Lock
                           allowAnimation={false}
                           autoPlay={false}
@@ -433,6 +519,19 @@ export default ({ show }: any) => {
                         >
                           {i?.level}
                         </span>
+                        {userNFT[index]?.tokenId && userNFT[index]?.nftType?.startsWith('CLV') ? (
+                          <>
+                            <br />
+                            <span
+                              style={{
+                                display: "inline-block",
+                                marginTop: "8px",
+                              }}
+                            >
+                              ID: #{userNFT[index]?.tokenId}
+                            </span>
+                          </>
+                        ) : null}
                       </div>
                     </NftCard>
                   ))
@@ -447,6 +546,19 @@ export default ({ show }: any) => {
                       alt=""
                     />
                   </div>
+
+                  {onProgress?.includes(activeNft?.level) ? (
+                    <div className="row processing">
+                      <IconLock />
+
+                      <span>Processing</span>
+                    </div>
+                  ) : !activeNft?.unlocked ? (
+                    <div className="lock">
+                      <IconLock />
+                    </div>
+                  ) : null}
+
                   <div className="label">
                     <div className="left">{activeNft.name}</div>
                     <div className="right" />
@@ -486,7 +598,7 @@ export default ({ show }: any) => {
                           <span>Token ID:</span>
                           <a href={userNFT[active]?.url} target="_blank">
                             <span>
-                              {userNFT[active]?.tokenId} <IconTopRightArrow />{" "}
+                              #{userNFT[active]?.tokenId} <IconTopRightArrow />{" "}
                             </span>
                           </a>
                         </div>
@@ -549,6 +661,19 @@ export default ({ show }: any) => {
                         >
                           {i?.level}
                         </span>
+                        {userNFT[index]?.tokenId && userNFT[index]?.nftType?.startsWith('ALV') ? (
+                          <>
+                            <br />
+                            <span
+                              style={{
+                                display: "inline-block",
+                                marginTop: "8px",
+                              }}
+                            >
+                              ID: #{userNFT[index]?.tokenId}
+                            </span>
+                          </>
+                        ) : null}
                       </div>
                     </NftCard>
                   ))
@@ -563,6 +688,19 @@ export default ({ show }: any) => {
                       alt=""
                     />
                   </div>
+
+                  {onProgress?.includes(activeNft?.level) ? (
+                    <div className="row processing">
+                      <IconLock />
+
+                      <span>Processing</span>
+                    </div>
+                  ) : !activeNft?.unlocked ? (
+                    <div className="lock">
+                      <IconLock />
+                    </div>
+                  ) : null}
+
                   <div className="label">
                     <div className="left">{activeNft.name}</div>
                     <div className="right" />
@@ -602,7 +740,7 @@ export default ({ show }: any) => {
                           <span>Token ID:</span>
                           <a href={userNFT[active]?.url} target="_blank">
                             <span>
-                              {userNFT[active]?.tokenId} <IconTopRightArrow />{" "}
+                              #{userNFT[active]?.tokenId} <IconTopRightArrow />{" "}
                             </span>
                           </a>
                         </div>

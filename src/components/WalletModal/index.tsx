@@ -194,7 +194,12 @@ export default () => {
       }
     } catch (error) {
       console.debug(`web3-react connection error: ${error}`);
-      toast.error(error?.message);
+      // @ts-ignore
+      if(error?.code === 4001){
+        toast('Please');
+      }else{
+        toast.error(error?.message);
+      }
       // todo 引流下载钱包链接
     }
   };
