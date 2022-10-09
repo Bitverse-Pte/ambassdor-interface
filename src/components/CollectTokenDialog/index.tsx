@@ -490,8 +490,10 @@ const CollectTokenDialog = (props: any) => {
                   onClick={toggle}
                 >
                   <div className="tokens">
-                    {currentLevelConfig?.name} -{" "}
-                    {format(currentLevelConfig?.token)} TELE
+                    {currentLevelConfig?.name} -
+                    {currentLevelConfig?.token
+                      ? format(currentLevelConfig?.token) + " TELE"
+                      : " /"}
                   </div>
                   {!getUserTokenLoading ? (
                     <div className="row">

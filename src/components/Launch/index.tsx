@@ -104,6 +104,9 @@ const LaunchApp = () => {
     }
     window.localStorage.removeItem("auth");
     updateAuth("");
+    setTimeout(()=>{
+      window.location.reload()
+    }, 500)
   };
 
   useClickAway(() => {
