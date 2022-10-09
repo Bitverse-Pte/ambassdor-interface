@@ -420,7 +420,7 @@ const ExpandContainer = ({ row, children }: any) => {
       key: "rewards",
       id: "Rewards",
       formatter({ row }: any) {
-        return (row?.inputAmount || 0) + " points";
+        return (row?.inputAmount || 0) + " Points";
       },
     },
     {
@@ -428,7 +428,7 @@ const ExpandContainer = ({ row, children }: any) => {
       key: "type",
       id: "Type",
       formatter({ row }: any) {
-        return row?.active === "N" ? "EXPIRED" : row?.type || "/";
+        return ""
       },
     },
     {
