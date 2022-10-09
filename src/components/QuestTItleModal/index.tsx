@@ -204,7 +204,7 @@ const StyledModal = styled(Modal)`
 
 const QuestTitleModal = () => {
   const {
-    questModal: { data, loading, actions, questModalState, questModalSetFalse },
+    questModal: { data, loading, actions, categories, questModalState, questModalSetFalse },
   } = useModel("questModal");
 
   const quest = useMemo(
@@ -214,13 +214,11 @@ const QuestTitleModal = () => {
 
   const curActions = useMemo(() => {
     // return ["CONTENT", "COMMUNITY", "MARKETING", "DEVELOP", "DESIGN"];
-    if (actions?.records) {
-      return actions?.records
-        ?.filter((i: any) => i?.categories)
-        .map((i: any) => i?.categories?.toUpperCase());
+    if (categories && categories?.length) {
+      return categories?.map((i: any) => i?.toUpperCase());
     }
     return null;
-  }, [actions]);
+  }, [categories]);
 
   const questTitle = useMemo(() => quest?.title || "Quest Title", [quest]);
 

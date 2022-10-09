@@ -705,13 +705,15 @@ export default ({ show }: any) => {
               >
                 Cancel
               </Button>
-              <Button 
-              style={{
-                fontWeight: 600,
-                fontSize: "14px",
-                lineHeight: "24px",
-              }}
-              className="" onClick={setFalse}>
+              <Button
+                style={{
+                  fontWeight: 600,
+                  fontSize: "14px",
+                  lineHeight: "24px",
+                }}
+                className=""
+                onClick={setFalse}
+              >
                 Set Data
               </Button>
             </div>
@@ -727,6 +729,38 @@ export default ({ show }: any) => {
             <div>{toDate}</div>
             <IconCalendar />
           </div>
+
+          <Tippy content={"Search by post date"}>
+            <div
+              style={{
+                marginLeft: "8px",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g opacity="0.5">
+                  <circle cx="12" cy="12" r="9.5" stroke="white" />
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M12 6C12.9021 6 13.6001 6.77564 13.4882 7.6538L12.7556 12.9032C12.7122 13.2441 12.4167 13.5 12.0665 13.5H11.9335C11.5833 13.5 11.2878 13.2441 11.2444 12.9032L10.5118 7.6538C10.3999 6.77564 11.0979 6 12 6Z"
+                    fill="white"
+                  />
+                  <path
+                    d="M12 15C12.8284 15 13.5 15.6716 13.5 16.5C13.5 17.3284 12.8284 18 12 18C11.1716 18 10.5 17.3284 10.5 16.5C10.5 15.6716 11.1716 15 12 15Z"
+                    fill="white"
+                  />
+                </g>
+              </svg>
+            </div>
+          </Tippy>
         </div>
       </DayPickerContainer>
 

@@ -140,6 +140,14 @@ export const filterActionList = async ({ questKey }: any) =>
     },
   });
 
+  export const filterActionCategories = async ({ questKey }: any) =>
+  publicAxios.get("/jeecg-boot/ambassador/quest/action-def-categories", {
+    params: {
+      questFk: questKey
+    },
+  });
+  // /action-def-categories
+
 // get profile
 export const getProfile = async () =>
   privateAxios.get("/jeecg-boot/am/profile");
