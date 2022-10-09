@@ -4,7 +4,7 @@ import { getConnection } from "@/utils";
 import { useWeb3React } from "@web3-react/core";
 import { Connector } from "@web3-react/types";
 import { useRequest } from "ahooks";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import styled from "styled-components";
 import { useModel } from "umi";
@@ -229,6 +229,9 @@ export default () => {
     }
   }, [error])
 
+  // @ts-ignore
+  const hasDownloadTeleport = useMemo(()=>!!window?.teleport, [])
+
   // injectedConnection.connector
   return (
     <Modal
@@ -267,7 +270,7 @@ export default () => {
               </div>
             ))}
 
-            <a
+           {hasDownloadTeleport ? null : <a
               className="wallet-download-link"
               target="_blank"
               href="https://chrome.google.com/webstore/detail/teleport-wallet/gkeelndblnomfmjnophbhfhcjbcnemka"
@@ -287,7 +290,7 @@ export default () => {
                 />
                 <rect y="4.5" width="20" height="1" rx="0.5" fill="#00EBC9" />
               </svg>
-            </a>
+            </a>}
           </Wallets>
         ) : (
           <>
@@ -298,7 +301,7 @@ export default () => {
               address you filled in entry-level task list.
             </div>
 
-            <a
+            {hasDownloadTeleport ? null : <a
               className="download-link"
               target="_blank"
               href="https://chrome.google.com/webstore/detail/teleport-wallet/gkeelndblnomfmjnophbhfhcjbcnemka"
@@ -318,9 +321,10 @@ export default () => {
                 />
                 <rect y="4.5" width="20" height="1" rx="0.5" fill="#00EBC9" />
               </svg>
-            </a>
+            </a>}
 
             <Button
+              disabled={!hasDownloadTeleport}
               onClick={() => {
                 setStep(1);
               }}
