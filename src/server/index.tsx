@@ -78,14 +78,15 @@ export const login = async ({
   try {
     const signature = await sign(address)
     if(!signature) {
-      return new Error("Login Failed");
+      return Promise.reject("Login Failed");
     }
     const loginRes = await publicAxios.post("/jeecg-boot/am/user-login", {
       address,
       sign: signature,
     });
     if (!loginRes?.data?.result?.token) {
-      return new Error("Login Failed");
+      // return new Error("Login Failed");
+      return Promise.reject("Login Failed");
     }
     // window.localStorage.auth = loginRes?.data?.result?.token
     return Promise.resolve(loginRes);

@@ -160,7 +160,7 @@ export default () => {
   const [active, setActive] = useState("");
   const { account } = useWeb3React();
   // 登陆
-  const { run, data, loading } = useRequest(
+  const { run, data, loading, error } = useRequest(
     ({ address }) => login({ address }),
     { manual: true }
   );
@@ -221,6 +221,13 @@ export default () => {
       updateAuth(data?.data?.result?.token);
     }
   }, [data]);
+
+  useEffect(()=>{
+    if(error){
+      toast.error("Unknown Character!");
+      hiddenModal();
+    }
+  }, [error])
 
   // injectedConnection.connector
   return (
