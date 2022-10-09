@@ -394,7 +394,7 @@ const ExpandContainer = ({ row, children }: any) => {
             href={row?.landingUrl}
             target="_blank"
           >
-            <Tippy content={row?.title}>
+            <Tippy content={row?.actionName}>
               <div style={{ display: "flex", alignItems: "center" }}>
                 <span
                   style={{
@@ -407,7 +407,7 @@ const ExpandContainer = ({ row, children }: any) => {
                     flex: 1,
                   }}
                 >
-                  {row?.title || "/"}
+                  {row?.actionName || "/"}
                 </span>
               </div>
             </Tippy>
@@ -420,7 +420,7 @@ const ExpandContainer = ({ row, children }: any) => {
       key: "rewards",
       id: "Rewards",
       formatter({ row }: any) {
-        return row?.rewards || 0 + " points";
+        return (row?.inputAmount || 0) + " points";
       },
     },
     {
