@@ -671,6 +671,16 @@ export default ({ show }: any) => {
     qustListData,
   ]);
 
+  const onSetDate = ()=>{
+    if(!selected) return;
+    const from = selected?.from?.getTime()
+    const to = selected?.to?.getTime()
+
+    run({from, to})
+
+    setFalse()
+  }
+
   return (
     <Container>
       <DayPickerContainer className="daypicker-target">
@@ -712,9 +722,9 @@ export default ({ show }: any) => {
                   lineHeight: "24px",
                 }}
                 className=""
-                onClick={setFalse}
+                onClick={onSetDate}
               >
-                Set Data
+                Set Date
               </Button>
             </div>
           }
