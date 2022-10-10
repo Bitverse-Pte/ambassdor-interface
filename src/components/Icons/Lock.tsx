@@ -87,6 +87,12 @@ const Container = styled.div`
       transform-origin: bottom;
       animation-duration: 2s;
       animation-timing-function: linear;
+      &:nth-of-type(1) {
+        transform: translate(.1px);
+      }
+      &:nth-of-type(2) {
+        transform: translate(-.1px);
+      }
     }
     &.force-active{
       & g:nth-of-type(1), g:nth-of-type(2){

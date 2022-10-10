@@ -279,7 +279,7 @@ const QuestTitleModal = () => {
             <div className="desc">
               <div dangerouslySetInnerHTML={{ __html: quest?.description }} />
             </div>
-            <div className="column">
+            <div className="column" style={{flex: 1}}>
               <div className="img-container column">
                 <img src={quest?.image} alt="" />
               </div>
