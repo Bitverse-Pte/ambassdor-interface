@@ -435,6 +435,7 @@ const CollectTokenDialog = (props: any) => {
     configCombindProfile?.length - 1 || 0
   );
 
+
   const currentChosenLevel = useMemo(() => {
     if (!configCombindProfile || !configCombindProfile[activeIndex])
       return null;
@@ -446,6 +447,7 @@ const CollectTokenDialog = (props: any) => {
         }
       : {
           ...configCombindProfile[activeIndex],
+          ...currentLevelConfig,
           level: currentLevelConfig?.name,
           token: currentLevelConfig?.token,
         };
@@ -490,7 +492,7 @@ const CollectTokenDialog = (props: any) => {
                   onClick={toggle}
                 >
                   <div className="tokens">
-                    {currentLevelConfig?.name} -
+                    {currentLevelConfig?.name} -&nbsp;
                     {currentLevelConfig?.token
                       ? format(currentLevelConfig?.token) + " TELE"
                       : " /"}
@@ -590,7 +592,7 @@ const CollectTokenDialog = (props: any) => {
                   {currentChosenLevel?.status !== CLAIM_STATUS.Claimable
                     ? 0
                     : format(currentChosenLevel?.token)}
-                  TELE
+                  &nbsp;TELE
                 </span>
               </div>
             </div>
