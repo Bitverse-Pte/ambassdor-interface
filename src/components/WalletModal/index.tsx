@@ -196,7 +196,7 @@ export default () => {
       console.debug(`web3-react connection error: ${error}`);
       // @ts-ignore
       if(error?.code === 4001){
-        toast('Please');
+        toast('Please connect Teleport Wallet again to sign in');
       }else{
         toast.error(error?.message);
       }

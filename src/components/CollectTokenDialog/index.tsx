@@ -562,7 +562,7 @@ const CollectTokenDialog = (props: any) => {
                   color: "#B7B7B7",
                 }}
               >
-                $TELE token rewards will be able to release after Teleport’s TGE
+                $TELE token rewards will be claimable after TGE
               </span>
             </div>
             <div className="claim-container row">

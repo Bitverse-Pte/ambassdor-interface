@@ -478,7 +478,7 @@ const AllQuest = () => {
           <Button
             onClick={() =>
               window.open(
-                "https://gleam.io/competitions/HlwYN-clv1-task",
+                "https://ambassador.teleport.network/",
                 "_blank"
               )
             }
