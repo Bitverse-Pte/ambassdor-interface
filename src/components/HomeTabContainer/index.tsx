@@ -307,7 +307,7 @@ export default () => {
               <span>
                 Go apply our Ambassador Program, Earn exculsive Rewards!
               </span>
-              <Button>Apply</Button>
+              <Button onClick={()=>window.open('https://ambassador.teleport.network/', '_blank')}>Apply</Button>
             </div>
           ) : (
             <div className={`nav-detail-ctr nav-detail-ctr-left`}>
