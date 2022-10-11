@@ -660,7 +660,7 @@ export default ({ show }: any) => {
                         >
                           {i?.level}
                         </span>
-                        {userNFT[index]?.tokenId && userNFT[index]?.nftType?.startsWith('ALV') ? (
+                        {userNFT?.length && userNFT[index]?.tokenId && userNFT[index]?.nftType?.startsWith('ALV') ? (
                           <>
                             <br />
                             <span
