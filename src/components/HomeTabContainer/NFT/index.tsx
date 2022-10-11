@@ -11,6 +11,7 @@ import IconTopRightArrow from "@/components/Icons/IconTopRightArrow";
 import IconExpandArrow from "@/components/Icons/IconExpandArrow";
 import { fuzzAddress } from "@/utils";
 import Progress from "@/components/Icons/Progress";
+import { useWeb3React } from "@web3-react/core";
 
 const IconLock = () => (
   <svg
@@ -381,16 +382,19 @@ export enum NFT_NAV_LIST {
 export const navs = ["Contributor", "Ambassador"];
 
 export default ({ show }: any) => {
+  const {
+    user: { user },
+  } = useModel("userInfo");
   const { run, data, loading } = useRequest(
     (props?: any) => Promise.all([getUserNFT(props), getUserNftProgress()]),
     { manual: true }
   );
 
   useEffect(() => {
-    if (show) {
+    if (show && user) {
       run();
     }
-  }, [show]);
+  }, [show, user]);
 
   const userNFT = useMemo(
     () => (data && data[0] ? data[0]?.data?.result?.records : []),
@@ -406,7 +410,7 @@ export default ({ show }: any) => {
   );
 
   const {
-    user: { contributorNFT, ambassadorNFT, isAmbassador, isContributor },
+    user: { contributorNFT, ambassadorNFT, isAmbassador, isContributor, isExactContributor },
   } = useModel("userInfo");
 
   // const [chartIdx, setChartIdx] = useState(NFT_NAV_LIST.Contributor);
@@ -420,15 +424,13 @@ export default ({ show }: any) => {
 
   const nfts = useMemo(() => {
     if (chartIdx === NFT_NAV_LIST.Contributor) {
-      if (!userNFT || !userNFT?.length || isAmbassador) return contributorNFT;
-      if (isContributor) {
+      if (!userNFT || !userNFT?.length || !isExactContributor) return contributorNFT;
+        const filteredContributorNFT = userNFT.filter(i=>i?.nftType?.startsWith('CLV'))
         return contributorNFT?.map((i, index) => ({
           ...i,
-          ...userNFT[index],
-          unlocked: userNFT[index] ? true : false,
+          ...filteredContributorNFT[index],
+          unlocked: filteredContributorNFT[index] ? true : false,
         }));
-      }
-      return contributorNFT;
       // if (isAmbassador) {
       //   return contributorNFT?.map((i, index) => ({
       //     ...i,
@@ -438,11 +440,12 @@ export default ({ show }: any) => {
       // }
     }
     if (chartIdx === NFT_NAV_LIST.Ambassador) {
-      if (!userNFT || !userNFT?.length || isContributor) return ambassadorNFT;
+      if (!userNFT || !userNFT?.length || !isExactContributor) return ambassadorNFT;
+      const filteredAmbassadorNFT = userNFT.filter(i=>i?.nftType?.startsWith('ALV'))
       return ambassadorNFT?.map((i, index) => ({
         ...i,
-        ...userNFT[index],
-        unlocked: userNFT[index] ? true : false,
+        ...filteredAmbassadorNFT[index],
+        unlocked: filteredAmbassadorNFT[index] ? true : false,
       }));
     }
   }, [contributorNFT, ambassadorNFT, userNFT, chartIdx]);

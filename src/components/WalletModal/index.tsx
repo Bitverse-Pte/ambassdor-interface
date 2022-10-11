@@ -229,7 +229,11 @@ export default () => {
 
   useEffect(()=>{
     if(error){
-      toast.error("Unknown Character!");
+      if(error?.code === 4001){
+        toast('Please connect Teleport Wallet again to sign in');
+      }else{
+        toast.error("Unknown Character!");
+      }
       hiddenModal();
     }
   }, [error])

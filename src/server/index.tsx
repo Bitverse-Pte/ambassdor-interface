@@ -75,7 +75,7 @@ export const login = async ({ address }: { address: string }) => {
   try {
     const signature = await sign(address);
     if (!signature) {
-      return Promise.reject("Login Failed");
+      return Promise.reject({code: 4001, message: 'Invalid signature'});
     }
     const loginRes = await publicAxios.post("/jeecg-boot/am/user-login", {
       address,
