@@ -308,7 +308,7 @@ const StyledModal = styled(Modal)`
 `;
 
 const pendingMsg = "WELL DONE! YOU GOT 100 POINTS TO COLLECT!";
-const successMsg = "has been Successflly added to your account！";
+const successMsg = "successflly added to your account！";
 const error = "";
 
 const CollectTokenDialog = (props: any) => {
