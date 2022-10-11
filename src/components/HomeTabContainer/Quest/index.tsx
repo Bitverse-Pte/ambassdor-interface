@@ -8,13 +8,14 @@ import IconTopRightArrow from "@/components/Icons/IconTopRightArrow";
 import Loading from "@/components/Loading";
 import { format } from "date-fns";
 import { DayPicker, DateRange } from "react-day-picker";
-import "react-day-picker/dist/style.css";
 import IconCalendar from "@/components/Icons/IconCalendar";
 import Button from "@/components/Button";
 import Tippy from "@tippyjs/react";
-import "tippy.js/dist/tippy.css";
 import { useModel } from "umi";
 import ReactPaginate from "react-paginate";
+
+import "react-day-picker/dist/style.css";
+import "tippy.js/dist/tippy.css";
 
 const DayPickerContainer = styled.div`
   position: relative;

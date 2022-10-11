@@ -7,7 +7,6 @@ import labelLeft from "@/assets/label-left.svg";
 import labelRight from "@/assets/label-right.svg";
 import { useModel } from "umi";
 import { getUserNFT, getUserNftProgress } from "@/server";
-import { IconDropdown } from "react-day-picker";
 import IconTopRightArrow from "@/components/Icons/IconTopRightArrow";
 import IconExpandArrow from "@/components/Icons/IconExpandArrow";
 import { fuzzAddress } from "@/utils";
@@ -438,7 +437,6 @@ export default ({ show }: any) => {
       //   }));
       // }
     }
-
     if (chartIdx === NFT_NAV_LIST.Ambassador) {
       if (!userNFT || !userNFT?.length || isContributor) return ambassadorNFT;
       return ambassadorNFT?.map((i, index) => ({
@@ -470,7 +468,7 @@ export default ({ show }: any) => {
           />
         </div>
 
-        {chartIdx === NFT_NAV_LIST.Contributor && (
+        {chartIdx === NFT_NAV_LIST.Contributor ? (
           <div className="grid">
             <div className={`nav-detail-ctr nav-detail-ctr-left nft-container`}>
               {nfts?.length
@@ -520,7 +518,7 @@ export default ({ show }: any) => {
                         >
                           {i?.level}
                         </span>
-                        {userNFT[index]?.tokenId && userNFT[index]?.nftType?.startsWith('CLV') ? (
+                        {userNFT?.length && userNFT[index]?.tokenId && userNFT[index]?.nftType?.startsWith('CLV') ? (
                           <>
                             <br />
                             <span
@@ -631,9 +629,9 @@ export default ({ show }: any) => {
               </div>
             ) : null}
           </div>
-        )}
+        ): null}
 
-        {chartIdx === NFT_NAV_LIST.Ambassador && (
+        {chartIdx === NFT_NAV_LIST.Ambassador ? (
           <div className="grid">
             <div className={`nav-detail-ctr nav-detail-ctr-left nft-container`}>
               {nfts?.length
@@ -773,7 +771,7 @@ export default ({ show }: any) => {
               </div>
             ) : null}
           </div>
-        )}
+        ): null}
       </div>
     </Container>
   );

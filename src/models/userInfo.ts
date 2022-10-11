@@ -27,6 +27,9 @@ export default () => {
   const isContributor = useMemo(() => profile?.role !== ROLE.ambassador, [
     profile?.role,
   ]);
+  const isExactContributor = useMemo(() => profile?.role === ROLE.contributor, [
+    profile?.role,
+  ]);
   const isAmbassador = useMemo(() => profile?.role === ROLE.ambassador, [
     profile?.role,
   ]);
@@ -60,6 +63,7 @@ export default () => {
     loading,
     error,
     isContributor,
+    isExactContributor,
     isAmbassador,
     curRoleNft,
     contributorNFT: contributor_basic_info_nfts,

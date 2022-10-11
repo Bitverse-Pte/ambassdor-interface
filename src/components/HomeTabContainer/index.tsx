@@ -1,16 +1,21 @@
 import styled from "styled-components";
 import { useEffect, useMemo, useState } from "react";
+import { useModel } from "umi";
+import {
+  useBoolean,
+  useSessionStorageState,
+} from "ahooks";
 import NavBar from "../Navbar";
 import Level from "./Level";
 import Quest from "./Quest";
 import NFT from "./NFT";
 import CardTypeQuest from "./Quest/CardTypeQuest";
 import Modal from "../Modal";
-import { useBoolean, useLocalStorageState, useSessionStorageState } from "ahooks";
+
 
 import Portal from "../Portal";
 import { ROLE } from "@/interface";
-import { useModel } from "umi";
+import Button from "../Button";
 
 const FullScreen = styled.div`
   position: fixed;
@@ -127,6 +132,44 @@ const Container = styled.div`
       transform: translate3d(100%, 0, 0);
     }
   }
+
+  .no-role {
+    margin-top: 216px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    img{
+      width: 180px;
+    }
+    span {
+      display: inline-block;
+      margin: 32px 0;
+      font-weight: 500;
+      font-size: 24px;
+      line-height: 36px;
+      /* identical to box height */
+
+      text-align: center;
+      text-transform: capitalize;
+
+      color: #ffffff;
+    }
+    button {
+      border-radius: 20px;
+      font-weight: 400;
+      font-size: 24px;
+      line-height: 36px;
+      /* identical to box height */
+
+      text-align: center;
+      text-transform: capitalize;
+
+      color: #05050e;
+      width: 190px;
+      height: 36px;
+    }
+  }
 `;
 
 export enum NAVLIST {
@@ -140,12 +183,14 @@ export const questSubLevel = ["Monthly", "Storyline", "History"];
 export const levelSubLevel = ["Contributor", "Ambassador"];
 
 export default () => {
-  const [chartIdx, setChartIdx] = useSessionStorageState('topic-tabs', {defaultValue: NAVLIST.Level});
+  const [chartIdx, setChartIdx] = useSessionStorageState("topic-tabs", {
+    defaultValue: NAVLIST.Level,
+  });
   const [showLevelDialog, { setTrue, setFalse }] = useBoolean(false);
   const [currentSubNav, setCurrentSubNav] = useState(0);
 
   const {
-    user: { isAmbassador },
+    user: { isAmbassador, isExactContributor },
   } = useModel("userInfo");
   const [
     tvFullScreenStatus,
@@ -189,11 +234,11 @@ export default () => {
     setChartIdx(e);
   };
 
-  useEffect(()=>{
-    if(isAmbassador){
-      handleChartIdxChange(1)
+  useEffect(() => {
+    if (isAmbassador) {
+      handleChartIdxChange(1);
     }
-  }, [isAmbassador])
+  }, [isAmbassador]);
 
   return (
     <Container>
@@ -248,31 +293,45 @@ export default () => {
 
         {chartIdx === NAVLIST.Level && (
           <div className={`nav-detail-ctr nav-detail-ctr-left`}>
-            <Level show={chartIdx === NAVLIST.Level} displayRole={currentSubNav ? ROLE.ambassador : ROLE.contributor}/>
+            <Level
+              show={chartIdx === NAVLIST.Level}
+              displayRole={currentSubNav ? ROLE.ambassador : ROLE.contributor}
+            />
           </div>
         )}
 
-        {chartIdx === NAVLIST.Quest && (
-          <div className={`nav-detail-ctr nav-detail-ctr-left`}>
-            {currentSubNav === 0 && (
-              <CardTypeQuest
-                type="Monthly"
-                color="linear-gradient(90deg, #10CEC3 3.8%, #006B69 95.11%);"
-                label={questSubLevel[currentSubNav]}
-                show={chartIdx === NAVLIST.Quest}
-              />
-            )}
-            {currentSubNav === 1 && (
-              <CardTypeQuest
-                type="Storyline"
-                color="linear-gradient(90deg, #AA58B7 -6.84%, #580897 103.42%);"
-                label={questSubLevel[currentSubNav]}
-                show={chartIdx === NAVLIST.Quest}
-              />
-            )}
-            {currentSubNav === 2 && <Quest show={chartIdx === NAVLIST.Quest} />}
-          </div>
-        )}
+        {chartIdx === NAVLIST.Quest &&
+          (!isAmbassador && !isExactContributor ? (
+            <div className="no-role">
+              <img src={require('@/assets/nodata.png')} alt="" />
+              <span>
+                Go apply our Ambassador Program, Earn exculsive Rewards!
+              </span>
+              <Button>Apply</Button>
+            </div>
+          ) : (
+            <div className={`nav-detail-ctr nav-detail-ctr-left`}>
+              {currentSubNav === 0 && (
+                <CardTypeQuest
+                  type="Monthly"
+                  color="linear-gradient(90deg, #10CEC3 3.8%, #006B69 95.11%);"
+                  label={questSubLevel[currentSubNav]}
+                  show={chartIdx === NAVLIST.Quest}
+                />
+              )}
+              {currentSubNav === 1 && (
+                <CardTypeQuest
+                  type="Storyline"
+                  color="linear-gradient(90deg, #AA58B7 -6.84%, #580897 103.42%);"
+                  label={questSubLevel[currentSubNav]}
+                  show={chartIdx === NAVLIST.Quest}
+                />
+              )}
+              {currentSubNav === 2 && (
+                <Quest show={chartIdx === NAVLIST.Quest} />
+              )}
+            </div>
+          ))}
 
         {chartIdx === NAVLIST.NFT && (
           <div className={`nav-detail-ctr nav-detail-ctr-left`}>
