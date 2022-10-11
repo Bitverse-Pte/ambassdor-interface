@@ -429,7 +429,7 @@ const ExpandContainer = ({ row, children }: any) => {
       key: "type",
       id: "Type",
       formatter({ row }: any) {
-        return ""
+        return "";
       },
     },
     {
@@ -665,6 +665,12 @@ export default ({ show }: any) => {
   );
 
   const handlePageClick = (event: any) => {
+    if (selected) {
+      const from = selected?.from?.getTime();
+      const to = selected?.to?.getTime();
+      run({ page: event?.selected + 1, from, to });
+      return;
+    }
     run({ page: event?.selected + 1 });
   };
 
@@ -672,15 +678,15 @@ export default ({ show }: any) => {
     qustListData,
   ]);
 
-  const onSetDate = ()=>{
-    if(!selected) return;
-    const from = selected?.from?.getTime()
-    const to = selected?.to?.getTime()
+  const onSetDate = () => {
+    if (!selected) return;
+    const from = selected?.from?.getTime();
+    const to = selected?.to?.getTime();
 
-    run({from, to})
+    run({ from, to });
 
-    setFalse()
-  }
+    setFalse();
+  };
 
   return (
     <Container>

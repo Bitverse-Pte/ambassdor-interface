@@ -187,7 +187,9 @@ export default () => {
     defaultValue: NAVLIST.Level,
   });
   const [showLevelDialog, { setTrue, setFalse }] = useBoolean(false);
-  const [currentSubNav, setCurrentSubNav] = useState(0);
+  const [currentSubNav, setCurrentSubNav] = useSessionStorageState('quest-tabs', {
+    defaultValue: 0
+  });
 
   const {
     user: { isAmbassador, isExactContributor },
