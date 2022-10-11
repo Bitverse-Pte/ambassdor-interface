@@ -665,7 +665,7 @@ export default ({ show }: any) => {
   );
 
   const handlePageClick = (event: any) => {
-    run({ page: event?.selected });
+    run({ page: event?.selected + 1 });
   };
 
   const totalPage = useMemo(() => qustListData?.data?.result?.pages, [
