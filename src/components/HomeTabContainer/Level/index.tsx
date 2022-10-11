@@ -17,6 +17,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import useLevelList from "@/hooks/useLevelList";
 import Loading from "@/components/Loading";
 import { ROLE } from "@/interface";
+import Button from "@/components/Button";
 
 const Container = styled.div`
   max-width: 1400px;
@@ -75,6 +76,26 @@ const Container = styled.div`
     .contributor-lock-container{
       .lock-svg{
         top: 40%;
+      }
+     
+    }
+    .contributor-lock-container, .ambassador-lock-container{
+      button{
+        margin-top: 31px;
+        position: relative;
+        z-index: 3;
+        border-radius: 20px;
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 36px;
+        /* identical to box height */
+
+        text-align: center;
+        text-transform: capitalize;
+
+        color: #05050e;
+        width: 190px;
+        height: 36px;
       }
     }
 
@@ -184,9 +205,9 @@ const SwiperController = ({ ifIsCurrentRole, lastCompleted, index }: any) => {
     }, 0);
   }, [swiper, lastCompleted]);
 
-  useEffect(()=>{
+  useEffect(() => {
     swiper.slideTo(index, 1000);
-  }, [index])
+  }, [index]);
 
   return null;
 };
@@ -204,6 +225,7 @@ export default ({ show, displayRole }: any) => {
       curRoleNft,
       isAmbassador,
       isContributor,
+      isExactContributor,
       loading,
       contributorNFT,
       ambassadorNFT,
@@ -248,7 +270,7 @@ export default ({ show, displayRole }: any) => {
       ) => ({
         ...i,
         ...c[index],
-        label: i?.name||displayRole[index]?.name,
+        label: i?.name || displayRole[index]?.name,
         value: i?.min || 0,
         steps: i?.max || 0,
         stepsCompleted: !ifIsCurrentRole
@@ -281,7 +303,7 @@ export default ({ show, displayRole }: any) => {
     setIndex(index);
   };
 
-  const [curIndex, setCurIndex] = useState(0)
+  const [curIndex, setCurIndex] = useState(0);
 
   return (
     <Container>
@@ -304,8 +326,8 @@ export default ({ show, displayRole }: any) => {
             }}
             modules={[Navigation]}
             className="mySwiper"
-            onSlideChange={(e)=>{
-              setCurIndex(e.activeIndex)
+            onSlideChange={(e) => {
+              setCurIndex(e.activeIndex);
             }}
             // onActiveIndexChange={(e) => {
             //   setIndex(+e.activeIndex + 1);
@@ -632,10 +654,16 @@ export default ({ show, displayRole }: any) => {
                               </Lock>
                               {displayRole === ROLE.ambassador ? (
                                 <div className="ambassador-lock">
-                                  Wanna become Ambassador？<br/>
-                                  <span className="active" onClick={()=>window.open('/allquest', '_blank')}>
+                                  Wanna become Ambassador？
+                                  <br />
+                                  <span
+                                    className="active"
+                                    onClick={() =>
+                                      window.open("/allquest", "_blank")
+                                    }
+                                  >
                                     Go Do Quests
-                                  </span> 
+                                  </span>
                                   &nbsp;to level up！
                                 </div>
                               ) : (
@@ -644,6 +672,18 @@ export default ({ show, displayRole }: any) => {
                                   NFT
                                 </div>
                               )}
+                              {!isAmbassador && !isExactContributor ? (
+                                <Button
+                                  onClick={() =>
+                                    window.open(
+                                      "https://ambassador.teleport.network/",
+                                      "_blank"
+                                    )
+                                  }
+                                >
+                                  Apply
+                                </Button>
+                              ) : null}
                             </div>
                           )}
                         </Meteor>
