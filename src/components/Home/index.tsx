@@ -9,7 +9,7 @@ import galaxy from "@/assets/dragons/galaxy.png";
 import guardians from "@/assets/dragons/guardians.png";
 import psychedelic from "@/assets/dragons/psychedelic.png";
 import QuestCard from "@/components/QuestCard";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import HomeTabContainer from "@/components/HomeTabContainer";
 import { useWeb3React } from "@web3-react/core";
 
@@ -26,6 +26,7 @@ import { getPublicQuestList } from "@/server";
 import Loading from "../Loading";
 import Link from "../Link";
 import { format } from "@/utils";
+import { ROLE } from "@/interface";
 
 // active: "N"
 // assignTo: "contributor"
@@ -300,7 +301,13 @@ const Home = () => {
     questModalSetTrue();
   };
 
-  const { data, loading } = useRequest(getPublicQuestList);
+  const {
+    user: { isAmbassador, isExactContributor },
+  } = useModel("userInfo");
+
+  const { data, loading, run } = useRequest(getPublicQuestList, {
+    manual: true,
+  });
   const popularQuest = useMemo(() => {
     if (!data?.data?.result?.records) return questCard;
     return questCard.map((i: any, index: any) => ({
@@ -309,6 +316,10 @@ const Home = () => {
       status: data?.data?.result?.records[index] ? true : false,
     }));
   }, [data]);
+
+  useEffect(() => {
+    run({ assignTo: isAmbassador ? ROLE.ambassador : ROLE.contributor });
+  }, [isAmbassador]);
 
   return (
     <Container>
@@ -362,7 +373,7 @@ const Home = () => {
                   key={i?.questKey}
                   src={i?.src}
                   gradient={i?.gradient}
-                  label={i?.active === 'N' ? 'EXPIRED' : i?.type }
+                  label={i?.active === "N" ? "EXPIRED" : i?.type}
                   title={i?.title}
                   des={i?.description}
                   valid={i?.status}
@@ -384,24 +395,25 @@ const Home = () => {
               </SwiperSlide>
             ))}
           </Swiper>
-
-          <Link to="/allquest" className="see-all">
-            See All
-            <svg
-              width="22"
-              height="10"
-              viewBox="0 0 22 10"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M16 9.5L20.1741 5.74329C20.6155 5.34605 20.6155 4.65395 20.1741 4.25671L16 0.5"
-                stroke="#00EBC9"
-                strokeLinecap="round"
-              />
-              <rect y="4.5" width="20" height="1" rx="0.5" fill="#00EBC9" />
-            </svg>
-          </Link>
+          {isAmbassador || isExactContributor ? (
+            <Link to="/allquest" className="see-all">
+              See All
+              <svg
+                width="22"
+                height="10"
+                viewBox="0 0 22 10"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16 9.5L20.1741 5.74329C20.6155 5.34605 20.6155 4.65395 20.1741 4.25671L16 0.5"
+                  stroke="#00EBC9"
+                  strokeLinecap="round"
+                />
+                <rect y="4.5" width="20" height="1" rx="0.5" fill="#00EBC9" />
+              </svg>
+            </Link>
+          ) : null}
         </div>
       </section>
     </Container>

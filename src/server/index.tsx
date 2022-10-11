@@ -1,3 +1,4 @@
+import { ROLE } from "@/interface";
 import { sign } from "@/utils";
 import axios, { AxiosRequestConfig } from "axios";
 
@@ -164,11 +165,12 @@ export const collectPoint = async () =>
 export const getAmbassadorUser = async () =>
   privateAxios.get("/jeecg-boot/amuser/ambassadorUser/list");
 
-export const getPublicQuestList = async () =>
+export const getPublicQuestList = async ({assignTo}: any) =>
   publicAxios.get("/jeecg-boot/ambassador/quest/list", {
     params: {
       pageSize: 5,
       active: "Y",
+      assignTo: assignTo || ROLE.contributor
     },
   });
 
@@ -176,6 +178,8 @@ export const getAllPublicQuestList = async (props: any) =>
   publicAxios.get("/jeecg-boot/ambassador/quest/list", {
     params: {
       ...props,
+      column: "active",
+      order: "desc",
     },
   });
 

@@ -285,7 +285,7 @@ const CollectPointsDialog = (props: any) => {
     return `WELL DONE! YOU GOT ${format(user?.pointCache || 0)} POINTS TO COLLECT!`;
   }, [user?.pointCache]);
 
-  const successMsg = "has been Successflly added to your account!";
+  const successMsg = "has been successflly added to your account!";
 
   const ifLevelUp = useMemo(() => {
     const latestLevel = data?.data?.result?.level;

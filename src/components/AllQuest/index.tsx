@@ -18,6 +18,7 @@ import { useModel } from "umi";
 import CardTypeQuest from "../HomeTabContainer/Quest/CardTypeQuest";
 import Tippy from "@tippyjs/react";
 import { format } from "@/utils";
+import { ROLE } from "@/interface";
 
 const removeHtmlStyle = (html: string) =>
   html.replaceAll(/style="[^\"]*?"/g, "");
@@ -389,12 +390,36 @@ const Container = styled.div`
       }
     }
   }
+  .no-data {
+    justify-content: center;
+    grid-template-columns: none;
+    .none {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      font-weight: 500;
+      font-size: 24px;
+      line-height: 36px;
+      text-align: center;
+      text-transform: capitalize;
+      /* margin-top: 25px; */
+      color: #fff;
+      img {
+        margin-bottom: 32px;
+      }
+    }
+  }
 `;
 
 const AllQuest = () => {
   const tabs = ["All", "Popular quest", "Monthly", "Storyline"];
   const [activeIndex, setActiveIndex] = useState(0);
   const [curParam, setParam] = useState({});
+
+  const {
+    user: { isAmbassador },
+  } = useModel("userInfo");
 
   const { data, loading, run } = useRequest(getAllPublicQuestList, {
     manual: true,
@@ -403,14 +428,20 @@ const AllQuest = () => {
   useEffect(() => {
     run({
       ...curParam,
+      assignTo: isAmbassador ? ROLE.ambassador : ROLE.contributor,
     });
-  }, [curParam]);
+  }, [curParam, isAmbassador]);
 
   const records = useMemo(() => data?.data?.result?.records, [data]);
   const totalPage = useMemo(() => data?.data?.result?.pages, [data]);
 
   const handlePageClick = (event: any) => {
-    run({ ...curParam, pageNo: event?.selected + 1, pageSize: 9 });
+    run({
+      ...curParam,
+      pageNo: event?.selected + 1,
+      pageSize: 9,
+      assignTo: isAmbassador ? ROLE.ambassador : ROLE.contributor,
+    });
   };
 
   const popularQuest = useMemo(() => {
@@ -471,16 +502,13 @@ const AllQuest = () => {
         <div className="left">
           <img src={require("@/assets/quest/dragon.png")} />
 
-          <div className="title" style={{marginBottom: '16px', width: '60%'}}>
+          <div className="title" style={{ marginBottom: "16px", width: "60%" }}>
             Complete quests and earn Tokens & NFT rewards
           </div>
           {/* <div className="desc">Complete tasks and earn Tokens & NFT rewards</div> */}
           <Button
             onClick={() =>
-              window.open(
-                "https://ambassador.teleport.network/",
-                "_blank"
-              )
+              window.open("https://ambassador.teleport.network/", "_blank")
             }
           >
             Apply
@@ -503,7 +531,7 @@ const AllQuest = () => {
         </div>
         <div className="cards">
           {!loading ? (
-            <div className="card-wrapper">
+            <div className={`card-wrapper ${records?.length ? "" : "no-data"}`}>
               {records?.length ? (
                 activeIndex === 2 || activeIndex === 3 ? (
                   popularQuest?.map((i) => (
@@ -529,7 +557,7 @@ const AllQuest = () => {
                         <div className="line" />
                       </div>
                       <div className="bottom row-between">
-                        <div className="col title" style={{flex: 1}}>
+                        <div className="col title" style={{ flex: 1 }}>
                           <Tippy content={i?.title}>
                             <div className="title">{i?.title}</div>
                           </Tippy>
@@ -586,7 +614,17 @@ const AllQuest = () => {
                   ))
                 )
               ) : (
-                <div>null</div>
+                <div className="none">
+                  <img
+                    style={{ width: "180px" }}
+                    src={require("@/assets/nodata.png")}
+                    alt=""
+                  />
+                  <span>
+                    This part of the task will be released at a specific time,
+                    <br /> stay tuned and look forward to it!
+                  </span>
+                </div>
               )}
             </div>
           ) : (
