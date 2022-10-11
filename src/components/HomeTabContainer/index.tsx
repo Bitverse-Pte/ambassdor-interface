@@ -6,7 +6,7 @@ import Quest from "./Quest";
 import NFT from "./NFT";
 import CardTypeQuest from "./Quest/CardTypeQuest";
 import Modal from "../Modal";
-import { useBoolean } from "ahooks";
+import { useBoolean, useLocalStorageState, useSessionStorageState } from "ahooks";
 
 import Portal from "../Portal";
 import { ROLE } from "@/interface";
@@ -140,7 +140,7 @@ export const questSubLevel = ["Monthly", "Storyline", "History"];
 export const levelSubLevel = ["Contributor", "Ambassador"];
 
 export default () => {
-  const [chartIdx, setChartIdx] = useState(NAVLIST.Level);
+  const [chartIdx, setChartIdx] = useSessionStorageState('topic-tabs', {defaultValue: NAVLIST.Level});
   const [showLevelDialog, { setTrue, setFalse }] = useBoolean(false);
   const [currentSubNav, setCurrentSubNav] = useState(0);
 

@@ -410,7 +410,8 @@ export default ({ show }: any) => {
     user: { contributorNFT, ambassadorNFT, isAmbassador, isContributor },
   } = useModel("userInfo");
 
-  const [chartIdx, setChartIdx] = useState(NFT_NAV_LIST.Contributor);
+  // const [chartIdx, setChartIdx] = useState(NFT_NAV_LIST.Contributor);
+  const [chartIdx, setChartIdx] = useSessionStorageState('secondary-tabs', {defaultValue: NFT_NAV_LIST.Contributor});
   const navList = useMemo(() => navs.map((item) => ({ item })), []);
   const [active, setActive] = useState(0);
   const [animated, setFalse] = useSessionStorageState("animated", {
