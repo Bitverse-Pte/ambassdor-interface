@@ -646,15 +646,36 @@ export default ({ show }: any) => {
                       unlocked={i?.unlocked || false}
                       key={i?.name}
                     >
-                      <Lock
-                        allowAnimation={false}
-                        delay={index * 100}
-                        autoPlay={i?.unlocked}
-                      >
-                        <img
-                          src={require(`@/assets/level/nft/${i?.name}.png`)}
-                        />
-                      </Lock>
+                      {onProgress?.includes(i?.level) ? (
+                        <Progress>
+                          <img
+                            src={require(`@/assets/level/nft/${i?.name}.png`)}
+                          />
+                        </Progress>
+                      ) : animated ? (
+                        <Lock
+                          allowAnimation={false}
+                          autoPlay={false}
+                          skipAnimationForceUnlocked={i?.unlocked}
+                        >
+                          <img
+                            src={require(`@/assets/level/nft/${i?.name}.png`)}
+                          />
+                        </Lock>
+                      ) : (
+                        <Lock
+                          allowAnimation={false}
+                          delay={index * 100}
+                          autoPlay={!animated && i?.unlocked}
+                          onAnimationEnd={() => {
+                            setFalse(1);
+                          }}
+                        >
+                          <img
+                            src={require(`@/assets/level/nft/${i?.name}.png`)}
+                          />
+                        </Lock>
+                      )}
 
                       <div className="name">
                         {i?.name} <br />{" "}
