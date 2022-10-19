@@ -564,7 +564,7 @@ const CollectTokenDialog = (props: any) => {
                   color: "#B7B7B7",
                 }}
               >
-                $TELE token rewards will be claimable after TGE
+                $TELE token rewards will be released after TGE
               </span>
             </div>
             <div className="claim-container row">
