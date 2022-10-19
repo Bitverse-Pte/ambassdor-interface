@@ -6,7 +6,7 @@ const calReducer = (
   tar: any,
   length: any,
   key: string | number,
-  defaultValue = 0
+  defaultValue = 1
 ) => {
   const _t = JSON.parse(JSON.stringify(tar));
   _t.length = length;
@@ -50,18 +50,8 @@ const useLevelList = ({ forceRole }: any) => {
         };
       }
 
-      const min = calReducer(
-        _copied,
-        index,
-        "points",
-        forceRole !== ROLE.ambassador || (!forceRole && isAmbassador) ? 1 : 0
-      );
-      const max = calReducer(
-        _copied,
-        index + 1,
-        "points",
-        forceRole !== ROLE.ambassador || (!forceRole && isAmbassador) ? 1 : 0
-      );
+      const min = calReducer(_copied, index, "points");
+      const max = calReducer(_copied, index + 1, "points");
 
       return {
         ...i,
