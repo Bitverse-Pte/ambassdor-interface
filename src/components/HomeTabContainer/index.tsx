@@ -236,11 +236,11 @@ export default () => {
     setChartIdx(e);
   };
 
-  useEffect(() => {
-    if (isAmbassador) {
-      handleChartIdxChange(1);
-    }
-  }, [isAmbassador]);
+  // useEffect(() => {
+  //   if (isAmbassador) {
+  //     handleChartIdxChange(1);
+  //   }
+  // }, [isAmbassador]);
 
   return (
     <Container>
