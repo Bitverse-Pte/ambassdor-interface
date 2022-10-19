@@ -216,7 +216,7 @@ export default ({ show, displayRole }: any) => {
   const nextRef = useRef(null);
   const prevRef = useRef(null);
   const levelList = useLevelList({
-    forceRole: displayRole === ROLE.ambassador,
+    forceRole: displayRole === ROLE.ambassador ? ROLE.ambassador : ROLE.contributor,
   });
 
   const {
@@ -246,6 +246,8 @@ export default ({ show, displayRole }: any) => {
     () => (displayRole === ROLE.ambassador ? ambassadorNFT : contributorNFT),
     [displayRole, contributorNFT, ambassadorNFT]
   );
+
+    
 
   const steps = useMemo(() => {
     if (!levelList) return null;

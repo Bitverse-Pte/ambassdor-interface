@@ -265,9 +265,10 @@ export default () => {
     forceRole: false
   });
   const currentLevel = useMemo(()=>levelList ? levelList.find(i=>i?.name === user?.level): null, [levelList, user])
+
   const precent = useMemo(()=>{
     if(!currentLevel) return 0;
-    return user?.point / currentLevel?.max * 100
+    return (user?.point - currentLevel?.min) / currentLevel?.max * 100
   }, [currentLevel, user?.point])
 
   const { account } = useWeb3React();
