@@ -410,11 +410,13 @@ export default ({ show }: any) => {
   );
 
   const {
-    user: { contributorNFT, ambassadorNFT, isAmbassador, isContributor, isExactContributor },
+    user: { contributorNFT, ambassadorNFT, isInvalidRole },
   } = useModel("userInfo");
 
   // const [chartIdx, setChartIdx] = useState(NFT_NAV_LIST.Contributor);
-  const [chartIdx, setChartIdx] = useSessionStorageState('secondary-tabs', {defaultValue: NFT_NAV_LIST.Contributor});
+  const [chartIdx, setChartIdx] = useSessionStorageState("secondary-tabs", {
+    defaultValue: NFT_NAV_LIST.Contributor,
+  });
   const navList = useMemo(() => navs.map((item) => ({ item })), []);
   const [active, setActive] = useState(0);
   const [animated, setFalse] = useSessionStorageState("animated", {
@@ -424,13 +426,16 @@ export default ({ show }: any) => {
 
   const nfts = useMemo(() => {
     if (chartIdx === NFT_NAV_LIST.Contributor) {
-      if (!userNFT || !userNFT?.length || !isExactContributor) return contributorNFT;
-        const filteredContributorNFT = userNFT.filter(i=>i?.nftType?.startsWith('CLV'))
-        return contributorNFT?.map((i, index) => ({
-          ...i,
-          ...filteredContributorNFT[index],
-          unlocked: filteredContributorNFT[index] ? true : false,
-        }));
+      if (!userNFT || !userNFT?.length || isInvalidRole) return contributorNFT;
+      const filteredContributorNFT = userNFT.filter((i) =>
+        i?.nftType?.startsWith("CLV")
+      );
+      console.log("filteredContributorNFT", filteredContributorNFT);
+      return contributorNFT?.map((i, index) => ({
+        ...i,
+        ...filteredContributorNFT[index],
+        unlocked: filteredContributorNFT[index] ? true : false,
+      }));
       // if (isAmbassador) {
       //   return contributorNFT?.map((i, index) => ({
       //     ...i,
@@ -440,8 +445,11 @@ export default ({ show }: any) => {
       // }
     }
     if (chartIdx === NFT_NAV_LIST.Ambassador) {
-      if (!userNFT || !userNFT?.length || !isExactContributor) return ambassadorNFT;
-      const filteredAmbassadorNFT = userNFT.filter(i=>i?.nftType?.startsWith('ALV'))
+      if (!userNFT || !userNFT?.length || isInvalidRole) return ambassadorNFT;
+      const filteredAmbassadorNFT = userNFT.filter((i) =>
+        i?.nftType?.startsWith("ALV")
+      );
+      console.log("filteredAmbassadorNFT", filteredAmbassadorNFT);
       return ambassadorNFT?.map((i, index) => ({
         ...i,
         ...filteredAmbassadorNFT[index],
@@ -459,6 +467,21 @@ export default ({ show }: any) => {
     setActive(0);
     setChartIdx(e);
   };
+
+  console.log("nfts", userNFT);
+
+  const contributorUserNFT = useMemo(() => {
+    if (!userNFT || !userNFT?.length) return [];
+    return userNFT.filter((i) => i?.nftType?.startsWith("CLV"));
+  }, [userNFT]);
+
+  const ambassdorUserNFT = useMemo(() => {
+    if (!userNFT || !userNFT?.length) return [];
+    return userNFT.filter((i) => i?.nftType?.startsWith("ALV"));
+  }, [userNFT]);
+
+  console.log('contributorUserNFT', contributorUserNFT)
+  console.log('ambassdorUserNFT', ambassdorUserNFT)
 
   return (
     <Container>
@@ -521,7 +544,11 @@ export default ({ show }: any) => {
                         >
                           {i?.level}
                         </span>
-                        {userNFT?.length && userNFT[index]?.tokenId && userNFT[index]?.nftType?.startsWith('CLV') ? (
+                        {contributorUserNFT?.length &&
+                        contributorUserNFT[index]?.tokenId &&
+                        contributorUserNFT[index]?.nftType?.startsWith(
+                          "CLV"
+                        ) ? (
                           <>
                             <br />
                             <span
@@ -530,7 +557,7 @@ export default ({ show }: any) => {
                                 marginTop: "8px",
                               }}
                             >
-                              ID: #{userNFT[index]?.tokenId}
+                              ID: #{contributorUserNFT[index]?.tokenId}
                             </span>
                           </>
                         ) : null}
@@ -584,9 +611,9 @@ export default ({ show }: any) => {
                 {/* <Button disabled={!activeNft.unlocked} className="claim-button">
                   Claim
                 </Button> */}
-                {userNFT &&
-                userNFT[active] &&
-                userNFT[active]?.nftType.startsWith("CLV") ? (
+                {contributorUserNFT &&
+                contributorUserNFT[active] &&
+                contributorUserNFT[active]?.nftType.startsWith("CLV") ? (
                   <div className={`nft-detail ${showDetail ? "active" : ""}`}>
                     <div
                       className={`row detail-btn ${showDetail ? "active" : ""}`}
@@ -595,12 +622,12 @@ export default ({ show }: any) => {
                       <IconExpandArrow onClick={toggleShowDetail} />
                     </div>
                     <div className={`col ${showDetail ? "active" : ""}`}>
-                      {userNFT[active]?.tokenId ? (
+                      {contributorUserNFT[active]?.tokenId ? (
                         <div className="row">
                           <span>Token ID:</span>
-                          <a href={userNFT[active]?.url} target="_blank">
+                          <a href={contributorUserNFT[active]?.url} target="_blank">
                             <span>
-                              #{userNFT[active]?.tokenId} <IconTopRightArrow />{" "}
+                              #{contributorUserNFT[active]?.tokenId} <IconTopRightArrow />{" "}
                             </span>
                           </a>
                         </div>
@@ -610,14 +637,14 @@ export default ({ show }: any) => {
                         <span>Contract Address:</span>
                         <a
                           href={
-                            userNFT[active]?.url?.split("/tx")[0] +
+                            contributorUserNFT[active]?.url?.split("/tx")[0] +
                             "/address/" +
-                            userNFT[active]?.address
+                            contributorUserNFT[active]?.address
                           }
                           target="_blank"
                         >
                           <span>
-                            {fuzzAddress(userNFT[active]?.address)}{" "}
+                            {fuzzAddress(contributorUserNFT[active]?.address)}{" "}
                             <IconTopRightArrow />{" "}
                           </span>
                         </a>
@@ -632,7 +659,7 @@ export default ({ show }: any) => {
               </div>
             ) : null}
           </div>
-        ): null}
+        ) : null}
 
         {chartIdx === NFT_NAV_LIST.Ambassador ? (
           <div className="grid">
@@ -684,7 +711,9 @@ export default ({ show }: any) => {
                         >
                           {i?.level}
                         </span>
-                        {userNFT?.length && userNFT[index]?.tokenId && userNFT[index]?.nftType?.startsWith('ALV') ? (
+                        {ambassdorUserNFT?.length &&
+                        ambassdorUserNFT[index]?.tokenId &&
+                        ambassdorUserNFT[index]?.nftType?.startsWith("ALV") ? (
                           <>
                             <br />
                             <span
@@ -693,7 +722,7 @@ export default ({ show }: any) => {
                                 marginTop: "8px",
                               }}
                             >
-                              ID: #{userNFT[index]?.tokenId}
+                              ID: #{ambassdorUserNFT[index]?.tokenId}
                             </span>
                           </>
                         ) : null}
@@ -747,9 +776,9 @@ export default ({ show }: any) => {
                 {/* <Button disabled={!activeNft.unlocked} className="claim-button">
                   Claim
                 </Button> */}
-                {userNFT &&
-                userNFT[active] &&
-                userNFT[active]?.nftType.startsWith("ALV") ? (
+                {ambassdorUserNFT &&
+                ambassdorUserNFT[active] &&
+                ambassdorUserNFT[active]?.nftType.startsWith("ALV") ? (
                   <div className={`nft-detail ${showDetail ? "active" : ""}`}>
                     <div
                       className={`row detail-btn ${showDetail ? "active" : ""}`}
@@ -758,12 +787,12 @@ export default ({ show }: any) => {
                       <IconExpandArrow onClick={toggleShowDetail} />
                     </div>
                     <div className={`col ${showDetail ? "active" : ""}`}>
-                      {userNFT[active]?.tokenId ? (
+                      {ambassdorUserNFT[active]?.tokenId ? (
                         <div className="row">
                           <span>Token ID:</span>
-                          <a href={userNFT[active]?.url} target="_blank">
+                          <a href={ambassdorUserNFT[active]?.url} target="_blank">
                             <span>
-                              #{userNFT[active]?.tokenId} <IconTopRightArrow />{" "}
+                              #{ambassdorUserNFT[active]?.tokenId} <IconTopRightArrow />{" "}
                             </span>
                           </a>
                         </div>
@@ -773,14 +802,14 @@ export default ({ show }: any) => {
                         <span>Contract Address:</span>
                         <a
                           href={
-                            userNFT[active]?.url?.split("/tx")[0] +
+                            ambassdorUserNFT[active]?.url?.split("/tx")[0] +
                             "/address/" +
-                            userNFT[active]?.address
+                            ambassdorUserNFT[active]?.address
                           }
                           target="_blank"
                         >
                           <span>
-                            {fuzzAddress(userNFT[active]?.address)}{" "}
+                            {fuzzAddress(ambassdorUserNFT[active]?.address)}{" "}
                             <IconTopRightArrow />{" "}
                           </span>
                         </a>
@@ -795,7 +824,7 @@ export default ({ show }: any) => {
               </div>
             ) : null}
           </div>
-        ): null}
+        ) : null}
       </div>
     </Container>
   );

@@ -24,6 +24,10 @@ export default () => {
   });
   const profile = useMemo(() => data?.data?.result?.user, [data]);
 
+  const isUpdatedAmbassador = useMemo(() => !!profile?.historyPoint, [
+    profile?.historyPoint,
+  ]);
+
   const isContributor = useMemo(() => profile?.role !== ROLE.ambassador, [
     profile?.role,
   ]);
@@ -31,6 +35,10 @@ export default () => {
     profile?.role,
   ]);
   const isAmbassador = useMemo(() => profile?.role === ROLE.ambassador, [
+    profile?.role,
+  ]);
+
+  const isInvalidRole = useMemo(() => !profile?.role, [
     profile?.role,
   ]);
 
@@ -62,8 +70,10 @@ export default () => {
     currentRole,
     loading,
     error,
+    isUpdatedAmbassador,
     isContributor,
     isExactContributor,
+    isInvalidRole,
     isAmbassador,
     curRoleNft,
     contributorNFT: contributor_basic_info_nfts,

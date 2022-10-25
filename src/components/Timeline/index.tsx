@@ -6,6 +6,7 @@ import { useModel } from "umi";
 import IconRocket from "./IconRocket";
 import BigNumber from "bignumber.js";
 import { format } from "@/utils";
+import Tippy from "@tippyjs/react";
 
 const Row = styled.div`
   display: flex;
@@ -112,6 +113,12 @@ const Container = styled.div`
     width: calc(100% - 36px);
     margin: auto;
     .tooltip {
+      &.locked {
+        .triangle {
+          border-bottom-color: #c9fff9;
+        }
+        color: #c9fff9;
+      }
       width: 100%;
       position: absolute;
       top: 24px;
@@ -178,8 +185,17 @@ const Container = styled.div`
       position: relative;
       top: 10px;
       width: calc(100% - 1px);
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: visible;
       height: 6px;
+    }
+
+    .level-locked-svg {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 3;
     }
 
     .line-progression {
@@ -330,6 +346,8 @@ export default function Timeline({
   curStepsCompleted,
   max,
   curIndex,
+  locked = false,
+  lockedValue
 }: any) {
   if (!Array.isArray(milestones)) {
     return null;
@@ -394,6 +412,52 @@ export default function Timeline({
   return (
     <Row>
       <Container className="timeline">
+        {
+          locked ?(
+            <Tippy content={<span>Contributor Level Points: <span style={{color: '#00ECC9'}}>{lockedValue}</span></span>}>
+            <svg
+              style={{
+                left: `calc(${dis * 100}% - 7px)`,
+              }}
+              width="18"
+              height="21"
+              viewBox="0 0 18 21"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="level-locked-svg"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M11.7143 7.64706V5.14706C11.7143 3.60391 10.4991 2.35294 9 2.35294C7.50094 2.35294 6.28571 3.60391 6.28571 5.14706V7.64706H11.7143ZM9 0C6.23858 0 4 2.30442 4 5.14706V10H14V5.14706C14 2.30442 11.7614 0 9 0Z"
+                fill="#C9FFF8"
+              />
+              <mask id="path-2-inside-1_71_58600" fill="white">
+                <rect y="7" width="18" height="14" rx="3" />
+              </mask>
+              <rect
+                y="7"
+                width="18"
+                height="14"
+                rx="3"
+                fill="#C9FFF8"
+                stroke="#C9FFF8"
+                stroke-width="14"
+                mask="url(#path-2-inside-1_71_58600)"
+              />
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M9.95675 14.5512C10.3297 14.2711 10.5709 13.8251 10.5709 13.3227C10.5709 12.4747 9.88346 11.7873 9.03545 11.7873C8.18745 11.7873 7.5 12.4747 7.5 13.3227C7.5 13.8251 7.74125 14.2711 8.11421 14.5512V16.3936C8.11421 16.9024 8.52668 17.3149 9.03548 17.3149C9.54429 17.3149 9.95675 16.9024 9.95675 16.3936V14.5512Z"
+                fill="#05050E"
+              />
+            </svg>
+          </Tippy>
+          ):null
+        }
+        {/* locked */}
+       
+
         <div className="line" ref={ref}>
           <div
             className="line-progression"
@@ -419,7 +483,7 @@ export default function Timeline({
           </div>
         ) : null}
 
-        <div className="tooltip">
+        <div className={`${locked ? "locked" : ""} tooltip`}>
           <div
             // style={{ left: `${(totalStepsCompleted / totalSteps) * 100}%` }}
             style={{

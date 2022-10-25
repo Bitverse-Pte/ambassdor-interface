@@ -319,7 +319,7 @@ export default () => {
           >
             <UserPoints
               title={"Point"}
-              amount={user?.point || 0}
+              amount={(user?.point+user?.historyPoint) || 0}
               disabled={!user?.pointCache || user?.pointCache <= 0}
               action={() => {
                 if (user?.pointCache && user?.pointCache > 0) {

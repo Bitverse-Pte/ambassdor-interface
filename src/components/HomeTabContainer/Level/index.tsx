@@ -216,7 +216,8 @@ export default ({ show, displayRole }: any) => {
   const nextRef = useRef(null);
   const prevRef = useRef(null);
   const levelList = useLevelList({
-    forceRole: displayRole === ROLE.ambassador ? ROLE.ambassador : ROLE.contributor,
+    forceRole:
+      displayRole === ROLE.ambassador ? ROLE.ambassador : ROLE.contributor,
   });
 
   const {
@@ -226,6 +227,7 @@ export default ({ show, displayRole }: any) => {
       isAmbassador,
       isContributor,
       isExactContributor,
+      isUpdatedAmbassador,
       loading,
       contributorNFT,
       ambassadorNFT,
@@ -237,17 +239,26 @@ export default ({ show, displayRole }: any) => {
     config: { contributor, ambassador },
   } = useModel("config");
 
-  const ifIsCurrentRole = useMemo(() => displayRole === currentRole, [
-    displayRole,
-    currentRole,
-  ]);
+  const ifIsCurrentRole = useMemo(
+    () => displayRole === currentRole || isUpdatedAmbassador,
+    [displayRole, currentRole, isUpdatedAmbassador]
+  );
 
   const displayRoleNft = useMemo(
     () => (displayRole === ROLE.ambassador ? ambassadorNFT : contributorNFT),
     [displayRole, contributorNFT, ambassadorNFT]
   );
 
-    
+  const points = useMemo(() => {
+    if (displayRole === ROLE.contributor && isUpdatedAmbassador) {
+      return user?.historyPoint;
+    }
+    return user?.point;
+  }, [displayRole, user?.point, user?.historyPoint, isUpdatedAmbassador]);
+
+  const lockedTimeline = useMemo(() => {
+    return displayRole === ROLE.contributor && isUpdatedAmbassador;
+  }, [displayRole, isUpdatedAmbassador]);
 
   const steps = useMemo(() => {
     if (!levelList) return null;
@@ -277,11 +288,11 @@ export default ({ show, displayRole }: any) => {
         steps: i?.max || 0,
         stepsCompleted: !ifIsCurrentRole
           ? 0
-          : user?.point < i.min
+          : points < i.min
           ? 0
-          : user?.point >= i.max
+          : points >= i.max
           ? i.max
-          : user?.point,
+          : points,
         date: null,
         hasIncident: false,
         // ...displayRole[index]
@@ -306,6 +317,12 @@ export default ({ show, displayRole }: any) => {
   };
 
   const [curIndex, setCurIndex] = useState(0);
+
+  useEffect(()=>{
+    if(isUpdatedAmbassador && displayRole){
+      handleSlide(null, lastCompleted)
+    }
+  }, [isUpdatedAmbassador, lastCompleted])
 
   return (
     <Container>
@@ -712,9 +729,11 @@ export default ({ show, displayRole }: any) => {
             <Timeline
               handleSlide={handleSlide}
               milestones={steps}
-              curStepsCompleted={!ifIsCurrentRole ? 0 : user?.point || 0}
+              curStepsCompleted={!ifIsCurrentRole ? 0 : points || 0}
               max={steps?.lastIndex ? steps[steps?.lastIndex]?.min : 0}
               curIndex={curIndex}
+              locked={lockedTimeline}
+              lockedValue={user?.historyPoint}
             />
           ) : null}
         </>

@@ -10,6 +10,8 @@ import Modal from "../Modal";
 import warning from "@/assets/dialog/warning.svg";
 import { format } from "@/utils";
 import Rotate from "../Rotate";
+import useLevelList from "@/hooks/useLevelList";
+import { ROLE } from "@/interface";
 
 enum CLAIM_STATUS {
   Claimable = "Claimable",
@@ -312,9 +314,19 @@ const successMsg = "successflly added to your account！";
 const error = "";
 
 const CollectTokenDialog = (props: any) => {
+  const clvLevel = useLevelList({ forceRole: ROLE.contributor });
   const {
-    user: { user, fetchUser, currentRoleConfig },
+    user: { user, fetchUser, currentRoleConfig, isUpdatedAmbassador },
   } = useModel("userInfo");
+
+  const contributorHistoryPoint = useMemo(() => user?.historyPoint, [
+    user?.historyPoint,
+  ]);
+
+  const contributorConfig = useMemo(
+    () => (isUpdatedAmbassador ? clvLevel : []),
+    [isUpdatedAmbassador, clvLevel]
+  );
 
   const { loading, data, run, error } = useRequest(claimToken, {
     manual: true,
@@ -394,6 +406,7 @@ const CollectTokenDialog = (props: any) => {
   // }, [claimFailed]);
 
   const [tableOpen, { setTrue, setFalse, toggle }] = useBoolean(false);
+  const [clvTableOpen, { toggle: clvToggle }] = useBoolean(false);
 
   const configCombindProfile = useMemo(() => {
     if (!currentRoleConfig || !user) return [];
@@ -426,15 +439,61 @@ const CollectTokenDialog = (props: any) => {
       .reverse();
   }, [user, currentRoleConfig, userToken]);
 
+  const contributorConfigCombindProfile = useMemo(() => {
+    if (!contributorConfig || !contributorConfig?.length || !user) return [];
+    const curLevel = contributorConfig?.find(
+      (i) =>
+        i?.max > contributorHistoryPoint && contributorHistoryPoint >= i?.min
+    )?.name;
+
+    const lessLevelIndex = contributorConfig?.findIndex(
+      (i) => i?.name === curLevel
+    );
+
+    return contributorConfig
+      ?.map((i: any, index: number) => {
+        if (index <= lessLevelIndex) {
+          return {
+            ...i,
+            levelStatus: i?.token ? "TGE+365 Days" : "/",
+          };
+        }
+        return {
+          ...i,
+          levelStatus: i?.token ? "After level up" : "/",
+        };
+      })
+      ?.map((i) => {
+        if (!userToken) return i;
+        const _ = userToken.find((j) => j?.name === i?.name);
+        return {
+          ...i,
+          ..._,
+        };
+      })
+      .reverse();
+  }, [user, contributorHistoryPoint, contributorConfig, userToken]);
+
   const currentLevelConfig = useMemo(
     () => configCombindProfile?.find((i) => i?.name === user?.level),
     [user, configCombindProfile]
   );
 
+  const contributorCurrentLevelConfig = useMemo(() => {
+    const curLevel = contributorConfig?.find(
+      (i) =>
+        i?.max > contributorHistoryPoint && contributorHistoryPoint >= i?.min
+    )?.name;
+    return contributorConfigCombindProfile?.find((i) => i?.name === curLevel);
+  }, [user, contributorConfigCombindProfile]);
+
   const [activeIndex, setIndex] = useState(
     configCombindProfile?.length - 1 || 0
   );
 
+  const [contributorActiveIndex, setContributorIndex] = useState(
+    contributorConfigCombindProfile?.length - 1 || 0
+  );
 
   const currentChosenLevel = useMemo(() => {
     if (!configCombindProfile || !configCombindProfile[activeIndex])
@@ -452,6 +511,31 @@ const CollectTokenDialog = (props: any) => {
           token: currentLevelConfig?.token,
         };
   }, [configCombindProfile, tableOpen, currentLevelConfig, activeIndex]);
+
+  const contributorCurrentChosenLevel = useMemo(() => {
+    if (
+      !contributorConfigCombindProfile ||
+      !contributorConfigCombindProfile[contributorActiveIndex]
+    )
+      return null;
+    return clvTableOpen
+      ? {
+          ...contributorConfigCombindProfile[contributorActiveIndex],
+          level: contributorConfigCombindProfile[contributorActiveIndex]?.name,
+          token: contributorConfigCombindProfile[contributorActiveIndex]?.token,
+        }
+      : {
+          ...contributorConfigCombindProfile[contributorActiveIndex],
+          ...contributorCurrentLevelConfig,
+          level: contributorCurrentLevelConfig?.name,
+          token: contributorCurrentLevelConfig?.token,
+        };
+  }, [
+    contributorConfigCombindProfile,
+    clvTableOpen,
+    contributorCurrentLevelConfig,
+    contributorActiveIndex,
+  ]);
 
   return (
     <>
@@ -548,6 +632,121 @@ const CollectTokenDialog = (props: any) => {
                 </Collapse>
               </div>
             ) : null}
+
+            {/* contributorConfigCombindProfile */}
+            {contributorConfigCombindProfile?.length ? (
+              <div
+                className="token-detail-table"
+                style={{ marginTop: "-12px" }}
+              >
+                <div
+                  className="curent-level row"
+                  style={{
+                    justifyContent: "space-between",
+                    position: clvTableOpen ? "absolute" : "relative",
+                    opacity: clvTableOpen ? 0 : 1,
+                    zIndex: clvTableOpen ? -3 : 1,
+                  }}
+                  onClick={clvToggle}
+                >
+                  <div className="tokens">
+                    {contributorCurrentChosenLevel?.name} -&nbsp;
+                    {contributorCurrentChosenLevel?.token
+                      ? format(contributorCurrentChosenLevel?.token) + " TELE"
+                      : " /"}
+                  </div>
+                  {!getUserTokenLoading ? (
+                    <div className="row">
+                      <div className="days">
+                        {contributorCurrentChosenLevel?.status_dictText}
+                      </div>
+                      <Icon />
+                    </div>
+                  ) : (
+                    <Loading />
+                  )}
+                </div>
+
+                <Collapse isOpened={clvTableOpen}>
+                  {contributorConfigCombindProfile?.map((i, index) => (
+                    <div
+                      onClick={() => setContributorIndex(index)}
+                      key={i?.name}
+                      className={`level-container ${
+                        contributorActiveIndex === index ? "active" : ""
+                      }`}
+                    >
+                      <div style={{display: 'flex', alignItems:'center'}}>
+                        <div style={{marginRight: '5px'}}>{i?.name}</div>
+                        {i?.min > contributorHistoryPoint ? (
+                          <svg
+                            width="13"
+                            height="15"
+                            viewBox="0 0 13 15"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            style={{width: '15px', height: '15px'}}
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M8.4 5.35294V3.60294C8.4 2.52274 7.54934 1.64706 6.5 1.64706C5.45066 1.64706 4.6 2.52274 4.6 3.60294V5.35294H8.4ZM6.5 0C4.567 0 3 1.61309 3 3.60294V7H10V3.60294C10 1.61309 8.433 0 6.5 0Z"
+                              fill="#00DBC9"
+                            />
+                            <mask id="path-2-inside-1_142_1816" fill="white">
+                              <rect y="5" width="13" height="10" rx="3" />
+                            </mask>
+                            <rect
+                              y="5"
+                              width="13"
+                              height="10"
+                              rx="3"
+                              fill="#00DBC9"
+                              stroke="#00DBC9"
+                              stroke-width="10"
+                              mask="url(#path-2-inside-1_142_1816)"
+                            />
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M7.19086 10.3423C7.46018 10.14 7.63438 9.81791 7.63438 9.45513C7.63438 8.84268 7.13789 8.34619 6.52544 8.34619C5.91299 8.34619 5.4165 8.84268 5.4165 9.45513C5.4165 9.81796 5.59075 10.1401 5.86013 10.3424C5.86013 10.3424 5.86013 10.3424 5.86013 10.3424V11.6732C5.86013 12.0406 6.15803 12.3385 6.5255 12.3385C6.89297 12.3385 7.19086 12.0406 7.19086 11.6732V10.3424C7.19086 10.3424 7.19086 10.3424 7.19086 10.3423Z"
+                              fill="#1D3441"
+                            />
+                          </svg>
+                        ) : null}
+                      </div>
+                      <div style={{ textAlign: "center" }}>
+                        {i?.token ? <>{format(i?.token)}TELE</> : "/"}
+                      </div>
+                      <div style={{ textAlign: "center" }}>
+                        {i?.levelStatus || "/"}
+                      </div>
+                      <div className="row self-end">
+                        <div
+                          style={{
+                            marginRight: `${
+                              index ===
+                              contributorConfigCombindProfile?.length - 1
+                                ? "0"
+                                : "40px"
+                            }`,
+                          }}
+                        >
+                          {i?.status_dictText}
+                        </div>
+                        {index ===
+                          contributorConfigCombindProfile?.length - 1 && (
+                          <Rotate className="rotate">
+                            <Icon onClick={clvToggle} />
+                          </Rotate>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </Collapse>
+              </div>
+            ) : null}
+
             <div
               className="tge"
               style={{
