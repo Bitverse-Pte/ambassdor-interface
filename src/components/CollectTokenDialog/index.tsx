@@ -406,7 +406,18 @@ const CollectTokenDialog = (props: any) => {
   // }, [claimFailed]);
 
   const [tableOpen, { setTrue, setFalse, toggle }] = useBoolean(false);
-  const [clvTableOpen, { toggle: clvToggle }] = useBoolean(false);
+  const [clvTableOpen, { setFalse: clvSetFalse, toggle: clvToggle }] = useBoolean(false);
+
+  useEffect(()=>{
+    if(tableOpen){
+      clvSetFalse()
+    }
+  }, [tableOpen])
+  useEffect(()=>{
+    if(clvTableOpen){
+      setFalse()
+    }
+  }, [clvTableOpen])
 
   const configCombindProfile = useMemo(() => {
     if (!currentRoleConfig || !user) return [];
@@ -670,11 +681,9 @@ const CollectTokenDialog = (props: any) => {
                 <Collapse isOpened={clvTableOpen}>
                   {contributorConfigCombindProfile?.map((i, index) => (
                     <div
-                      onClick={() => setContributorIndex(index)}
+                      // onClick={() => setContributorIndex(index)}
                       key={i?.name}
-                      className={`level-container ${
-                        contributorActiveIndex === index ? "active" : ""
-                      }`}
+                      className={`level-container`}
                     >
                       <div style={{display: 'flex', alignItems:'center'}}>
                         <div style={{marginRight: '5px'}}>{i?.name}</div>
